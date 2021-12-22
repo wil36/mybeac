@@ -75,7 +75,7 @@ class UserController extends Controller
             // })
             // ->addColumn("dateHade", function ($data) {
             //     return $data->role;
-            // })
+            // }) 
             ->editColumn("status", function ($data) {
                 if ($data->status) {
                     return ' <td class="nk-tb-col tb-col-md">
