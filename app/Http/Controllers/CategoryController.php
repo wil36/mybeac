@@ -48,7 +48,7 @@ class CategoryController extends Controller
                 return $data->libelle;
             })
             ->addColumn("montant", function ($data) {
-                return $data->montant;
+                return $data->montant . ' FCFA';
             })
             ->addColumn('Actions', function ($data) {
                 return '<ul class="nk-tb-actions gx-1">

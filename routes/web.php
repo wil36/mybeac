@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{AcceuilController, CategoryController, UserController};
+use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, UserController};
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +31,10 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     Route::resource('categories', CategoryController::class)->except(['show', 'update', 'delete']);
     Route::get('/getcategoriesList', [CategoryController::class, 'getcategoriesList'])->name('getcategoriesList');
     Route::post('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+
+    //Route for ayants droits
+    Route::resource('ayantsdroits', AyantDroitController::class)->except(['show', 'update', 'delete', 'create']);
+    Route::get('ayantsdroits/{id}', [AyantDroitController::class, 'create'])->name('ayantsdroits.create');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');

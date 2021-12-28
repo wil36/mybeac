@@ -102,7 +102,17 @@ class UserController extends Controller
                 </li>
                  <li class="nk-tb-action-hidden">
                     <a href="' . route('user.doubleauthdelete', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Supprimer la double authentification">
-                      <em class="icon ni ni-share-alt"></em>
+                        <em class="icon ni ni-reload-alt"></em>
+                    </a>
+                </li>
+                <li class="nk-tb-action-hidden">
+                    <a href="' . route('ayantsdroits.create', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Ajouter un ayant droit">
+                      <em class="icon ni ni-user-add-fill"></em>
+                    </a>
+                </li>
+                  <li class="nk-tb-action-hidden">
+                    <a href="' . route('ayantsdroits.create', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Detail du membre">
+                      <em class="icon ni ni-expand"></em>
                     </a>
                 </li>
                 <li>
@@ -111,9 +121,9 @@ class UserController extends Controller
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
                                 <li><a href="' . route('users.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
-                                 
                                 <li><a href="' . route('user.delete', $data->id) . '" ><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
-                                <li><a href="' . route('user.doubleauthdelete', $data->id) . '" ><em class="icon ni ni-share-alt"></em><span>Supprimer la DA</span></a></li>
+                                <li><a href="' . route('user.doubleauthdelete', $data->id) . '" ><em class="icon ni ni-reload-alt"></em><span>Supprimer la DA</span></a></li>
+                                <li><a href="' . route('ayantsdroits.create', $data->id) . '" > <em class="icon ni ni-user-add-fill"></em><span>Ajouter un ayant droit</span></a></li>
                             </ul>
                         </div>
                     </div>
