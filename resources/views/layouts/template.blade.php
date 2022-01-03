@@ -58,7 +58,7 @@
                             <ul class="nk-menu">
 
                                 <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">@lang('Utilisateur')</h6>
+                                    <h6 class="overline-title text-primary-alt">@lang('Menu Principal')</h6>
                                 </li><!-- .nk-menu-heading -->
                                 @php
                                     $affiche = false;
@@ -68,8 +68,8 @@
     auth()->user()->isAdmin())
                                         @if ($elements['role'] == 'admin' && $affiche == false)
                                             <li class="nk-menu-heading">
-                                                <h6 class="overline-title text-primary-alt">@lang('Administration')
-                                                </h6>
+                                                {{-- <h6 class="overline-title text-primary-alt">@lang('Administration')
+                                                </h6> --}}
                                             </li><!-- .nk-menu-heading -->
                                             @php
                                                 $affiche = true;

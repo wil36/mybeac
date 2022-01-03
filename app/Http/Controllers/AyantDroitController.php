@@ -45,7 +45,7 @@ class AyantDroitController extends Controller
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['required', 'string', 'max:255'],
             'statut' => ['required', 'string', 'max:50'],
-            'cni' => ['max:2000', 'mimes:jpeg,png,doc,docs,pdf'],
+            'cni' => ['required', 'max:2000', 'mimes:jpeg,png,doc,docs,pdf'],
         ]);
         if ($validator->fails()) {
             return response()
@@ -60,8 +60,8 @@ class AyantDroitController extends Controller
             $ayantsdroits['users_id'] = $request['id'];
             $file = $request->file('cni');
             $file = $request->file->store('public/images');
-            // $new_name = rand() . '.' . $file->getClientOriginalExtension();
-            // $file->move(public_path('images/upload'), $new_name);
+            $new_name = rand() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $new_name);
             $ayantsdroits['cni'] = $file;
 
             $ayantsdroits->save();

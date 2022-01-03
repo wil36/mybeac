@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, UserController};
+use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, TypePrestationController, UserController};
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +21,7 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/getCategories', [Categor
 Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     //Route for Users
     Route::get('users/delete/{id}', [UserController::class, 'destroys'])->name('user.delete');
+    Route::get('users/cotisations', [UserController::class, 'cotisation'])->name('users.cotisation');
     Route::get('users/doubleauthdelete/{id}', [UserController::class, 'doubleauthdelete'])->name('user.doubleauthdelete');
     Route::get('/getuser', [UserController::class, 'getUser'])->name('getuser');
     Route::resource('users', UserController::class)->except(['show', 'update']);
@@ -35,6 +36,12 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     //Route for ayants droits
     Route::resource('ayantsdroits', AyantDroitController::class)->except(['show', 'update', 'delete', 'create']);
     Route::get('ayantsdroits/{id}', [AyantDroitController::class, 'create'])->name('ayantsdroits.create');
+
+    //Route for Type de prestation
+    Route::resource('typeprestation', TypePrestationController::class)->except(['show', 'delete']);
+    Route::get('/gettypeprestationList', [TypePrestationController::class, 'gettypeprestationList'])->name('gettypeprestationList');
+    Route::get('typeprestation/delete/{id}', [TypePrestationController::class, 'destroy'])->name('typeprestation.delete');
+    Route::post('typeprestation/{id}', [TypePrestationController::class, 'update'])->name('typeprestation.update');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');

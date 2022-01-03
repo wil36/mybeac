@@ -149,6 +149,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label style="font-weight: bold;"
@@ -223,12 +224,16 @@
             $('#alert-javascript').addClass('d-none');
             $('#alert-javascript').text('');
             e.preventDefault();
-            var id = $("#id").val();
-            var nom = $("#nom").val();
-            var prenom = $("#prenom").val();
-            var statut = $("#statut").val();
-            var cni = $("#cni").val();
+            let id = $("#id").val();
+            let nom = $("#nom").val();
+            let prenom = $("#prenom").val();
+            let statut = $("#statut").val();
+            let cni = $("#cni");
             console.log(cni);
+            var myForm = document.getElementById('formayantsdroits');
+            var formData = new FormData(myForm);
+            // formData.append('cni', input.files[0]);
+            console.log(formData[0]);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -236,13 +241,14 @@
                 url: "" + $('#formayantsdroits').attr('action'),
                 type: "" + $('#formayantsdroits').attr('method'),
                 dataType: 'json',
-                data: {
-                    id: id,
-                    nom: nom,
-                    prenom: prenom,
-                    statut: statut,
-                    cni: cni,
-                },
+                data: formData,
+                // data: {
+                //     id: id,
+                //     nom: nom,
+                //     prenom: prenom,
+                //     statut: statut,
+                //     cni: cni,
+                // },
                 success: function(data) {
                     if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
                         //success

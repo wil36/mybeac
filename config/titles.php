@@ -1,11 +1,12 @@
 <?php
-
+$mytime = Carbon\Carbon::now();
 return [
     'dashboard' => 'Acceuil',
     'users' => [
         'index' => 'Liste des membres',
         'create' => 'Ajout d\'un nouveau membre',
         'edit' => 'Modification d\'un membre',
+        'cotisation' => 'Cotisation de ' . $mytime->format('M Y'),
     ],
     'categories' => [
         'index' => 'Liste des catégories',
@@ -16,5 +17,10 @@ return [
         'index' => 'Liste des ayants droits',
         'create' => 'Ajout d\'un ayant droit',
         'edit' => 'Modification d\'un ayant droit',
-    ]
+    ],
+    'typeprestation' => [
+        'index' => 'Liste des types de prestation',
+        'create' => 'Ajout d\'un type de prestation',
+        'edit' => 'Modification d\'un type de prestation',
+    ],
 ];
