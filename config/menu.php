@@ -66,7 +66,7 @@ return [
         'name' => "Gestion des cotisations",
         'route' => 'users.index',
         'routes' => ['users.cotisation'],
-        'icon' => 'icon ni ni-sign-dollar',
+        'icon' => 'icon ni ni-money',
         'role'   => 'admin',
         'childrens' => [
             [

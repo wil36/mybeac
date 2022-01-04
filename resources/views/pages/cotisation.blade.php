@@ -46,9 +46,49 @@
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <a href="{{ route('users.create') }}" class="btn btn-primary"><em
-                                        class="icon ni ni-plus"></em></a>
+                            <div class="card">
+                                <div class="nk-block nk-block-lg">
+                                    {{-- <button class="btn btn-primary right" style="position: relative">Test</button> --}}
+                                    <div class="card card-preview">
+                                        <div class="card-inner">
+                                            <div class="row">
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <div class="form-group">
+                                                        <x-input name='dateHadhésion'
+                                                            :value="Carbon\Carbon::now()->format('Y-m-d') " input='date'
+                                                            :required="true" title="Date">
+                                                        </x-input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <x-input name='dateHadhésion' :value="50" input='text' :required="true"
+                                                        title="Numéro de la séance" :disabled="true">
+                                                    </x-input>
+                                                </div>
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <x-input name='dateHadhésion' :value="50000000000" input='text'
+                                                        :required="true" title="Solde de la séance en cours"
+                                                        :disabled="true">
+                                                    </x-input>
+                                                </div>
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <x-input name='dateHadhésion' :value="50000000000" input='text'
+                                                        :required="true" title="Total global des cotisations"
+                                                        :disabled="true">
+                                                    </x-input>
+                                                </div>
+                                                <div class="col-md-12" style="margin-bottom: 10px">
+                                                    <div class="form-group">
+                                                        <button type="submit"
+                                                            class="btn btn-lg btn-primary btn-submit-ayantsdroits">Sauvegarder</button>
+                                                        <button type="button" onclick="clearformayantsdroits()"
+                                                            class="btn btn-lg btn-clear">@lang('Annuler')</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card">
                                 <div class="nk-block nk-block-lg">
@@ -56,12 +96,20 @@
                                     <div class="card card-preview">
                                         <div class="card-inner">
                                             <div class="table-responsive">
-                                                <table class="nk-tb-list nk-tb-ulist" id="userList"
-                                                    data-auto-responsive="false">
+                                                <table class="nk-tb-list nk-tb-ulist" id="cotisationList"
+                                                    data-auto-responsive="true">
                                                     <thead>
                                                         <tr class="nk-tb-item nk-tb-head">
                                                             <th class="nk-tb-col" hidden><span
                                                                     class="sub-text"></span></th>
+                                                            <th class="nk-tb-col"><span class="sub-text"></span>
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="customCheckAll">
+                                                                    <label class="custom-control-label"
+                                                                        for="customCheckAll"></label>
+                                                                </div>
+                                                            </th>
                                                             <th class="nk-tb-col"><span
                                                                     class="sub-text">@lang('Matricule')</span>
                                                             </th>
@@ -101,12 +149,52 @@
                                                             </th>
                                                             {{-- <th class="nk-tb-col"><span class="sub-text">Status</span>
                                                         </th> --}}
-                                                            <th class="text-right nk-tb-col nk-tb-col-tools"><span
-                                                                    class="sub-text">Action</span></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody></tbody>
                                                 </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="nk-block nk-block-lg">
+                                    {{-- <button class="btn btn-primary right" style="position: relative">Test</button> --}}
+                                    <div class="card card-preview">
+                                        <div class="card-inner">
+                                            <div class="row">
+                                                <div class="col-md-12" style="margin-bottom: 10px">
+                                                    <div class="form-group">
+                                                        <button type="submit"
+                                                            class="btn btn-lg btn-primary btn-submit-ayantsdroits">Sauvegarder</button>
+                                                        <button type="button" onclick="clearformayantsdroits()"
+                                                            class="btn btn-lg btn-clear">@lang('Annuler')</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <div class="form-group">
+                                                        <x-input name='dateHadhésion'
+                                                            :value="Carbon\Carbon::now()->format('Y-m-d') " input='date'
+                                                            :required="true" title="Date">
+                                                        </x-input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <x-input name='dateHadhésion' :value="50" input='text' :required="true"
+                                                        title="Numéro de la séance">
+                                                    </x-input>
+                                                </div>
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <x-input name='dateHadhésion' :value="50000000000" input='text'
+                                                        :required="true" title="Solde de la séance en cours">
+                                                    </x-input>
+                                                </div>
+                                                <div class="col-md-3" style="margin-bottom: 10px">
+                                                    <x-input name='dateHadhésion' :value="50000000000" input='text'
+                                                        :required="true" title="Total global des cotisations">
+                                                    </x-input>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -130,12 +218,12 @@
     @if (config('app.locale') == 'fr')
         <script>
             $(document).ready(function() {
-                $('#userList').DataTable({
+                $('#cotisationList').DataTable({
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
                     pageLength: 10,
-                    paginate: true,
+                    paginate: false,
                     info: true,
                     language: {
                         "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
@@ -171,7 +259,7 @@
                     buttons: [
                         'copy', 'excel', 'pdf'
                     ],
-                    ajax: "{{ route('getuser') }}",
+                    ajax: "{{ route('getUserCotisation') }}",
                     order: [
                         [0, "desc"]
                     ],
@@ -179,6 +267,13 @@
                             "data": 'updated_at',
                             "name": 'updated_at',
                             "visible": false,
+                            "className": 'nk-tb-col nk-tb-col-check'
+                        },
+                        {
+                            "data": 'select',
+                            "name": 'select',
+                            "orderable": false,
+                            "serachable": false,
                             "className": 'nk-tb-col nk-tb-col-check'
                         },
                         {
@@ -241,13 +336,6 @@
                             "name": 'status',
                             "className": 'nk-tb-col'
                         },
-                        {
-                            "data": 'Actions',
-                            "name": 'Actions',
-                            "orderable": false,
-                            "serachable": false,
-                            "className": 'nk-tb-col nk-tb-col-tools'
-                        },
                     ]
                 });
             });
@@ -256,12 +344,12 @@
     @else
         <script>
             $(document).ready(function() {
-                $('#userList').DataTable({
+                $('#cotisationList').DataTable({
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
                     pageLength: 10,
-                    paginate: true,
+                    paginate: false,
                     info: true,
                     language: {
                         "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json",
@@ -271,7 +359,7 @@
                     ],
                     // scrollX: true,
                     // "order": [[ 0, "desc" ]],
-                    ajax: "{{ route('getuser') }}",
+                    ajax: "{{ route('getUserCotisation') }}",
                     order: [
                         [0, "desc"]
                     ], //or asc 
@@ -285,6 +373,13 @@
                             "data": 'updated_at',
                             "name": 'updated_at',
                             "visible": false,
+                            "className": 'nk-tb-col nk-tb-col-check'
+                        },
+                        {
+                            "data": 'select',
+                            "name": 'select',
+                            "orderable": false,
+                            "serachable": false,
                             "className": 'nk-tb-col nk-tb-col-check'
                         },
                         {
@@ -307,22 +402,43 @@
                             "name": 'status',
                             "className": 'nk-tb-col'
                         },
-                        {
-                            "data": 'Actions',
-                            "name": 'Actions',
-                            "orderable": false,
-                            "serachable": false,
-                            "className": 'nk-tb-col nk-tb-col-tools'
-                        },
                     ]
                 });
             });
             $(".loader").addClass("d-none");
         </script>
     @endif
+    <script>
+        $('#customCheckAll').click(function(e) {
+            var table = $('#cotisationList').DataTable();
+            var data = table.rows().data();
+            if ($("#customCheckAll").prop("checked")) {
+                console.log(1);
+                data.each(function(value, index) {
+                    $("#customCheck" + value.id).prop("checked", true);
+                });
+            } else {
+                data.each(function(value, index) {
+                    $("#customCheck" + value.id).prop("checked", false);
+                });
+            }
+        });
 
-    {{-- <script src="{{ mix('js/app.js') }}">
+        function setCheckBox() {
+            var test = false;
+            var table = $('#cotisationList').DataTable();
+            var data = table.rows().data();
+            data.each(function(value, index) {
+                if ($("#customCheck" + value.id).prop("checked") == false) {
+                    $("#customCheckAll").prop("checked", false);
+                    test = true;
+                    return false;
+                }
+            });
+            if (test == false) {
+                $("#customCheckAll").prop("checked", true);
+            }
+            return false;
+        }
     </script>
-    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script> --}}
-
 @endsection

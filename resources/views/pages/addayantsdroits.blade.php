@@ -149,7 +149,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label style="font-weight: bold;"
@@ -228,12 +227,17 @@
             let nom = $("#nom").val();
             let prenom = $("#prenom").val();
             let statut = $("#statut").val();
-            let cni = $("#cni");
-            console.log(cni);
-            var myForm = document.getElementById('formayantsdroits');
-            var formData = new FormData(myForm);
-            // formData.append('cni', input.files[0]);
-            console.log(formData[0]);
+            let cni = $("#cni")[0].files;
+            let acte_naissance = $("#acte_naissance")[0].files;
+            let certificat_vie = $("#certificat_vie")[0].files;
+            var formData = new FormData();
+            formData.append('id', id);
+            formData.append('cni', cni[0]);
+            formData.append('acte_naissance', acte_naissance[0]);
+            formData.append('certificat_vie', certificat_vie[0]);
+            formData.append('nom', nom);
+            formData.append('prenom', prenom);
+            formData.append('statut', statut);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -241,7 +245,6 @@
                 url: "" + $('#formayantsdroits').attr('action'),
                 type: "" + $('#formayantsdroits').attr('method'),
                 dataType: 'json',
-                data: formData,
                 // data: {
                 //     id: id,
                 //     nom: nom,
@@ -249,6 +252,10 @@
                 //     statut: statut,
                 //     cni: cni,
                 // },
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "json",
                 success: function(data) {
                     if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
                         //success
@@ -308,9 +315,9 @@
             $("#cni").val('');
             $("#acte_naissance").val('');
             $("#certificat_vie").val('');
-            $("#lab_certificat_vie").val('Choisir un fichier ');
-            $("#lab_cni").val('Choisir un fichier ');
-            $("#lab_acte_naissance").val('Choisir un fichier ');
+            $("#lab_certificat_vie").text('Choisir un fichier ');
+            $("#lab_cni").text('Choisir un fichier ');
+            $("#lab_acte_naissance").text('Choisir un fichier ');
         }
     </script>
 @endsection

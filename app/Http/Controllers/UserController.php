@@ -329,9 +329,4 @@ class UserController extends Controller
         $user->save();
         return back()->with("status", "Suppression de la double authentification éffectuer avec succès");
     }
-
-    public function cotisation()
-    {
-        return view('pages.cotisation');
-    }
 }
