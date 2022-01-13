@@ -34,22 +34,19 @@
                 <div class="nk-sidebar-element nk-sidebar-head">
                     <div class="nk-sidebar-brand">
                         <a href="{{ route('dashboard') }}" class="logo-link">
-                            <img class="logo-light logo-img logo-img-lg"
-                                src="{{ asset('images/logolykati-dark.png') }}"
-                                srcset="{{ asset('images/logolykati-dark.png') }}" alt="logo">
-                            <img class="logo-dark logo-img logo-img-lg"
-                                src="{{ asset('images/logolykati-ligth.png') }}"
-                                srcset="{{ asset('images/logolykati-ligth.png') }}" alt="logo-dark">
-
-                            {{-- <img class="logo-small logo-img logo-img-small" src="{{ asset('images/logolykati.png') }}"
-                                srcset="{{ asset('images/logolykati-ligth.png') }}" alt="logo-small"> --}}
+                            <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
+                                srcset="{{ asset('images/logo.png') }}" alt="logo">
+                            <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
+                                srcset="{{ asset('images/logo.png') }}" alt="logo-dark">
+                            {{-- <img class="logo-small logo-img logo-img-small" src="{{ asset('images/logo.png') }}"
+                                srcset="{{ asset('images/logo.png') }}" alt="logo-small"> --}}
                         </a>
                     </div>
                     <div class="nk-menu-trigger mr-n2">
                         <a href="#" class="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu"><em
-                                class="icon ni ni-arrow-left"></em></a>
+                                class="icon ni ni-menu-alt-left"></em></a>
                         <a href="#" class="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex"
-                            data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            data-target="sidebarMenu"><em class="icon ni ni-menu-alt-left"></em></a>
                     </div>
                 </div><!-- .nk-sidebar-element -->
                 <div class="nk-sidebar-element">
@@ -98,16 +95,14 @@
                         <div class="nk-header-wrap">
                             <div class="nk-menu-trigger d-xl-none ml-n1">
                                 <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em
-                                        class="icon ni ni-menu"></em></a>
+                                        class="icon ni ni-menu-alt-left"></em></a>
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="{{ route('dashboard') }}" class="logo-link">
-                                    <img class="logo-light logo-img logo-img-lg"
-                                        src="{{ asset('images/logolykati.png') }}"
-                                        srcset="{{ asset('images/logolykati.png') }}" alt="logo">
-                                    <img class="logo-dark logo-img logo-img-lg"
-                                        src="{{ asset('images/logolykati.png') }}"
-                                        srcset="{{ asset('images/logolykati.png') }}" alt="logo-dark">
+                                    <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
+                                        srcset="{{ asset('images/logo.png') }}" alt="logo">
+                                    <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
+                                        srcset="{{ asset('images/logo.png') }}" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
                             <div class="ml-3 nk-header-search ml-xl-0">

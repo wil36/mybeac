@@ -56,9 +56,9 @@
                     <div class="nk-block nk-block-middle nk-auth-body wide-xs">
                         <div class="pb-4 text-center brand-logo">
                             <a href="{{ route('dashboard') }}" class="logo-link">
-                                <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logolykati.png') }}"
-                                    srcset="{{ asset('images/logolykati.png') }}" alt="logo">
-                                <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logolykati.png') }}"
+                                <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
+                                    srcset="{{ asset('images/logo.png') }}" alt="logo">
+                                <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
                                     srcset="{{ asset('images/logolykati.png') }}" alt="logo-dark">
                             </a>
                         </div>
@@ -107,7 +107,8 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="form-label-group">
-                                            <label class="form-label" for="password_confirmation">@lang('Confirmation mot de
+                                            <label class="form-label" for="password_confirmation">@lang('Confirmation
+                                                mot de
                                                 passe')</label>
                                         </div>
                                         <input class="form-control form-control-lg" id="password_confirmation"

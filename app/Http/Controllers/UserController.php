@@ -52,6 +52,9 @@ class UserController extends Controller
             ->addColumn("prenom", function ($data) {
                 return $data->prenom;
             })
+            ->addColumn("sexe", function ($data) {
+                return $data->sexe;
+            })
             ->addColumn("nationalité", function ($data) {
                 return $data->nationalité;
             })
@@ -110,8 +113,13 @@ class UserController extends Controller
                       <em class="icon ni ni-user-add-fill"></em>
                     </a>
                 </li>
+                 <li class="nk-tb-action-hidden">
+                    <a href="' . route('prestation.create', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Ajouter une prestation">
+                      <em class="icon ni ni-property-add"></em>
+                    </a>
+                </li>
                   <li class="nk-tb-action-hidden">
-                    <a href="' . route('ayantsdroits.create', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Detail du membre">
+                    <a href="' . route('membre.info', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Detail du membre">
                       <em class="icon ni ni-expand"></em>
                     </a>
                 </li>
@@ -124,6 +132,8 @@ class UserController extends Controller
                                 <li><a href="' . route('user.delete', $data->id) . '" ><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
                                 <li><a href="' . route('user.doubleauthdelete', $data->id) . '" ><em class="icon ni ni-reload-alt"></em><span>Supprimer la DA</span></a></li>
                                 <li><a href="' . route('ayantsdroits.create', $data->id) . '" > <em class="icon ni ni-user-add-fill"></em><span>Ajouter un ayant droit</span></a></li>
+                                <li><a href="' . route('prestation.create', $data->id) . '" > <em class="icon ni ni-property-add"></em><span>Ajouter une prestation</span></a></li>
+                                <li><a href="' . route('membre.info', $data->id) . '" > <em class="icon ni ni-user-add-fill"></em><span>Detail du membre</span></a></li>
                             </ul>
                         </div>
                     </div>
@@ -132,6 +142,22 @@ class UserController extends Controller
             })->setRowClass("nk-tb-item")
             ->rawColumns(['matricule', 'Actions', 'status'])
             ->make(true);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function infomembre(Request $request)
+    {
+        if ($request->id != null) {
+            $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement')->where('id', $request->id)->first();
+            $cat = Category::find($membre->categories_id);
+            return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat]);
+        } else {
+            abort(404);
+        }
     }
 
     /**
@@ -167,6 +193,7 @@ class UserController extends Controller
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['required', 'string', 'max:255'],
             'nationalité' => ['required', 'string', 'max:255'],
+            'sexe' => ['required', 'string', 'max:10'],
             'agence' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'tel' => ['required', 'string', 'max:25', 'unique:users,tel'],
@@ -192,6 +219,7 @@ class UserController extends Controller
             $user['agence'] = $request['agence'];
             $user['email'] = $request['email'];
             $user['tel'] = $request['tel'];
+            $user['sexe'] = $request['sexe'];
             $user['date_naissance'] = date("Y-m-d", strtotime($request['dateNaissance']));
             $user['date_hadésion'] = date("Y-m-d", strtotime($request['dateRecrutement']));
             $user['date_recrutement'] = date("Y-m-d", strtotime($request['dateHadhésion']));
@@ -261,6 +289,7 @@ class UserController extends Controller
             'prenom' => ['required', 'string', 'max:255'],
             'nationalité' => ['required', 'string', 'max:255'],
             'agence' => ['required', 'string', 'max:255'],
+            'sexe' => ['required', 'string', 'max:10'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->where(function ($query) use ($request) {
                 $query->where('id', '!=', $request['id']);
             })],
@@ -287,6 +316,7 @@ class UserController extends Controller
             $user['nationalité'] = $request['nationalité'];
             $user['agence'] = $request['agence'];
             $user['email'] = $request['email'];
+            $user['sexe'] = $request['sexe'];
             $user['tel'] = $request['tel'];
             $user['date_naissance'] = date("Y-m-d", strtotime($request['dateNaissance']));
             $user['date_hadésion'] = date("Y-m-d", strtotime($request['dateRecrutement']));

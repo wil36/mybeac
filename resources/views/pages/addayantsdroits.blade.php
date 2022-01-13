@@ -110,7 +110,7 @@
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
                                                                         <x-input name='nom'
-                                                                            :value="isset($ayantsdroits) ? $ayantsdroits->code : ''"
+                                                                            :value="isset($ayantsdroits) ? $ayantsdroits->nom : ''"
                                                                             input='text' :required="true" title="Nom *">
                                                                         </x-input>
                                                                     </div>
@@ -118,7 +118,7 @@
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
                                                                         <x-input name='prenom'
-                                                                            :value="isset($ayantsdroits) ? $ayantsdroits->libelle : ''"
+                                                                            :value="isset($ayantsdroits) ? $ayantsdroits->prenom : ''"
                                                                             input='text' :required="true" title="Prénom *">
                                                                         </x-input>
                                                                     </div>
@@ -126,7 +126,7 @@
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
                                                                         <x-input name='statut'
-                                                                            :value="isset($user) ? $user->role=='admin'?'Administrateur':'Agent' : ''"
+                                                                            :value="isset($ayantsdroits) ? $ayantsdroits->statut : ''"
                                                                             input='select'
                                                                             :options='[["name"=>"","value"=>""],["name"=>"Conjoint","value"=>"Conjoint"],["name"=>"Enfant","value"=>"Enfant"],["name"=>"Père","value"=>"Père"],["name"=>"Mère","value"=>"Mère"], ["name"=>"Tuteur","value"=>"Tuteur"],["name"=>"Tatrice","value"=>"Tatrice"],["name"=>"Bénéficiaire","value"=>"Bénéficiaire"],]'
                                                                             :required="true" title="Statut *">

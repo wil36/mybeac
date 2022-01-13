@@ -40,6 +40,7 @@ class User extends Authenticatable
         'date_recrutement',
         'role',
         'theme',
+        'sexe',
         'status',
         'categories_id',
         'email_verified_at'
@@ -48,6 +49,11 @@ class User extends Authenticatable
     function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    function prestations()
+    {
+        return $this->hasMany(Prestation::class);
     }
 
 

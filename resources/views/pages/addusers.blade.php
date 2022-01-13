@@ -135,6 +135,16 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
+                                                        <x-input name='sexe'
+                                                            :value="isset($user) ? $user->sexe=='Masculin'?'Masculin':'Feminin' : ''"
+                                                            input='select'
+                                                            :options='[["name"=>"","value"=>""],["name"=>"Masculin","value"=>"Masculin"],["name"=>"Feminin","value"=>"Feminin"]]'
+                                                            :required="true" title="Sexe *">
+                                                        </x-input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
                                                         <x-input name='role'
                                                             :value="isset($user) ? $user->role=='admin'?'Administrateur':'Agent' : ''"
                                                             input='select'
@@ -184,6 +194,7 @@
             var dateHadhésion = $("#dateHadhésion").val();
             var categorie = $("#categorie").val();
             var listCategorie = $("#listCategorie").val();
+            var sexe = $("#sexe").val();
             var role = $("#role").val();
 
             $.ajax({
@@ -206,6 +217,7 @@
                     dateHadhésion: dateHadhésion,
                     categorie: categorie,
                     role: role,
+                    sexe: sexe,
                     listCategorie: listCategorie,
                 },
                 success: function(data) {
@@ -290,8 +302,12 @@
             $("#dateRecrutement").val('');
             $("#dateHadhésion").val('');
             $("#role").text('');
+            $("#sexe").text('');
             $("#role").append(
                 '<option value=""></option><option value="admin">Administrateur</option><option value="agent">Agent</option>'
+            );
+            $("#sexe").append(
+                '<option value=""></option><option value="Masculin">Masculin</option><option value="Feminin">Feminin</option>'
             );
             $("#listCategorie").empty();
             loadCategories();

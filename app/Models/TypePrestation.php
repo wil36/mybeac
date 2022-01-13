@@ -13,4 +13,9 @@ class TypePrestation extends Model
         'libelle',
         'montant',
     ];
+
+    function prestations()
+    {
+        return $this->hasMany(Prestation::class);
+    }
 }

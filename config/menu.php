@@ -32,7 +32,7 @@ return [
     'Prestation' => [
         'name' => "Gestion des prestations",
         'route' => 'users.index',
-        'routes' => ['typeprestation.index', 'typeprestation.create', 'typeprestation.edit'],
+        'routes' => ['typeprestation.index', 'typeprestation.create', 'typeprestation.edit', 'prestation.index', 'prestation.create', 'prestation.deit'],
         'icon' => 'icon ni ni-sign-waves-alt',
         'role'   => 'admin',
         'childrens' => [
@@ -51,13 +51,7 @@ return [
             [
                 'name'  => 'Tout les prestations',
                 'role'  => 'admin',
-                'route' => 'typeprestation.index',
-                'altRoute' => '',
-            ],
-            [
-                'name'  => 'Ajouter d\'une prestation',
-                'role'  => 'admin',
-                'route' => 'typeprestation.create',
+                'route' => 'prestation.index',
                 'altRoute' => '',
             ],
         ],
@@ -80,7 +74,7 @@ return [
     'User' => [
         'name' => "Gestion des membres",
         'route' => 'users.index',
-        'routes' => ['users.index', 'users.create', 'ayantsdroits.create', 'ayantsdroits.edit'],
+        'routes' => ['users.index', 'users.create', 'ayantsdroits.create', 'ayantsdroits.edit', 'membre.info'],
         'icon' => 'icon ni ni-user-fill',
         'role'   => 'admin',
         'childrens' => [

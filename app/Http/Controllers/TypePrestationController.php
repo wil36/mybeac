@@ -77,6 +77,18 @@ class TypePrestationController extends Controller
             ->make(true);
     }
 
+    public function getTypePrestations(Request $request)
+    {
+        $data = TypePrestation::select("id", "libelle", "montant")->where(function ($query) use ($request) {
+            $query->where('libelle', 'like', '%' . $request->search . '%');
+        })->limit(5)->get();
+        $resp = array();
+        foreach ($data as $e) {
+            $resp[] = array('id' => $e->id . '|' . $e->montant, 'text' => $e->libelle, 'value' => $e->id . '|' . $e->montant);
+        }
+        return response()->json($resp);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

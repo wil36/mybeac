@@ -5,10 +5,10 @@
                 {{-- <x-jet-authentication-card-logo /> --}}
                 <div class="pb-4 text-center brand-logo">
                     <a href="{{ route('dashboard') }}" class="logo-link">
-                        <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logolykati.png') }}"
-                            srcset="{{ asset('images/logolykati.png') }}" alt="logo">
-                        <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logolykati.png') }}"
-                            srcset="{{ asset('images/logolykati.png') }}" alt="logo-dark">
+                        <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
+                            srcset="{{ asset('images/logo.png') }}" alt="logo">
+                        <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
+                            srcset="{{ asset('images/logo.png') }}" alt="logo-dark">
                     </a>
                 </div>
             </x-slot>

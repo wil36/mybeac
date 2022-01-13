@@ -23,4 +23,9 @@ class AyantDroit extends Model
         'acte_naissance',
         'certificat_vie',
     ];
+
+    function prestations()
+    {
+        return $this->hasMany(Prestation::class);
+    }
 }

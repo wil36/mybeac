@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('matricule');
             $table->string('email');
             $table->string('tel');
+            $table->string('sexe')->default('Masculin');
             $table->dateTime('date_naissance')->default(Carbon::now());
             $table->dateTime('date_hadésion')->default(Carbon::now());
             $table->dateTime('date_recrutement')->default(Carbon::now());

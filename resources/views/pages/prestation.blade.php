@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('css')
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css"> --}}
+
 
 @endsection
 
@@ -46,64 +46,34 @@
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <a href="{{ route('users.create') }}" class="btn btn-primary"><em
-                                        class="icon ni ni-plus"></em></a>
-                            </div>
                             <div class="card">
                                 <div class="nk-block nk-block-lg">
                                     {{-- <button class="btn btn-primary right" style="position: relative">Test</button> --}}
                                     <div class="card card-preview">
                                         <div class="card-inner">
                                             <div class="table-responsive">
-                                                <table class="nk-tb-list nk-tb-ulist" id="userList"
-                                                    data-auto-responsive="false">
+                                                <table class="nk-tb-list nk-tb-ulist" id="typeprestationList"
+                                                    data-auto-responsive="true">
                                                     <thead>
                                                         <tr class="nk-tb-item nk-tb-head">
                                                             <th class="nk-tb-col" hidden><span
                                                                     class="sub-text"></span></th>
                                                             <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Matricule')</span>
+                                                                    class="sub-text">@lang('Date')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Nom')</span>
+                                                                    class="sub-text">@lang('Montant')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Prenom')</span>
+                                                                    class="sub-text">@lang('Nom du membre')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Sexe')</span>
+                                                                    class="sub-text">@lang('Type de
+                                                                    prestation')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Nationalité')</span>
+                                                                    class="sub-text">@lang('Ayant droit')</span>
                                                             </th>
-                                                            <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Agence')</span>
-                                                            </th>
-                                                            {{-- <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Email')</span>
-                                                            </th> --}}
-                                                            <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Telephone')</span>
-                                                            </th>
-                                                            <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Categorie')</span>
-                                                            </th>
-                                                            {{-- <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Date de naissance')</span>
-                                                            </th> --}}
-                                                            {{-- <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Date de
-                                                                    recrutement')</span>
-                                                            </th>
-                                                            <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Date d\'hadésion')</span>
-                                                            </th> --}}
-                                                            <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Status')</span>
-                                                            </th>
-                                                            {{-- <th class="nk-tb-col"><span class="sub-text">Status</span>
-                                                        </th> --}}
                                                             <th class="text-right nk-tb-col nk-tb-col-tools"><span
                                                                     class="sub-text">Action</span></th>
                                                         </tr>
@@ -133,7 +103,7 @@
     @if (config('app.locale') == 'fr')
         <script>
             $(document).ready(function() {
-                $('#userList').DataTable({
+                $('#typeprestationList').DataTable({
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
@@ -174,7 +144,7 @@
                     buttons: [
                         'copy', 'excel', 'pdf'
                     ],
-                    ajax: "{{ route('getuser') }}",
+                    ajax: "{{ route('getprestationList') }}",
                     order: [
                         [0, "desc"]
                     ],
@@ -185,68 +155,28 @@
                             "className": 'nk-tb-col nk-tb-col-check'
                         },
                         {
-                            "data": 'matricule',
-                            "name": 'matricule',
-                            "className": 'nk-tb-col '
-                        },
-                        {
-                            "data": 'nom',
-                            "name": 'nom',
-                            "className": 'nk-tb-col '
-                        },
-                        {
-                            "data": 'prenom',
-                            "name": 'prenom',
-                            "className": 'nk-tb-col '
-                        },
-                        {
-                            "data": 'sexe',
-                            "name": 'sexe',
-                            "className": 'nk-tb-col '
-                        },
-                        {
-                            "data": 'nationalité',
-                            "name": 'nationalité',
-                            "className": 'nk-tb-col '
-                        },
-                        {
-                            "data": 'agence',
-                            "name": 'agence',
-                            "className": 'nk-tb-col '
-                        },
-                        // {
-                        //     "data": 'email',
-                        //     "name": 'email',
-                        //     "className": 'nk-tb-col '
-                        // },
-                        {
-                            "data": 'tel',
-                            "name": 'tel',
+                            "data": 'date',
+                            "name": 'date',
                             "className": 'nk-tb-col'
                         },
                         {
-                            "data": 'category',
-                            "name": 'category',
+                            "data": 'montant',
+                            "name": 'montant',
                             "className": 'nk-tb-col'
                         },
-                        // {
-                        //     "data": 'dateNais',
-                        //     "name": 'dateNais',
-                        //     "className": 'nk-tb-col'
-                        // },
-                        // {
-                        //     "data": 'dateRecru',
-                        //     "name": 'dateRecru',
-                        //     "className": 'nk-tb-col'
-                        // },
-                        // {
-                        //     "data": 'dateHade',
-                        //     "name": 'dateHade',
-                        //     "className": 'nk-tb-col'
-                        // },
                         {
-                            "data": 'status',
-                            "name": 'status',
+                            "data": 'membre',
+                            "name": 'membre',
+                            "className": 'nk-tb-col'
+                        },
+                        {
+                            "data": 'typePrestation',
+                            "name": 'typePrestation',
+                            "className": 'nk-tb-col'
+                        },
+                        {
+                            "data": 'ayantDroit',
+                            "name": 'ayantDroit',
                             "className": 'nk-tb-col'
                         },
                         {
@@ -264,7 +194,7 @@
     @else
         <script>
             $(document).ready(function() {
-                $('#userList').DataTable({
+                $('#typeprestationList').DataTable({
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
@@ -277,42 +207,24 @@
                     buttons: [
                         'copy', 'excel', 'pdf'
                     ],
-                    // scrollX: true,
-                    // "order": [[ 0, "desc" ]],
-                    ajax: "{{ route('getuser') }}",
+                    ajax: "{{ route('gettypeprestationList') }}",
                     order: [
                         [0, "desc"]
-                    ], //or asc 
-                    columns: [
-                        // {
-                        //     "data": 'id',
-                        //     "name": 'id',
-                        //     "className": 'nk-tb-col nk-tb-col-check'
-                        // },
-                        {
+                    ],
+                    columns: [{
                             "data": 'updated_at',
                             "name": 'updated_at',
                             "visible": false,
                             "className": 'nk-tb-col nk-tb-col-check'
                         },
                         {
-                            "data": 'name',
-                            "name": 'name',
-                            "className": 'nk-tb-col '
-                        },
-                        {
-                            "data": 'email',
-                            "name": 'email',
+                            "data": 'libelle',
+                            "name": 'libelle',
                             "className": 'nk-tb-col'
                         },
                         {
-                            "data": 'role',
-                            "name": 'role',
-                            "className": 'nk-tb-col'
-                        },
-                        {
-                            "data": 'status',
-                            "name": 'status',
+                            "data": 'montant',
+                            "name": 'montant',
                             "className": 'nk-tb-col'
                         },
                         {
@@ -328,9 +240,5 @@
             $(".loader").addClass("d-none");
         </script>
     @endif
-
-    {{-- <script src="{{ mix('js/app.js') }}">
-    </script>
-    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script> --}}
 
 @endsection

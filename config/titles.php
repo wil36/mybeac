@@ -8,6 +8,9 @@ return [
         'edit' => 'Modification d\'un membre',
         'cotisation' => 'Cotisation de ' . $mytime->format('M Y'),
     ],
+    'membre' => [
+        'info' => 'Information sur les membres',
+    ],
     'categories' => [
         'index' => 'Liste des catégories',
         'create' => 'Ajout d\'une nouvelle catégorie',
@@ -22,5 +25,10 @@ return [
         'index' => 'Liste des types de prestation',
         'create' => 'Ajout d\'un type de prestation',
         'edit' => 'Modification d\'un type de prestation',
+    ],
+    'prestation' => [
+        'index' => 'Liste des prestations',
+        'create' => 'Ajout d\'une prestation',
+        'edit' => 'Modification d\'une prestation',
     ],
 ];

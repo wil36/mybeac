@@ -54,24 +54,12 @@ class CotisationController extends Controller
             ->addColumn("agence", function ($data) {
                 return $data->agence;
             })
-            // ->addColumn("email", function ($data) {
-            //     return $data->email;
-            // })
             ->addColumn("tel", function ($data) {
                 return $data->tel;
             })
             ->addColumn("category", function ($data) {
                 return $data->categories_id;
             })
-            // ->addColumn("dateNais", function ($data) {
-            //     return $data->role;
-            // })
-            // ->addColumn("dateRecru", function ($data) {
-            //     return $data->role;
-            // })
-            // ->addColumn("dateHade", function ($data) {
-            //     return $data->role;
-            // }) 
             ->editColumn("status", function ($data) {
                 if ($data->status) {
                     return ' <td class="nk-tb-col tb-col-md">
@@ -83,7 +71,21 @@ class CotisationController extends Controller
             </td>';
                 }
             })
-            ->rawColumns(['matricule', 'select', 'status'])
+            ->addColumn('Actions', function ($data) {
+                return '<ul class="nk-tb-actions gx-1">
+               
+              
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                           
+                        </div>
+                    </div>
+                </li>
+            </ul>';
+            })->setRowClass("nk-tb-item")
+            ->rawColumns(['matricule', 'select', 'status', 'Actions',])
             ->make(true);
     }
 }
