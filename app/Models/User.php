@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->hasMany(Prestation::class);
     }
 
+    function cotisations()
+    {
+        return $this->hasMany(Cotisation::class);
+    }
+
 
     /**
      * The attributes that should be hidden for arrays.

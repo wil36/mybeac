@@ -25,7 +25,9 @@ class UserController extends Controller
 
     public function getUser(Request $request)
     {
-        $data = User::with('category')->latest()->get();
+        // $data = User::with('category')->latest()->get();
+        $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id'));
+
         return \Yajra\DataTables\DataTables::of($data)
             ->addIndexColumn()
             ->addColumn("id", function ($data) {
@@ -38,7 +40,7 @@ class UserController extends Controller
                 return "<div class='user-card'>
                 <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
                      <img class='object-cover w-8 h-8 rounded-full'
-                                                            src='$data->profile_photo_url'
+                                                            src=''
                                                             alt='$data->nom' />
                 </div>
                 <div class='user-info'>
@@ -68,7 +70,7 @@ class UserController extends Controller
                 return $data->tel;
             })
             ->addColumn("category", function ($data) {
-                return $data->categories_id;
+                return $data->libelle;
             })
             // ->addColumn("dateNais", function ($data) {
             //     return $data->role;

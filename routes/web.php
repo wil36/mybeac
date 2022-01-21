@@ -66,6 +66,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     //Route for cotisation
     Route::get('/getusercotisation', [CotisationController::class, 'getUserCotisation'])->name('getUserCotisation');
     Route::get('users/cotisations', [CotisationController::class, 'cotisation'])->name('users.cotisation');
+    Route::post('savecotisations', [CotisationController::class, 'savecotisation'])->name('users.savecotisation');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
