@@ -55,8 +55,8 @@
                                                 <div class="col-md-3" style="margin-bottom: 10px">
                                                     <div class="form-group">
                                                         <x-input name='date1'
-                                                            :value="Carbon\Carbon::now()->format('Y-m-d') " input='date'
-                                                            :required="true" title="Date">
+                                                            :value="Carbon\Carbon::now()->format('Y-m-d') " input='text'
+                                                            :required="true" title="Date" :disabled="true">
                                                         </x-input>
                                                     </div>
                                                 </div>
@@ -67,12 +67,13 @@
                                                 </div>
                                                 <div class="col-md-3" style="margin-bottom: 10px">
                                                     <x-input name='montant_seance' :value="0" input='text' :required="true"
-                                                        title="Solde de la séance en cours" :disabled="true">
+                                                        title="Solde de la séance en cours (FCFA)" :disabled="true">
                                                     </x-input>
                                                 </div>
                                                 <div class="col-md-3" style="margin-bottom: 10px">
-                                                    <x-input name='' :value="$montant_global" input='text' :required="true"
-                                                        title="Total global des cotisations" :disabled="true">
+                                                    <x-input name='montant_global' :value="$montant_global" input='text'
+                                                        :required="true" title="Total global des cotisations (FCFA)"
+                                                        :disabled="true">
                                                     </x-input>
                                                 </div>
                                                 <div class="col-md-12" style="margin-bottom: 10px">
@@ -131,6 +132,9 @@
                                                                     class="sub-text">@lang('Categorie')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
+                                                                    class="sub-text">@lang('Montant')</span>
+                                                            </th>
+                                                            <th class="nk-tb-col"><span
                                                                     class="sub-text">@lang('Status')</span>
                                                             </th>
                                                         </tr>
@@ -143,7 +147,7 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="nk-block nk-block-lg">
+                                <div class="nk-block nk-block-">
                                     {{-- <button class="btn btn-primary right" style="position: relative">Test</button> --}}
                                     <div class="card card-preview">
                                         <div class="card-inner">
@@ -158,34 +162,26 @@
                                                 </div>
                                                 <div class="col-md-3" style="margin-bottom: 10px">
                                                     <div class="form-group">
-                                                        {{-- <div class="form-group">
-                                                            <label class="form-label" style="font-weight: bold;"
-                                                                for="default-01">Input text
-                                                                label</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="default-01"
-                                                                    placeholder="Input placeholder">
-                                                            </div>
-                                                        </div> --}}
                                                         <x-input name='date2'
-                                                            :value="Carbon\Carbon::now()->format('Y-m-d') " input='date'
-                                                            :required="true" title="Date">
+                                                            :value="Carbon\Carbon::now()->format('Y-m-d') " input='text'
+                                                            :required="true" title="Date" :disabled="true">
                                                         </x-input>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3" style="margin-bottom: 10px">
-                                                    <x-input name='dateHadhésion' :value="50" input='text' :required="true"
-                                                        title="Numéro de la séance">
+                                                    <x-input name='num_seance2' :value="$numero_seance" input='text'
+                                                        :required="true" title="Numéro de la séance" :disabled="true">
                                                     </x-input>
                                                 </div>
                                                 <div class="col-md-3" style="margin-bottom: 10px">
-                                                    <x-input name='dateHadhésion' :value="50000000000" input='text'
-                                                        :required="true" title="Solde de la séance en cours">
+                                                    <x-input name='montant_seance2' :value="0" input='text' :required="true"
+                                                        title="Solde de la séance en cours (FCFA)" :disabled="true">
                                                     </x-input>
                                                 </div>
                                                 <div class="col-md-3" style="margin-bottom: 10px">
-                                                    <x-input name='dateHadhésion' :value="$montant_global" input='text'
-                                                        :required="true" title="Total global des cotisations">
+                                                    <x-input name='montant_global2' :value="$montant_global" input='text'
+                                                        :required="true" title="Total global des cotisations (FCFA)"
+                                                        :disabled="true">
                                                     </x-input>
                                                 </div>
                                             </div>
@@ -216,7 +212,7 @@
             var liste = new Array();
             data.each(function(value, index) {
                 if ($("#customCheck" + value.id).prop("checked")) {
-                    liste.push(value.id)
+                    liste.push(value)
                 }
             });
             $.ajax({
@@ -236,6 +232,8 @@
                         //success
                         Swal.fire(data.success,
                             'Votre requête s\'est terminer avec succèss', 'success', );
+                        $('#montant_global').val(data.montant);
+                        $('#montant_global2').val(data.montant);
                         clearform();
                     } else {
                         var error = "";
@@ -279,6 +277,8 @@
             var table = $('#cotisationList').DataTable();
             table.ajax.reload();
             $("#customCheckAll").prop("checked", false);
+            $('#montant_seance').val('0');
+            $('#montant_seance2').val('0');
         }
 
         $('#customCheckAll').click(function(e) {
@@ -291,11 +291,13 @@
                     montant_en_cour += value.montant;
                 });
                 $('#montant_seance').val(montant_en_cour);
+                $('#montant_seance2').val(montant_en_cour);
             } else {
                 data.each(function(value, index) {
                     $("#customCheck" + value.id).prop("checked", false);
                 });
-                $('#montant_seance').val(0);
+                $('#montant_seance').val('0');
+                $('#montant_seance2').val('0');
             }
         });
 
@@ -314,6 +316,7 @@
 
             });
             $('#montant_seance').val(montant_en_cour);
+            $('#montant_seance2').val(montant_en_cour);
             if (test == false) {
                 $("#customCheckAll").prop("checked", true);
             }
@@ -361,7 +364,7 @@
                 buttons: [
                     'copy', 'excel', 'pdf'
                 ],
-                ajax: "{{ route('getUserCotisation') }}",
+                ajax: "{{ route('getUserCotisation', Carbon\Carbon::now()->format('m')) }}",
                 order: [
                     [0, "desc"]
                 ],
@@ -417,6 +420,11 @@
                     {
                         "data": 'category',
                         "name": 'category',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'montant',
+                        "name": 'montant',
                         "className": 'nk-tb-col'
                     },
                     {

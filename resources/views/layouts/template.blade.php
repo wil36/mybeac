@@ -169,9 +169,8 @@
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
                                                     <li><a href="{{ route('profile.show') }}"><em
-                                                                class="icon ni ni-account-setting-fill"></em><span>@lang('Voir
-                                                                le
-                                                                Profile')</span></a></li>
+                                                                class="icon ni ni-lock"></em><span>@lang('Sécurité')</span></a>
+                                                    </li>
                                                     <li id="dark1"><a class="dark-switch" href="#"><em
                                                                 class="icon ni ni-moon"></em><span> @lang('Mode
                                                                 Dark')</span></a>

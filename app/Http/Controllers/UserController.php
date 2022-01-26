@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Cotisation;
+use App\Models\Prestation;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -155,8 +157,10 @@ class UserController extends Controller
     {
         if ($request->id != null) {
             $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement')->where('id', $request->id)->first();
+            $totalcotisation = Cotisation::where('users_id', '=', $request->id)->sum('montant');
+            $totalprestation = Prestation::where('users_id', '=', $request->id)->sum('montant');
             $cat = Category::find($membre->categories_id);
-            return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat]);
+            return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat, 'totalCotisation' => number_format($totalcotisation, 0, ',', ' '), 'totalPrestation' => number_format($totalprestation, 0, ',', ' ')]);
         } else {
             abort(404);
         }

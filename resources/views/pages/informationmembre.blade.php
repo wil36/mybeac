@@ -100,6 +100,16 @@
                                                     <h5>Date d'hadésion à la mutuelle :
                                                         {{ date('d M Y', strtotime($membre->date_hadésion)) }}</h5>
                                                 </div>
+                                                <div style="margin-bottom: 80px"></div>
+                                                <div class="col-md-12">
+                                                    <h5>Total des cotisations :
+                                                        {{ $totalCotisation }} FCFA</h5>
+                                                </div>
+                                                <div style="margin-bottom: 40px"></div>
+                                                <div class="col-md-12">
+                                                    <h5>Total des prestations :
+                                                        {{ $totalPrestation }} FCFA</h5>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -123,7 +133,32 @@
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active" id="tabItem1">
-                                                        <p>content1</p>
+                                                        <h3 class="text-center">Liste des cotisations</h3>
+                                                        <div class="table-responsive">
+                                                            <table class="nk-tb-list nk-tb-ulist" id="cotisationList"
+                                                                data-auto-responsive="true">
+                                                                <thead>
+                                                                    <tr class="nk-tb-item nk-tb-head">
+                                                                        <th class="nk-tb-col" hidden><span
+                                                                                class="sub-text"></span></th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Date')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Montant')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Numéro de la
+                                                                                séance')</span>
+                                                                        </th>
+                                                                        <th class="text-right nk-tb-col nk-tb-col-tools">
+                                                                            <span class="sub-text">Action</span>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                     <div class="tab-pane" id="tabItem2">
                                                         <h3 class="text-center">Liste des prestations</h3>
@@ -139,10 +174,6 @@
                                                                         </th>
                                                                         <th class="nk-tb-col"><span
                                                                                 class="sub-text">@lang('Montant')</span>
-                                                                        </th>
-                                                                        <th class="nk-tb-col"><span
-                                                                                class="sub-text">@lang('Nom du
-                                                                                membre')</span>
                                                                         </th>
                                                                         <th class="nk-tb-col"><span
                                                                                 class="sub-text">@lang('Type de
@@ -209,6 +240,87 @@
 
     <script>
         $(document).ready(function() {
+
+            $('#cotisationList').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                pageLength: 10,
+                paginate: true,
+                info: true,
+                language: {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                    "sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+                },
+                buttons: [
+                    'copy', 'excel', 'pdf'
+                ],
+                ajax: "{{ route('getcotisationListForUser', $membre->id) }}",
+                order: [
+                    [0, "desc"]
+                ],
+                columns: [{
+                        "data": 'updated_at',
+                        "name": 'updated_at',
+                        "visible": false,
+                        "className": 'nk-tb-col nk-tb-col-check'
+                    },
+                    {
+                        "data": 'date',
+                        "name": 'date',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'montant',
+                        "name": 'montant',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'numero_seance',
+                        "name": 'numero_seance',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'Actions',
+                        "name": 'Actions',
+                        "orderable": false,
+                        "serachable": false,
+                        "className": 'nk-tb-col nk-tb-col-tools'
+                    },
+                ]
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
             $('#prestationList').DataTable({
                 processing: true,
                 serverSide: true,
@@ -268,11 +380,6 @@
                     {
                         "data": 'montant',
                         "name": 'montant',
-                        "className": 'nk-tb-col'
-                    },
-                    {
-                        "data": 'membre',
-                        "name": 'membre',
                         "className": 'nk-tb-col'
                     },
                     {

@@ -91,7 +91,7 @@ class PrestationController extends Controller
 
     public function getprestationListForUser(Request $request)
     {
-        $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, us.nom, us.prenom, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id and pr.users_id=' . $request->id));
+        $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id and pr.users_id=' . $request->id));
         return \Yajra\DataTables\DataTables::of($data)
             ->addIndexColumn()
             ->addColumn("id", function ($data) {
@@ -112,10 +112,7 @@ class PrestationController extends Controller
             </div>";
             })
             ->addColumn("montant", function ($data) {
-                return $data->montant . ' FCFA';
-            })
-            ->addColumn("membre", function ($data) {
-                return $data->nom . ' ' . $data->prenom;
+                return number_format($data->montant, 0, ',', ' ') . ' FCFA';
             })
             ->addColumn("typePrestation", function ($data) {
                 return $data->libelle;

@@ -64,7 +64,8 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     Route::post('prestation/{id}', [PrestationController::class, 'update'])->name('prestation.update');
 
     //Route for cotisation
-    Route::get('/getusercotisation', [CotisationController::class, 'getUserCotisation'])->name('getUserCotisation');
+    Route::get('/getusercotisation/{date}', [CotisationController::class, 'getUserCotisation'])->name('getUserCotisation');
+    Route::get('/getcotisationListForUser/{id}', [CotisationController::class, 'getcotisationListForUser'])->name('getcotisationListForUser');
     Route::get('users/cotisations', [CotisationController::class, 'cotisation'])->name('users.cotisation');
     Route::post('savecotisations', [CotisationController::class, 'savecotisation'])->name('users.savecotisation');
 });
