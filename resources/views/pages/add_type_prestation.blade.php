@@ -145,6 +145,10 @@
             $("#libelle").val('');
             $("#libelle").focus();
             $("#montant").val('');
+            @if (Route::currentRouteName() === 'typeprestation.edit')
+                history.pushState({}, null, "{{ route('typeprestation.index') }}");
+                window.setTimeout('location.reload()', 1500);
+            @endif
         }
     </script>
 @endsection

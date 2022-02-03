@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class PrestationController extends Controller
 {
@@ -26,18 +25,19 @@ class PrestationController extends Controller
 
     public function getprestationList(Request $request)
     {
-        $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, us.nom, us.prenom, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id'));
-        return \Yajra\DataTables\DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn("id", function ($data) {
-                return $data->id;
-            })
-            ->addColumn("updated_at", function ($data) {
-                return $data->created_at;
-            })
-            ->editColumn("date", function ($data) {
-                return
-                    "<div class='user-card'>
+        try {
+            $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, us.nom, us.prenom, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id'));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("date", function ($data) {
+                    return
+                        "<div class='user-card'>
                 <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
                     <span>PRE</span>
                 </div>
@@ -45,29 +45,29 @@ class PrestationController extends Controller
                     <span class='tb-lead'>" . $data->dates . "</span>
                 </div>
             </div>";
-            })
-            ->addColumn("montant", function ($data) {
-                return $data->montant . ' FCFA';
-            })
-            ->addColumn("membre", function ($data) {
-                return $data->nom . ' ' . $data->prenom;
-            })
-            ->addColumn("typePrestation", function ($data) {
-                return $data->libelle;
-            })
-            ->addColumn("ayantDroit", function ($data) {
-                return $data->adnom . ' ' . $data->adprenom;
-            })
-            ->addColumn('Actions', function ($data) {
-                return '<ul class="nk-tb-actions gx-1">
+                })
+                ->addColumn("montant", function ($data) {
+                    return $data->montant . ' FCFA';
+                })
+                ->addColumn("membre", function ($data) {
+                    return $data->nom . ' ' . $data->prenom;
+                })
+                ->addColumn("typePrestation", function ($data) {
+                    return $data->libelle;
+                })
+                ->addColumn("ayantDroit", function ($data) {
+                    return $data->adnom . ' ' . $data->adprenom;
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
                
                 <li class="nk-tb-action-hidden">
                     <a href="' . route('prestation.edit', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Modifier">
                         <em class="icon ni ni-edit"></em>
                     </a>
                 </li>
-                <li class="nk-tb-action-hidden">
-                    <a href="' . route('prestation.delete', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Supprimer">
+               <li class="nk-tb-action-hidden">
+                    <a href="" data_id="' . $data->id . '" class="btn btn-trigger btn-icon delete-data-pres" data-toggle="tooltip" data-placement="top" title="Supprimer">
                        <em class="icon ni ni-trash"></em>
                     </a>
                 </li>
@@ -78,31 +78,36 @@ class PrestationController extends Controller
                             <ul class="link-list-opt no-bdr">
                                 <li><a href="' . route('prestation.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
                                  
-                                <li><a href="' . route('prestation.delete', $data->id) . '" ><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
+                                <li><a href="" class="delete-data-pres" data_id="' . $data->id . '"><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
                             </ul>
                         </div>
                     </div>
                 </li>
             </ul>';
-            })->setRowClass("nk-tb-item")
-            ->rawColumns(['Actions', 'date', 'status'])
-            ->make(true);
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'date', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
     }
 
     public function getprestationListForUser(Request $request)
     {
-        $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id and pr.users_id=' . $request->id));
-        return \Yajra\DataTables\DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn("id", function ($data) {
-                return $data->id;
-            })
-            ->addColumn("updated_at", function ($data) {
-                return $data->created_at;
-            })
-            ->editColumn("date", function ($data) {
-                return
-                    "<div class='user-card'>
+        try {
+
+            $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id and pr.users_id=' . $request->id));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("date", function ($data) {
+                    return
+                        "<div class='user-card'>
                 <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
                     <span>PRE</span>
                 </div>
@@ -110,18 +115,18 @@ class PrestationController extends Controller
                     <span class='tb-lead'>" . $data->dates . "</span>
                 </div>
             </div>";
-            })
-            ->addColumn("montant", function ($data) {
-                return number_format($data->montant, 0, ',', ' ') . ' FCFA';
-            })
-            ->addColumn("typePrestation", function ($data) {
-                return $data->libelle;
-            })
-            ->addColumn("ayantDroit", function ($data) {
-                return $data->adnom . ' ' . $data->adprenom;
-            })
-            ->addColumn('Actions', function ($data) {
-                return '<ul class="nk-tb-actions gx-1">
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
+                })
+                ->addColumn("typePrestation", function ($data) {
+                    return $data->libelle;
+                })
+                ->addColumn("ayantDroit", function ($data) {
+                    return $data->adnom . ' ' . $data->adprenom;
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
                
                 <li class="nk-tb-action-hidden">
                     <a href="' . route('prestation.edit', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Modifier">
@@ -129,7 +134,7 @@ class PrestationController extends Controller
                     </a>
                 </li>
                 <li class="nk-tb-action-hidden">
-                    <a href="' . route('prestation.delete', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Supprimer">
+                    <a href="" data_id="' . $data->id . '" class="btn btn-trigger btn-icon delete-data-pres" data-toggle="tooltip" data-placement="top" title="Supprimer">
                        <em class="icon ni ni-trash"></em>
                     </a>
                 </li>
@@ -140,15 +145,18 @@ class PrestationController extends Controller
                             <ul class="link-list-opt no-bdr">
                                 <li><a href="' . route('prestation.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
                                  
-                                <li><a href="' . route('prestation.delete', $data->id) . '" ><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
+                                <li><a href="" class="delete-data-pres" data_id="' . $data->id . '"><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
                             </ul>
                         </div>
                     </div>
                 </li>
             </ul>';
-            })->setRowClass("nk-tb-item")
-            ->rawColumns(['libelle', 'Actions', 'date', 'status'])
-            ->make(true);
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['libelle', 'Actions', 'date', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
     }
 
     /**
@@ -158,15 +166,19 @@ class PrestationController extends Controller
      */
     public function create(Request $request)
     {
-        if ($request->id != null) {
-            $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $request->id)->first();
-            // dd($membre);
-            if ($membre == null) {
+        try {
+            if ($request->id != null) {
+                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $request->id)->first();
+                // dd($membre);
+                if ($membre == null) {
+                    abort(404);
+                }
+                return view('pages.addprestation', ['membre' => $membre]);
+            } else {
                 abort(404);
             }
-            return view('pages.addprestation', ['membre' => $membre]);
-        } else {
-            abort(404);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
 
@@ -178,24 +190,24 @@ class PrestationController extends Controller
      */
     public function store(Request $request)
     {
-        $attributeNames = array(
-            'typePrestation' => 'type de prestation',
-            'listAyantDroit' => 'ayants droit',
-        );
-        $validator = FacadesValidator::make($request->all(), [
-            'id' => ['required', 'integer'],
-            'typePrestation' => ['required', 'string'],
-            'montant' => ['required', 'numeric'],
-            'date' => ['required', 'date', 'date_format:Y-m-d'],
-            'listAyantDroit' => ['required', 'integer'],
-        ]);
-        // dd(date('Y-m-d', strtotime(now())));
-        $validator->setAttributeNames($attributeNames);
-        if ($validator->fails()) {
-            return response()
-                ->json(['errors' => $validator->errors()->all()]);
-        }
         try {
+            $attributeNames = array(
+                'typePrestation' => 'type de prestation',
+                'listAyantDroit' => 'ayants droit',
+            );
+            $validator = FacadesValidator::make($request->all(), [
+                'id' => ['required', 'integer'],
+                'typePrestation' => ['required', 'string'],
+                'montant' => ['required', 'numeric'],
+                'date' => ['required', 'date', 'date_format:Y-m-d'],
+                'listAyantDroit' => ['required', 'integer'],
+            ]);
+            // dd(date('Y-m-d', strtotime(now())));
+            $validator->setAttributeNames($attributeNames);
+            if ($validator->fails()) {
+                return response()
+                    ->json(['errors' => $validator->errors()->all()]);
+            }
             DB::beginTransaction();
             $prestation  = new Prestation();
             $prestation['date'] = $request['date'];
@@ -232,18 +244,22 @@ class PrestationController extends Controller
      */
     public function edit($id)
     {
-        if ($id != null) {
-            $prestation = Prestation::find($id);
-            $type_prestation = TypePrestation::find($prestation->type_prestation_id);
-            $ayant_droits = AyantDroit::find($prestation->ayant_droits_id);
-            $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $prestation->users_id)->first();
-            // dd($membre);
-            if ($membre == null) {
+        try {
+            if ($id != null) {
+                $prestation = Prestation::find($id);
+                $type_prestation = TypePrestation::find($prestation->type_prestation_id);
+                $ayant_droits = AyantDroit::find($prestation->ayant_droits_id);
+                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $prestation->users_id)->first();
+                // dd($membre);
+                if ($membre == null) {
+                    abort(404);
+                }
+                return view('pages.addprestation', ['membre' => $membre, 'prestation' => $prestation, 'type_prestation' => $type_prestation, 'ayant_droit' => $ayant_droits]);
+            } else {
                 abort(404);
             }
-            return view('pages.addprestation', ['membre' => $membre, 'prestation' => $prestation, 'type_prestation' => $type_prestation, 'ayant_droit' => $ayant_droits]);
-        } else {
-            abort(404);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
 
@@ -256,24 +272,24 @@ class PrestationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $attributeNames = array(
-            'typePrestation' => 'type de prestation',
-            'listAyantDroit' => 'ayants droit',
-        );
-        $validator = FacadesValidator::make($request->all(), [
-            'id' => ['required', 'integer'],
-            'typePrestation' => ['required', 'string'],
-            'montant' => ['required', 'numeric'],
-            'date' => ['required', 'date', 'date_format:Y-m-d'],
-            'listAyantDroit' => ['required', 'integer'],
-        ]);
-        // dd(date('Y-m-d', strtotime(now())));
-        $validator->setAttributeNames($attributeNames);
-        if ($validator->fails()) {
-            return response()
-                ->json(['errors' => $validator->errors()->all()]);
-        }
         try {
+            $attributeNames = array(
+                'typePrestation' => 'type de prestation',
+                'listAyantDroit' => 'ayants droit',
+            );
+            $validator = FacadesValidator::make($request->all(), [
+                'id' => ['required', 'integer'],
+                'typePrestation' => ['required', 'string'],
+                'montant' => ['required', 'numeric'],
+                'date' => ['required', 'date', 'date_format:Y-m-d'],
+                'listAyantDroit' => ['required', 'integer'],
+            ]);
+            // dd(date('Y-m-d', strtotime(now())));
+            $validator->setAttributeNames($attributeNames);
+            if ($validator->fails()) {
+                return response()
+                    ->json(['errors' => $validator->errors()->all()]);
+            }
             DB::beginTransaction();
             $prestation  = Prestation::find($request->ids);
             $prestation['date'] = $request['date'];
@@ -297,11 +313,11 @@ class PrestationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteprestation(Request $request)
     {
         try {
-            Prestation::find($id)->delete();
-            return back()->with("status", "Suppression de la prestation éffectuer avec succès");
+            Prestation::find($request->id)->delete();
+            return response()->json(["success" => "Suppression éffectuer avec succès"]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

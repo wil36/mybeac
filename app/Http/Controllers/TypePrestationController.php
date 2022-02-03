@@ -23,18 +23,19 @@ class TypePrestationController extends Controller
 
     public function gettypeprestationList(Request $request)
     {
-        $data = TypePrestation::latest()->get();
-        return \Yajra\DataTables\DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn("id", function ($data) {
-                return $data->id;
-            })
-            ->addColumn("updated_at", function ($data) {
-                return $data->created_at;
-            })
-            ->editColumn("libelle", function ($data) {
-                return
-                    "<div class='user-card'>
+        try {
+            $data = TypePrestation::latest()->get();
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("libelle", function ($data) {
+                    return
+                        "<div class='user-card'>
                 <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
                     <span>TYP</span>
                 </div>
@@ -42,12 +43,12 @@ class TypePrestationController extends Controller
                     <span class='tb-lead'>$data->libelle</span>
                 </div>
             </div>";;
-            })
-            ->addColumn("montant", function ($data) {
-                return $data->montant . ' FCFA';
-            })
-            ->addColumn('Actions', function ($data) {
-                return '<ul class="nk-tb-actions gx-1">
+                })
+                ->addColumn("montant", function ($data) {
+                    return $data->montant . ' FCFA';
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
                
                 <li class="nk-tb-action-hidden">
                     <a href="' . route('typeprestation.edit', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Modifier">
@@ -55,7 +56,7 @@ class TypePrestationController extends Controller
                     </a>
                 </li>
                 <li class="nk-tb-action-hidden">
-                    <a href="' . route('typeprestation.delete', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Supprimer">
+                    <a href="" data_id="' . $data->id . '" class="btn btn-trigger btn-icon delete-data-typepres" data-toggle="tooltip" data-placement="top" title="Supprimer">
                        <em class="icon ni ni-trash"></em>
                     </a>
                 </li>
@@ -66,27 +67,34 @@ class TypePrestationController extends Controller
                             <ul class="link-list-opt no-bdr">
                                 <li><a href="' . route('typeprestation.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
                                  
-                                <li><a href="' . route('typeprestation.delete', $data->id) . '" ><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
+                                <li><a data_id="' . $data->id . '" href="" class="delete-data-typepres"><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
                             </ul>
                         </div>
                     </div>
                 </li>
             </ul>';
-            })->setRowClass("nk-tb-item")
-            ->rawColumns(['libelle', 'Actions', 'status'])
-            ->make(true);
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['libelle', 'Actions', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
     }
 
     public function getTypePrestations(Request $request)
     {
-        $data = TypePrestation::select("id", "libelle", "montant")->where(function ($query) use ($request) {
-            $query->where('libelle', 'like', '%' . $request->search . '%');
-        })->limit(5)->get();
-        $resp = array();
-        foreach ($data as $e) {
-            $resp[] = array('id' => $e->id . '|' . $e->montant, 'text' => $e->libelle, 'value' => $e->id . '|' . $e->montant);
+        try {
+            $data = TypePrestation::select("id", "libelle", "montant")->where(function ($query) use ($request) {
+                $query->where('libelle', 'like', '%' . $request->search . '%');
+            })->limit(5)->get();
+            $resp = array();
+            foreach ($data as $e) {
+                $resp[] = array('id' => $e->id . '|' . $e->montant, 'text' => $e->libelle, 'value' => $e->id . '|' . $e->montant);
+            }
+            return response()->json($resp);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
         }
-        return response()->json($resp);
     }
 
     /**
@@ -107,15 +115,15 @@ class TypePrestationController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = FacadesValidator::make($request->all(), [
-            'libelle' => ['required', 'string', 'max:255', 'unique:type_prestations,libelle'],
-            'montant' => ['required', 'numeric'],
-        ]);
-        if ($validator->fails()) {
-            return response()
-                ->json(['errors' => $validator->errors()->all()]);
-        }
         try {
+            $validator = FacadesValidator::make($request->all(), [
+                'libelle' => ['required', 'string', 'max:255', 'unique:type_prestations,libelle'],
+                'montant' => ['required', 'numeric'],
+            ]);
+            if ($validator->fails()) {
+                return response()
+                    ->json(['errors' => $validator->errors()->all()]);
+            }
             DB::beginTransaction();
             $typeprestation  = new TypePrestation();
             $typeprestation['libelle'] = $request['libelle'];
@@ -148,8 +156,12 @@ class TypePrestationController extends Controller
      */
     public function edit($id)
     {
-        $typeprestation = TypePrestation::findOrFail($id);
-        return view('pages.add_type_prestation', ['typeprestation' => $typeprestation]);
+        try {
+            $typeprestation = TypePrestation::findOrFail($id);
+            return view('pages.add_type_prestation', ['typeprestation' => $typeprestation]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
     }
 
     /**
@@ -161,19 +173,19 @@ class TypePrestationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = FacadesValidator::make($request->all(), [
-            'libelle' => [
-                'required', 'string', 'max:255', Rule::unique('type_prestations', 'libelle')->where(function ($query) use ($request) {
-                    $query->where('id', '!=', $request['id']);
-                })
-            ],
-            'montant' => ['required', 'numeric'],
-        ]);
-        if ($validator->fails()) {
-            return response()
-                ->json(['errors' => $validator->errors()->all()]);
-        }
         try {
+            $validator = FacadesValidator::make($request->all(), [
+                'libelle' => [
+                    'required', 'string', 'max:255', Rule::unique('type_prestations', 'libelle')->where(function ($query) use ($request) {
+                        $query->where('id', '!=', $request['id']);
+                    })
+                ],
+                'montant' => ['required', 'numeric'],
+            ]);
+            if ($validator->fails()) {
+                return response()
+                    ->json(['errors' => $validator->errors()->all()]);
+            }
             DB::beginTransaction();
             $typeprestation = TypePrestation::findOrFail($id);
             $typeprestation['libelle'] = $request['libelle'];
@@ -193,11 +205,11 @@ class TypePrestationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deletetypeprestation(Request $request)
     {
         try {
-            TypePrestation::findOrFail($id)->delete();
-            return back()->with("status", "Suppression éffectuer avec succès");
+            TypePrestation::findOrFail($request->id)->delete();
+            return response()->json(["success" => "Suppression éffectuer avec succès"]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

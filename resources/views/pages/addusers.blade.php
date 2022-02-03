@@ -39,8 +39,20 @@
                                 <div class="card">
                                     <div class="card-inner">
                                         <form method="POST" id="formUser"
-                                            action="{{ Route::currentRouteName() === 'users.edit' ? route('users.update', $user->id) : route('users.store') }}">
+                                            action="{{ Route::currentRouteName() === 'membre.edit' ? route('membre.update', $user->id) : route('membre.store') }}">
                                             @csrf
+                                            <div class="row d-flex justify-content-center">
+                                                <div class='user-avatar-lg bg-primary d-flex justify-items-center'
+                                                    style="height: 150px; width: 150px; margin-bottom: 20px;">
+                                                    <img class='object-cover w-8 h-8 rounded-full' id="show_img"
+                                                        {{-- @dd(public_path('picture_profile\\' . $user->profile_photo_path)) --}}
+                                                        src='{{ isset($user)? (isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=1ee0ac&size=150&color=fff'): 'https://ui-avatars.com/api/?name=Membre&background=1ee0ac&size=150&color=fff' }}'
+                                                        alt='' />
+                                                </div>
+                                                <input type="file" class="p-md-5" id="pictureupload"
+                                                    accept=".jpg, .jpeg, .png, .webp" value="">
+                                            </div>
+                                            <div style="height: 20px"></div>
                                             <div class="row g-gs">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -146,7 +158,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <x-input name='role'
-                                                            :value="isset($user) ? $user->role=='admin'?'Administrateur':'Agent' : ''"
+                                                            :value="isset($user) ? $user->role=='admin'?'Administrateur':'Membre' : ''"
                                                             input='select'
                                                             :options='[["name"=>"","value"=>""],["name"=>"Administrateur","value"=>"admin"],["name"=>"Membre","value"=>"agent"]]'
                                                             :required="true" title="Grade *">
@@ -182,44 +194,66 @@
             $('#alert-javascript').addClass('d-none');
             $('#alert-javascript').text('');
             e.preventDefault();
-            var matricule = $("#matricule").val();
-            var nom = $("#nom").val();
-            var prenom = $("#prenom").val();
-            var nationalité = $("#nationalité").val();
-            var agence = $("#agence").val();
-            var email = $("#email").val();
-            var tel = $("#tel").val();
-            var dateNaissance = $("#dateNaissance").val();
-            var dateRecrutement = $("#dateRecrutement").val();
-            var dateHadhésion = $("#dateHadhésion").val();
-            var categorie = $("#categorie").val();
-            var listCategorie = $("#listCategorie").val();
-            var sexe = $("#sexe").val();
-            var role = $("#role").val();
+            let picture = ($('#pictureupload')[0].files)[0] ?? null;
+            let matricule = $("#matricule").val();
+            let nom = $("#nom").val();
+            let prenom = $("#prenom").val();
+            let nationalité = $("#nationalité").val();
+            let agence = $("#agence").val();
+            let email = $("#email").val();
+            let tel = $("#tel").val();
+            let dateNaissance = $("#dateNaissance").val();
+            let dateRecrutement = $("#dateRecrutement").val();
+            let dateHadhésion = $("#dateHadhésion").val();
+            let categorie = $("#categorie").val();
+            let listCategorie = $("#listCategorie").val();
+            let sexe = $("#sexe").val();
+            let role = $("#role").val();
+
+            var formData = new FormData();
+            formData.append('matricule', matricule);
+            formData.append('nom', nom);
+            formData.append('prenom', prenom);
+            formData.append('nationalité', nationalité);
+            formData.append('agence', agence);
+            formData.append('email', email);
+            formData.append('tel', tel);
+            formData.append('dateNaissance', dateNaissance);
+            formData.append('dateRecrutement', dateRecrutement);
+            formData.append('dateHadhésion', dateHadhésion);
+            formData.append('categorie', categorie);
+            formData.append('role', role);
+            formData.append('sexe', sexe);
+            formData.append('listCategorie', listCategorie);
+            formData.append('picture', picture);
 
             $.ajax({
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 url: "" + $('#formUser').attr('action'),
                 type: "" + $('#formUser').attr('method'),
                 dataType: 'json',
-                data: {
-                    matricule: matricule,
-                    nom: nom,
-                    prenom: prenom,
-                    nationalité: nationalité,
-                    agence: agence,
-                    email: email,
-                    tel: tel,
-                    dateNaissance: dateNaissance,
-                    dateRecrutement: dateRecrutement,
-                    dateHadhésion: dateHadhésion,
-                    categorie: categorie,
-                    role: role,
-                    sexe: sexe,
-                    listCategorie: listCategorie,
-                },
+                // data: {
+                //     matricule: matricule,
+                //     nom: nom,
+                //     prenom: prenom,
+                //     nationalité: nationalité,
+                //     agence: agence,
+                //     email: email,
+                //     tel: tel,
+                //     dateNaissance: dateNaissance,
+                //     dateRecrutement: dateRecrutement,
+                //     dateHadhésion: dateHadhésion,
+                //     categorie: categorie,
+                //     role: role,
+                //     sexe: sexe,
+                //     listCategorie: listCategorie,
+                //     picture: picture == null ? null : picture,
+                // },
+                data: formData,
+                contentType: false,
+                processData: false,
                 success: function(data) {
                     if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
                         //success
@@ -284,9 +318,21 @@
             });
         }
 
+        $(function() {
+            $('#pictureupload').change(function(event) {
+                var x = URL.createObjectURL(event.target.files[0]);
+                $('#show_img').attr('src', x);
+                $('#show_img').attr('height', 150);
+                $('#show_img').attr('width', 150);
+            });
+        });
+
         function clearFormUser() {
-            history.pushState({}, null, "{{ route('users.create') }}");
-            $('#formUser').attr('action', "{{ route('users.store') }}");
+            @if (Route::currentRouteName() === 'membre.edit')
+                history.pushState({}, null, "{{ route('membre.index') }}");
+                window.setTimeout('location.reload()', 1500);
+            @endif
+            $('#formUser').attr('action', "{{ route('membre.store') }}");
             $('#formUser').attr('method', "POST");
             $('#alert-javascript').addClass('d-none');
             $('#alert-javascript').text('');
@@ -311,6 +357,10 @@
             );
             $("#listCategorie").empty();
             loadCategories();
+            $("#pictureupload").val('');
+            $('#show_img').attr('src', '');
+            $('#show_img').attr('height', 0);
+            $('#show_img').attr('width', 0);
         }
     </script>
 @endsection

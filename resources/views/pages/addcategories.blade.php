@@ -148,7 +148,6 @@
         });
 
         function clearformCategorie() {
-            history.pushState({}, null, "{{ route('categories.create') }}");
             $('#formCategorie').attr('action', "{{ route('categories.store') }}");
             $('#formCategorie').attr('method', "POST");
             $('#alert-javascript').addClass('d-none');
@@ -157,6 +156,10 @@
             $("#code").val('');
             $("#libelle").val('');
             $("#montant").val('');
+            @if (Route::currentRouteName() === 'categories.edit')
+                history.pushState({}, null, "{{ route('categories.index') }}");
+                window.setTimeout('location.reload()', 1500);
+            @endif
         }
     </script>
 @endsection

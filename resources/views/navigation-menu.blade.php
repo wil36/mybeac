@@ -73,7 +73,9 @@
                         </x-jet-dropdown>
                     </div>
                 @endif
-
+                @php
+                    $user = Auth::user();
+                @endphp
                 <!-- Settings Dropdown -->
                 <div class="relative ml-3">
                     <x-jet-dropdown align="right" width="48">
@@ -82,14 +84,15 @@
                                 <button
                                     class="flex text-sm transition border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
                                     <img class="object-cover w-8 h-8 rounded-full"
-                                        src="{{ Auth::user()->profile_photo_url }}"
-                                        alt="{{ Auth::user()->name }}" />
+                                        src="
+                                        {{ isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                        alt="" />
                                 </button>
                             @else
                                 <span class="inline-flex rounded-md">
                                     <button type="button"
                                         class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
-                                        {{ Auth::user()->name }}
+                                        {{ $user->nom }}
 
                                         <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 20 20" fill="currentColor">
@@ -126,7 +129,7 @@
 
                                 <x-jet-dropdown-link href="{{ route('logout') }}" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+                                    {{ __('Déconnexion') }}
                                 </x-jet-dropdown-link>
                             </form>
                         </x-slot>
@@ -142,8 +145,8 @@
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>

@@ -40,7 +40,7 @@
                                 <div class="card">
                                     <div class="card-inner">
                                         <form method="POST" id="formayantsdroits"
-                                            action="{{ Route::currentRouteName() === 'ayantsdroits.edit' ? route('ayantsdroits.update', $ayantsdroits->id) : route('ayantsdroits.store') }}">
+                                            action="{{ Route::currentRouteName() === 'ayantsdroits.edit'? route('ayantsdroits.update', $ayantsdroits->id): route('ayantsdroits.store') }}">
                                             @csrf
                                             <div class="row g-gs">
                                                 <div class="col-md-12">
@@ -240,7 +240,7 @@
             formData.append('statut', statut);
             $.ajax({
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 url: "" + $('#formayantsdroits').attr('action'),
                 type: "" + $('#formayantsdroits').attr('method'),
@@ -292,7 +292,6 @@
         });
 
         function clearformayantsdroits() {
-            history.pushState({}, null, "{{ route('ayantsdroits.create', $id) }}");
             $('#formayantsdroits').attr('action', "{{ route('ayantsdroits.store') }}");
             $('#formayantsdroits').attr('method', "POST");
             $('#alert-javascript').addClass('d-none');
@@ -318,6 +317,10 @@
             $("#lab_certificat_vie").text('Choisir un fichier ');
             $("#lab_cni").text('Choisir un fichier ');
             $("#lab_acte_naissance").text('Choisir un fichier ');
+            @if (Route::currentRouteName() === 'ayantsdroits.edit')
+                history.pushState({}, null, "{{ route('membre.index') }}");
+                window.setTimeout('location.reload()', 1500);
+            @endif
         }
     </script>
 @endsection

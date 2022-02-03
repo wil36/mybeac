@@ -19,19 +19,31 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::cl
 
 Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     //Route for Users
-    Route::get('users/delete/{id}', [UserController::class, 'destroys'])->name('user.delete');
-    Route::get('users/doubleauthdelete/{id}', [UserController::class, 'doubleauthdelete'])->name('user.doubleauthdelete');
+    Route::post('membre/delete', [UserController::class, 'deletemembre'])->name('user.delete');
+    Route::post('membre/doubleauthdelete', [UserController::class, 'doubleauthdelete'])->name('user.doubleauthdelete');
     Route::get('/getuser', [UserController::class, 'getUser'])->name('getuser');
-    Route::resource('users', UserController::class)->except(['show', 'update']);
-    Route::post('users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::resource('membre', UserController::class)->except(['show', 'update']);
+    Route::get('membre/delete', function () {
+        abort(404);
+    });
+    Route::get('membre/edit', function () {
+        abort(404);
+    });
+    Route::get('membre/information', function () {
+        abort(404);
+    });
+    Route::post('users/{id}', [UserController::class, 'update'])->name('membre.update');
     Route::get('membre/information/{id}', [UserController::class, 'infomembre'])->name('membre.info');
 
     //Route for categories
-    Route::get('categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
+    Route::post('categories/delete', [CategoryController::class, 'deletecategory'])->name('categories.delete');
     Route::resource('categories', CategoryController::class)->except(['show', 'update', 'delete']);
     Route::get('/getcategoriesList', [CategoryController::class, 'getcategoriesList'])->name('getcategoriesList');
     Route::post('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::post('/getCategories', [CategoryController::class, 'getCategories'])->name('getCategories');
+    Route::get('categories/edit', function () {
+        abort(404);
+    });
 
     //Route for ayants droits
     Route::resource('ayantsdroits', AyantDroitController::class)->except(['show', 'update', 'delete', 'create']);
@@ -39,21 +51,34 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     Route::get('ayantsdroitsListForUser/{id}', [AyantDroitController::class, 'ayantsdroitsListForUser'])->name('ayantsdroitsListForUser');
     Route::post('/getAyantsDroit/{id}', [AyantDroitController::class, 'getAyantsDroit'])->name('getAyantsDroit');
     Route::post('ayantsdroits/{ids}', [AyantDroitController::class, 'update'])->name('ayantsdroits.update');
-    Route::get('ayantsdroits/delete/{id}', [AyantDroitController::class, 'destroy'])->name('ayantsdroits.delete');
+    Route::post('deleteayantsdroits', [AyantDroitController::class, 'deleteayantdroits'])->name('ayantsdroits.delete');
+    Route::get('ayantsdroits/delete', function () {
+        abort(404);
+    });
+    Route::get('ayantsdroits/edit', function () {
+        abort(404);
+    });
+
 
     //Route for Type de prestation
     Route::resource('typeprestation', TypePrestationController::class)->except(['show', 'delete', 'update']);
     Route::get('/gettypeprestationList', [TypePrestationController::class, 'gettypeprestationList'])->name('gettypeprestationList');
-    Route::get('typeprestation/delete/{id}', [TypePrestationController::class, 'destroy'])->name('typeprestation.delete');
+    Route::post('typeprestation/delete', [TypePrestationController::class, 'deletetypeprestation'])->name('typeprestation.delete');
     Route::post('typeprestation/{id}', [TypePrestationController::class, 'update'])->name('typeprestation.update');
     Route::post('/getTypePrestations', [TypePrestationController::class, 'getTypePrestations'])->name('getTypePrestations');
+    Route::get('typeprestation/delete', function () {
+        abort(404);
+    });
+    Route::get('typeprestation/edit', function () {
+        abort(404);
+    });
 
     //Route for  prestation
     Route::resource('prestation', PrestationController::class)->except(['show', 'delete', 'update', 'create']);
     Route::get('/getprestationList', [PrestationController::class, 'getprestationList'])->name('getprestationList');
     Route::get('/getprestationListForUser/{id}', [PrestationController::class, 'getprestationListForUser'])->name('getprestationListForUser');
     Route::post('prestation/{ids}', [PrestationController::class, 'update'])->name('prestation.update');
-    Route::get('prestation/delete/{id}', [PrestationController::class, 'destroy'])->name('prestation.delete');
+    Route::post('deleteprestation', [PrestationController::class, 'deleteprestation'])->name('prestation.delete');
     Route::get('prestation/create/{id}', [PrestationController::class, 'create'])->name('prestation.create');
     Route::get('prestation/create', function () {
         abort(404);
@@ -61,13 +86,17 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     Route::get('prestation/delete', function () {
         abort(404);
     });
+    Route::get('prestation/edit', function () {
+        abort(404);
+    });
     Route::post('prestation/{id}', [PrestationController::class, 'update'])->name('prestation.update');
 
     //Route for cotisation
     Route::get('/getusercotisation/{date}', [CotisationController::class, 'getUserCotisation'])->name('getUserCotisation');
     Route::get('/getcotisationListForUser/{id}', [CotisationController::class, 'getcotisationListForUser'])->name('getcotisationListForUser');
-    Route::get('users/cotisations', [CotisationController::class, 'cotisation'])->name('users.cotisation');
-    Route::post('savecotisations', [CotisationController::class, 'savecotisation'])->name('users.savecotisation');
+    Route::get('users/cotisations', [CotisationController::class, 'cotisation'])->name('membre.cotisation');
+    Route::post('savecotisations', [CotisationController::class, 'savecotisation'])->name('membre.savecotisation');
+    Route::POST('deletecotisations', [CotisationController::class, 'deletecotisations'])->name('membre.deletecotisation');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');

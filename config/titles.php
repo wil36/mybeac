@@ -2,14 +2,12 @@
 $mytime = Carbon\Carbon::now();
 return [
     'dashboard' => 'Acceuil',
-    'users' => [
+    'membre' => [
+        'info' => 'Information sur les membres',
         'index' => 'Liste des membres',
         'create' => 'Ajout d\'un nouveau membre',
         'edit' => 'Modification d\'un membre',
         'cotisation' => 'Cotisation de ' . $mytime->format('M Y'),
-    ],
-    'membre' => [
-        'info' => 'Information sur les membres',
     ],
     'categories' => [
         'index' => 'Liste des catégories',

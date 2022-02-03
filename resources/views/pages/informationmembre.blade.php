@@ -45,7 +45,9 @@
                                         <div class='user-card user-card-s2'>
                                             <div class='user-avatar-lg bg-primary d-flex justify-content-left'
                                                 style="height: 150px; width: 150px">
-                                                <img class='object-cover w-8 h-8 rounded-full' src='' alt='' />
+                                                <img class='object-cover w-8 h-8 rounded-full'
+                                                    src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                    alt='' />
                                             </div>
                                             <div class="row user-info text-left">
                                                 <div class="col-md-12 text-center">
@@ -161,7 +163,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="tab-pane" id="tabItem2">
-                                                        <h3 class="text-center">Liste des prestations</h3>
+                                                        <div class="row m-md-2">
+                                                            <div class="col-md-2">
+                                                                <a href="{{ route('prestation.create', $membre->id) }}"
+                                                                    class="btn btn-primary"><em
+                                                                        class="icon ni ni-plus"></em></a>
+                                                            </div>
+                                                            <h3 class="text-center col-md-10">Liste des prestations</h3>
+                                                        </div>
                                                         <div class="table-responsive">
                                                             <table class="nk-tb-list nk-tb-ulist" id="prestationList"
                                                                 data-auto-responsive="true">
@@ -193,7 +202,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="tab-pane" id="tabItem3">
-                                                        <h3 class="text-center">Liste des ayants droits</h3>
+                                                        <div class="row m-md-2">
+                                                            <div class="col-md-2">
+                                                                <a href="{{ route('ayantsdroits.create', $membre->id) }}"
+                                                                    class="btn btn-primary"><em
+                                                                        class="icon ni ni-plus"></em></a>
+                                                            </div>
+                                                            <h3 class="text-center col-md-10">Liste des ayants droits</h3>
+                                                        </div>
                                                         <div class="table-responsive">
                                                             <table class="nk-tb-list nk-tb-ulist" id="ayantdroitList"
                                                                 data-auto-responsive="true">
@@ -207,6 +223,17 @@
                                                                         <th class="nk-tb-col"><span
                                                                                 class="sub-text">@lang('Liens de
                                                                                 parenté avec le membre')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Cni')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Acte de
+                                                                                naissance')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Certificat de
+                                                                                vie')</span>
                                                                         </th>
                                                                         <th class="text-right nk-tb-col nk-tb-col-tools">
                                                                             <span class="sub-text">Action</span>
@@ -236,7 +263,6 @@
 @section('script')
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
         $(document).ready(function() {
@@ -468,6 +494,21 @@
                         "className": 'nk-tb-col'
                     },
                     {
+                        "data": 'cni',
+                        "name": 'cni',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'acte_naissance',
+                        "name": 'acte_naissance',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'certificat_vie',
+                        "name": 'certificat_vie',
+                        "className": 'nk-tb-col'
+                    },
+                    {
                         "data": 'Actions',
                         "name": 'Actions',
                         "orderable": false,
@@ -475,6 +516,163 @@
                         "className": 'nk-tb-col nk-tb-col-tools'
                     },
                 ]
+            });
+        });
+
+        $(document).on('click', '.delete-data-cot', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data_id');
+            Swal.fire({
+                title: 'Voulez-vous vraiment supprimer ?',
+                text: "Vous êtes en train de vouloir supprimer une donnée ! Assurez-vous que c'est bien la bonne !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Annuler',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('membre.deletecotisation') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            id: id,
+                        },
+                        success: function(data) {
+                            if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+                                Swal.fire(
+                                    'Supprimer!',
+                                    data.success,
+                                    'success'
+                                )
+                                window.setTimeout('location.reload()', 1500);
+                            } else {
+                                Swal.fire(
+                                    'Erreur!',
+                                    data.error,
+                                    'error'
+                                )
+                            }
+                            $("html, body").animate({
+                                scrollTop: 0
+                            }, "slow");
+                        },
+                        error: function(data) {
+                            Swal.fire('Une erreur s\'est produite.',
+                                'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+                                'error');
+
+                        }
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('click', '.delete-data-pres', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data_id');
+            Swal.fire({
+                title: 'Voulez-vous vraiment supprimer ?',
+                text: "Vous êtes en train de vouloir supprimer une donnée ! Assurez-vous que c'est bien la bonne !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Annuler',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('prestation.delete') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            id: id,
+                        },
+                        success: function(data) {
+                            if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+                                Swal.fire(
+                                    'Supprimer!',
+                                    data.success,
+                                    'success'
+                                )
+                                window.setTimeout('location.reload()', 1500);
+                            } else {
+                                Swal.fire(
+                                    'Erreur!',
+                                    data.error,
+                                    'error'
+                                )
+                            }
+                            $("html, body").animate({
+                                scrollTop: 0
+                            }, "slow");
+                        },
+                        error: function(data) {
+                            Swal.fire('Une erreur s\'est produite.',
+                                'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+                                'error');
+
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.delete-data-ayant', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data_id');
+            Swal.fire({
+                title: 'Voulez-vous vraiment supprimer ?',
+                text: "Vous êtes en train de vouloir supprimer une donnée ! Assurez-vous que c'est bien la bonne !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Annuler',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('ayantsdroits.delete') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            id: id,
+                        },
+                        success: function(data) {
+                            if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+                                Swal.fire(
+                                    'Supprimer!',
+                                    data.success,
+                                    'success'
+                                )
+                                window.setTimeout('location.reload()', 1500);
+                            } else {
+                                Swal.fire(
+                                    'Erreur!',
+                                    data.error,
+                                    'error'
+                                )
+                            }
+                            $("html, body").animate({
+                                scrollTop: 0
+                            }, "slow");
+                        },
+                        error: function(data) {
+                            Swal.fire('Une erreur s\'est produite.',
+                                'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+                                'error');
+
+                        }
+                    });
+                }
             });
         });
     </script>

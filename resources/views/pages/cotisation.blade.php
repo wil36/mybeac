@@ -212,14 +212,14 @@
             var liste = new Array();
             data.each(function(value, index) {
                 if ($("#customCheck" + value.id).prop("checked")) {
-                    liste.push(value)
+                    liste.push(value);
                 }
             });
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{ route('users.savecotisation') }}",
+                url: "{{ route('membre.savecotisation') }}",
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -270,7 +270,6 @@
         });
 
         // $('#date1').on("input", function() {
-        //     console.log(2);
         // });
 
         function clearform() {
@@ -288,7 +287,12 @@
                 var montant_en_cour = 0;
                 data.each(function(value, index) {
                     $("#customCheck" + value.id).prop("checked", true);
-                    montant_en_cour += value.montant;
+                    if ({{ Carbon\Carbon::now()->format('m') }} == '03' ||
+                        {{ Carbon\Carbon::now()->format('m') }} == '12') {
+                        montant_en_cour += value.montant * 2;
+                    } else {
+                        montant_en_cour += value.montant;
+                    }
                 });
                 $('#montant_seance').val(montant_en_cour);
                 $('#montant_seance2').val(montant_en_cour);
@@ -311,7 +315,12 @@
                     $("#customCheckAll").prop("checked", false);
                     test = true;
                 } else {
-                    montant_en_cour += value.montant;
+                    if ({{ Carbon\Carbon::now()->format('m') }} == '03' ||
+                        {{ Carbon\Carbon::now()->format('m') }} == '12') {
+                        montant_en_cour += value.montant * 2;
+                    } else {
+                        montant_en_cour += value.montant;
+                    }
                 }
 
             });
@@ -364,7 +373,7 @@
                 buttons: [
                     'copy', 'excel', 'pdf'
                 ],
-                ajax: "{{ route('getUserCotisation', Carbon\Carbon::now()->format('m')) }}",
+                ajax: "{{ route('getUserCotisation', Carbon\Carbon::now()->format('Y-m-d')) }}",
                 order: [
                     [0, "desc"]
                 ],

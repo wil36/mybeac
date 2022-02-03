@@ -18,7 +18,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $dates = ['deleted_at'];
 
@@ -43,7 +43,8 @@ class User extends Authenticatable
         'sexe',
         'status',
         'categories_id',
-        'email_verified_at'
+        'email_verified_at',
+        'profile_photo_path',
     ];
 
     function category()

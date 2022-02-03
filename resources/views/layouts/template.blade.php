@@ -21,9 +21,11 @@
     @yield('css')
 </head>
 
-<body
+<body @php
+    $userinfo = Auth::user();
+@endphp
     class="no-touch nk-nio-theme                                                       
-                                 @if (Auth::user()->theme == 1)
+                                 @if ($userinfo->theme == 1)
     dark-mode
     @endif">
     ">
@@ -110,7 +112,7 @@
                             </div><!-- .nk-header-news -->
                             <div class="nk-header-tools">
                                 <ul class="nk-quick-nav">
-                                    <li class="nav-item dropdown">
+                                    {{-- <li class="nav-item dropdown">
                                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             @switch($locale)
@@ -136,18 +138,18 @@
                                                     src="{{ asset('images/france.png') }}" width="25px">
                                                 @lang('Français')</a>
                                         </div>
-                                    </li>
+                                    </li> --}}
 
                                     <li class="dropdown user-dropdown">
                                         <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
                                             <div class="user-toggle">
                                                 <span style="margin-right: 10px;">
-                                                    {{ Auth::user()->nom }}
-                                                    {{ Auth::user()->prenom }}</span>
+                                                    {{ $userinfo->nom }}
+                                                    {{ $userinfo->prenom }}</span>
                                                 <div class="user-avatar sm">
                                                     <img class="object-cover w-8 h-8 rounded-full"
-                                                        src="{{ Auth::user()->profile_photo_url }}"
-                                                        alt="{{ Auth::user()->nom }}" />
+                                                        src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                        alt="" />
                                                 </div>
                                             </div>
                                         </a>
@@ -156,13 +158,13 @@
                                                 <div class="user-card">
                                                     <div class="user-avatar">
                                                         <img class="object-cover w-8 h-8 rounded-full"
-                                                            src="{{ Auth::user()->profile_photo_url }}"
-                                                            alt="{{ Auth::user()->prenom }}" />
+                                                            src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                            alt="" />
                                                     </div>
                                                     <div class="user-info">
-                                                        <span class="lead-text">{{ Auth::user()->nom }}
-                                                            {{ Auth::user()->prenom }}</span>
-                                                        <span class="sub-text">{{ Auth::user()->email }}</span>
+                                                        <span class="lead-text">{{ $userinfo->nom }}
+                                                            {{ $userinfo->prenom }}</span>
+                                                        <span class="sub-text">{{ $userinfo->email }}</span>
                                                     </div>
                                                 </div>
                                             </div>

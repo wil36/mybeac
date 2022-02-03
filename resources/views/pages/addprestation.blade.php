@@ -45,7 +45,9 @@
                                         <div class='user-card user-card-s2'>
                                             <div class='user-avatar-lg bg-primary d-flex justify-content-center'
                                                 style="height: 150px; width: 150px">
-                                                <img class='object-cover w-8 h-8 rounded-full' src='' alt='' />
+                                                <img class='object-cover w-8 h-8 rounded-full'
+                                                    src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                    alt='' />
                                             </div>
                                             <div class="row user-info">
                                                 <div class="col-md-12">
@@ -90,7 +92,7 @@
                                         <div class="card">
                                             <div class="card-inner">
                                                 <form method="POST" id="formPrestation"
-                                                    action="{{ Route::currentRouteName() === 'prestation.edit' ? route('prestation.update', $prestation->id) : route('prestation.store') }}">
+                                                    action="{{ Route::currentRouteName() === 'prestation.edit'? route('prestation.update', $prestation->id): route('prestation.store') }}">
                                                     @csrf
                                                     <div class="row g-gs">
                                                         <div class="col-md-12">
@@ -176,6 +178,7 @@
     <script>
         $('.btn-submit-prestation').click(function(e) {
             e.preventDefault();
+
             $('#alert-javascript').addClass('d-none');
             $('#alert-javascript').text('');
             var typePrestation = $("#typePrestation").val();
@@ -183,10 +186,8 @@
             var id = $("#id").val();
             var date = $("#date").val();
             var listAyantDroit = $("#listAyantDroit").val();
-            console.log(typePrestation);
-            console.log($('#formPrestation').attr('action'));
 
-            // history.pushState({}, null, "{{ route('users.index') }}");
+            // history.pushState({}, null, "{{ route('membre.index') }}");
             // window.setTimeout('location.reload()', 1000);
             $.ajax({
                 headers: {
@@ -208,6 +209,8 @@
                         Swal.fire(data.success,
                             'Votre requête s\'est terminer avec succèss', 'success', );
                         clearformPrestation();
+                        // history.pushState({}, null, "{{ route('membre.index') }}");
+                        // window.setTimeout('location.reload()', 1500);
                     } else {
                         if (!$.isEmptyObject(data.error)) {
                             $('#alert-javascript').removeClass('d-none');
@@ -310,6 +313,10 @@
             $("#listAyantDroit").empty();
             loadprestation();
             loadAyantDroit();
+            @if (Route::currentRouteName() === 'prestation.edit')
+                // history.pushState({}, null, "{{ route('membre.index') }}");
+                window.setTimeout('window.history.back()', 1500);
+            @endif
         }
     </script>
 @endsection

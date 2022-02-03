@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a href="{{ route('users.create') }}" class="btn btn-primary"><em
+                                <a href="{{ route('membre.create') }}" class="btn btn-primary"><em
                                         class="icon ni ni-plus"></em></a>
                             </div>
                             <div class="card">
@@ -128,7 +128,111 @@
 @section('script')
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        $(document).on('click', '.delete-data-user', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data_id');
+            Swal.fire({
+                title: 'Voulez-vous vraiment supprimer ?',
+                text: "Vous êtes en train de vouloir supprimer une donnée ! Assurez-vous que c'est bien la bonne !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Annuler',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('user.delete') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            id: id,
+                        },
+                        success: function(data) {
+                            if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+                                Swal.fire(
+                                    'Supprimer!',
+                                    data.success,
+                                    'success'
+                                )
+                                window.setTimeout('location.reload()', 1500);
+                            } else {
+                                Swal.fire(
+                                    'Erreur!',
+                                    data.error,
+                                    'error'
+                                )
+                            }
+                            $("html, body").animate({
+                                scrollTop: 0
+                            }, "slow");
+                        },
+                        error: function(data) {
+                            Swal.fire('Une erreur s\'est produite.',
+                                'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+                                'error');
+
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.dbauth-delete', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data_id');
+            Swal.fire({
+                title: 'Voulez-vous vraiment supprimer ?',
+                text: "Vous êtes en train de vouloir supprimer la méthode de double authentification sur un compte utilisateur ! Assurez-vous que c'est bien la bonne !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Annuler',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('user.doubleauthdelete') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            id: id,
+                        },
+                        success: function(data) {
+                            if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+                                Swal.fire(
+                                    'Supprimer!',
+                                    data.success,
+                                    'success'
+                                )
+                            } else {
+                                Swal.fire(
+                                    'Erreur!',
+                                    data.error,
+                                    'error'
+                                )
+                            }
+                            $("html, body").animate({
+                                scrollTop: 0
+                            }, "slow");
+                        },
+                        error: function(data) {
+                            Swal.fire('Une erreur s\'est produite.',
+                                'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+                                'error');
+
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
     @if (config('app.locale') == 'fr')
         <script>
