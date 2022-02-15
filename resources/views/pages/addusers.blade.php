@@ -44,7 +44,8 @@
                                             <div class="row d-flex justify-content-center">
                                                 <div class='user-avatar-lg bg-primary d-flex justify-items-center'
                                                     style="height: 150px; width: 150px; margin-bottom: 20px;">
-                                                    <img class='object-cover w-8 h-8 rounded-full' id="show_img"
+                                                    <img class='object-cover w-8 h-8 rounded-full popup-image'
+                                                        data-toggle="modal" data-target="#view-photo-modal" id="show_img"
                                                         {{-- @dd(public_path('picture_profile\\' . $user->profile_photo_path)) --}}
                                                         src='{{ isset($user)? (isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=1ee0ac&size=150&color=fff'): 'https://ui-avatars.com/api/?name=Membre&background=1ee0ac&size=150&color=fff' }}'
                                                         alt='' />

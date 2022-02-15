@@ -42,7 +42,7 @@ class UserController extends Controller
                     if (isset($data->profile_photo_path)) {
                         return '<div class="user-card">
                 <div class="user-avatar bg-dim-primary d-none d-sm-flex">
-                     <img class="object-cover w-8 h-8 rounded-full" src="' . asset('picture_profile/' . $data->profile_photo_path)  . '" alt="" />
+                     <img class="object-cover w-8 h-8 rounded-full popup-image" data-toggle="modal" data-target="#view-photo-modal" src="' . asset('picture_profile/' . $data->profile_photo_path)  . '" alt="" />
                 </div>
                 <div class="user-info">
                     <span class="tb-lead">' . $data->matricule . '</span>

@@ -45,7 +45,7 @@ class TypePrestationController extends Controller
             </div>";;
                 })
                 ->addColumn("montant", function ($data) {
-                    return $data->montant . ' FCFA';
+                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">

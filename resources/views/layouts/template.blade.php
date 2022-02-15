@@ -157,7 +157,8 @@
                                             <div class="dropdown-inner user-card-wrap bg-lighter">
                                                 <div class="user-card">
                                                     <div class="user-avatar">
-                                                        <img class="object-cover w-8 h-8 rounded-full"
+                                                        <img class="object-cover w-8 h-8 rounded-full popup-image"
+                                                            data-toggle="modal" data-target="#view-photo-modal"
                                                             src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=1ee0ac&size=150&color=fff' }}"
                                                             alt="" />
                                                     </div>
@@ -203,13 +204,45 @@
         </div>
     </div>
 
+    <!-- Modal Trigger Code -->
+    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalDefault">Modal Default</button> --}}
+
+    <!-- Modal Content Code -->
+    <div class="modal fade" tabindex="-1" id="view-photo-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+                {{-- <div class="modal-header">
+                    <h5 class="modal-title">Modal Title</h5>
+                </div> --}}
+                <div class="modal-body">
+                    <img src="" alt="" id="photo-modal">
+                </div>
+                {{-- <div class="modal-footer bg-light">
+                    <span class="sub-text">Modal Footer Text</span>
+                </div> --}}
+            </div>
+        </div>
+    </div>
     {{-- Script js --}}
     <script src="{!! asset('assets/js/bundle.js?ver=2.2.0') !!}"></script>
     <script src="{!! asset('assets/js/scripts.js?ver=2.2.0') !!}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    @yield('script')
     <script>
+        $(document).on('click', '.popup-image', function(e) {
+            e.preventDefault();
+            var src = $(this).attr('src');
+            $('#photo-modal').attr('src', src);
+            // $('#modalDefault').modal({
+            //     show: 'false'
+            // });
+        });
         $(document).ready(function() {
             $('.active').removeClass('.active');
         });
@@ -224,7 +257,6 @@
             });
         });
     </script>
-    @yield('script')
 
 </body>
 
