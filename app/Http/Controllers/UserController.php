@@ -172,8 +172,9 @@ class UserController extends Controller
                 $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement', 'profile_photo_path')->where('id', $request->id)->first();
                 $totalcotisation = Cotisation::where('users_id', '=', $request->id)->sum('montant');
                 $totalprestation = Prestation::where('users_id', '=', $request->id)->sum('montant');
+                $poidMembre = $totalcotisation - $totalprestation;
                 $cat = Category::find($membre->categories_id);
-                return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat, 'totalCotisation' => number_format($totalcotisation, 0, ',', ' '), 'totalPrestation' => number_format($totalprestation, 0, ',', ' ')]);
+                return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat, 'poidMembre' => number_format($poidMembre, 0, ',', ' '), 'totalCotisation' => number_format($totalcotisation, 0, ',', ' '), 'totalPrestation' => number_format($totalprestation, 0, ',', ' ')]);
             } else {
                 abort(404);
             }

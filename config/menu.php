@@ -37,19 +37,19 @@ return [
         'role'   => 'admin',
         'childrens' => [
             [
-                'name'  => 'Liste des types de prestation',
+                'name'  => 'Liste des types de prestations',
                 'role'  => 'admin',
                 'route' => 'typeprestation.index',
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Ajouter d\'un type de prestation',
+                'name'  => 'Ajouter un type de prestation',
                 'role'  => 'admin',
                 'route' => 'typeprestation.create',
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Tout les prestations',
+                'name'  => 'Toutes les prestations',
                 'role'  => 'admin',
                 'route' => 'prestation.index',
                 'altRoute' => '',

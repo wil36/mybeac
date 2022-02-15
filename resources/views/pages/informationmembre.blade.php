@@ -2,7 +2,6 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css"> --}}
-
 @endsection
 
 @section('contenu')
@@ -45,7 +44,7 @@
                                         <div class='user-card user-card-s2'>
                                             <div class='user-avatar-lg bg-primary d-flex justify-content-left'
                                                 style="height: 150px; width: 150px">
-                                                <img class='object-cover w-8 h-8 rounded-full'
+                                                <img class='object-cover w-8 h-8 rounded-full popup-image'
                                                     src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=1ee0ac&size=150&color=fff' }}"
                                                     alt='' />
                                             </div>
@@ -112,6 +111,12 @@
                                                     <h5>Total des prestations :
                                                         {{ $totalPrestation }} FCFA</h5>
                                                 </div>
+                                                <div style="margin-bottom: 40px"></div>
+                                                <div class="col-md-12">
+                                                    <h5>Poids du membre :
+                                                        {{ $poidMembre }} FCFA
+                                                    </h5>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -129,8 +134,8 @@
                                                             des prestations</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#tabItem3">Listes
-                                                            des ayants droits</a>
+                                                        <a class="nav-link" data-toggle="tab" href="#tabItem3">Liste
+                                                            des ayant droits</a>
                                                     </li>
                                                 </ul>
                                                 <div class="tab-content">
@@ -208,7 +213,7 @@
                                                                     class="btn btn-primary"><em
                                                                         class="icon ni ni-plus"></em></a>
                                                             </div>
-                                                            <h3 class="text-center col-md-10">Liste des ayants droits</h3>
+                                                            <h3 class="text-center col-md-10">Liste des ayant droits</h3>
                                                         </div>
                                                         <div class="table-responsive">
                                                             <table class="nk-tb-list nk-tb-ulist" id="ayantdroitList"

@@ -20,7 +20,7 @@ return [
         'edit' => 'Modification d\'un ayant droit',
     ],
     'typeprestation' => [
-        'index' => 'Liste des types de prestation',
+        'index' => 'Liste des types de prestations',
         'create' => 'Ajout d\'un type de prestation',
         'edit' => 'Modification d\'un type de prestation',
     ],
