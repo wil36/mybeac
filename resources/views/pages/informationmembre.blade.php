@@ -114,7 +114,9 @@
                                                 <div style="margin-bottom: 40px"></div>
                                                 <div class="col-md-12">
                                                     <h5>Poids du membre :
-                                                        {{ $poidMembre }} FCFA
+                                                        <span
+                                                            style="color: {{ $poidMembre < 0 ? 'red' : '#1ee0ac' }};">{{ $poidMembre2 }}
+                                                            FCFA</span>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -152,7 +154,8 @@
                                                                                 class="sub-text">@lang('Date')</span>
                                                                         </th>
                                                                         <th class="nk-tb-col"><span
-                                                                                class="sub-text">@lang('Montant')</span>
+                                                                                class="sub-text">@lang('Montant
+                                                                                (FCFA)')</span>
                                                                         </th>
                                                                         <th class="nk-tb-col"><span
                                                                                 class="sub-text">@lang('Numéro de la
@@ -187,7 +190,8 @@
                                                                                 class="sub-text">@lang('Date')</span>
                                                                         </th>
                                                                         <th class="nk-tb-col"><span
-                                                                                class="sub-text">@lang('Montant')</span>
+                                                                                class="sub-text">@lang('Montant
+                                                                                (FCFA)')</span>
                                                                         </th>
                                                                         <th class="nk-tb-col"><span
                                                                                 class="sub-text">@lang('Type de

@@ -117,7 +117,7 @@ class PrestationController extends Controller
             </div>";
                 })
                 ->addColumn("montant", function ($data) {
-                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
+                    return number_format($data->montant, 0, ',', ' ');
                 })
                 ->addColumn("typePrestation", function ($data) {
                     return $data->libelle;

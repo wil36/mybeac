@@ -2,11 +2,11 @@
 
 return [
     'Acceuil' => [
-        'name' => "Tableau de bord",
+        'name' => "Informations",
         'route' => 'dashboard',
         'icon' => 'icon ni ni-dashboard-fill',
         'routes' => ['dashboard'],
-        'role'   => 'admin',
+        'role'   => 'agent',
     ],
     'Catégorie' => [
         'name' => "Gestion des catégories",

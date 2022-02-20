@@ -15,9 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
+    function () {
 
-Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
+        //Accieul
+        Route::get('/', [AcceuilController::class, 'index'])->name('dashboard');
+
+        //cotisations
+        Route::get('/getcotisationListForUser/{id}', [CotisationController::class, 'getcotisationListForUser'])->name('getcotisationListForUser');
+
+        //prestations
+        Route::get('/getprestationListForUser/{id}', [PrestationController::class, 'getprestationListForUser'])->name('getprestationListForUser');
+
+        //ayant droits
+        Route::get('ayantsdroitsListForUser/{id}', [AyantDroitController::class, 'ayantsdroitsListForUser'])->name('ayantsdroitsListForUser');
+    }
+);
+// Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration')->group(function () {
     //Route for Users
     Route::post('membre/delete', [UserController::class, 'deletemembre'])->name('user.delete');
     Route::post('membre/doubleauthdelete', [UserController::class, 'doubleauthdelete'])->name('user.doubleauthdelete');
@@ -48,7 +64,6 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     //Route for ayants droits
     Route::resource('ayantsdroits', AyantDroitController::class)->except(['show', 'update', 'delete', 'create']);
     Route::get('ayantsdroits/{id}', [AyantDroitController::class, 'create'])->name('ayantsdroits.create');
-    Route::get('ayantsdroitsListForUser/{id}', [AyantDroitController::class, 'ayantsdroitsListForUser'])->name('ayantsdroitsListForUser');
     Route::post('/getAyantsDroit/{id}', [AyantDroitController::class, 'getAyantsDroit'])->name('getAyantsDroit');
     Route::post('ayantsdroits/{ids}', [AyantDroitController::class, 'update'])->name('ayantsdroits.update');
     Route::post('deleteayantsdroits', [AyantDroitController::class, 'deleteayantdroits'])->name('ayantsdroits.delete');
@@ -76,7 +91,6 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
     //Route for  prestation
     Route::resource('prestation', PrestationController::class)->except(['show', 'delete', 'update', 'create']);
     Route::get('/getprestationList', [PrestationController::class, 'getprestationList'])->name('getprestationList');
-    Route::get('/getprestationListForUser/{id}', [PrestationController::class, 'getprestationListForUser'])->name('getprestationListForUser');
     Route::post('prestation/{ids}', [PrestationController::class, 'update'])->name('prestation.update');
     Route::post('deleteprestation', [PrestationController::class, 'deleteprestation'])->name('prestation.delete');
     Route::get('prestation/create/{id}', [PrestationController::class, 'create'])->name('prestation.create');
@@ -93,13 +107,20 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
 
     //Route for cotisation
     Route::get('/getusercotisation/{date}', [CotisationController::class, 'getUserCotisation'])->name('getUserCotisation');
-    Route::get('/getcotisationListForUser/{id}', [CotisationController::class, 'getcotisationListForUser'])->name('getcotisationListForUser');
     Route::get('users/cotisations', [CotisationController::class, 'cotisation'])->name('membre.cotisation');
     Route::post('savecotisations', [CotisationController::class, 'savecotisation'])->name('membre.savecotisation');
     Route::POST('deletecotisations', [CotisationController::class, 'deletecotisations'])->name('membre.deletecotisation');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
+
+
+
+
+
+
+
+
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/set', function () {
     //App::setLocale('en');
     // dd($locale = App::currentLocale());

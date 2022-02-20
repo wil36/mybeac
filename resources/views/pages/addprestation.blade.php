@@ -2,7 +2,6 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css"> --}}
-
 @endsection
 
 @section('contenu')
@@ -209,6 +208,8 @@
                         Swal.fire(data.success,
                             'Votre requête s\'est terminer avec succèss', 'success', );
                         clearformPrestation();
+                        history.back();
+                        window.setTimeout('location.reload()', 1500);
                         // history.pushState({}, null, "{{ route('membre.index') }}");
                         // window.setTimeout('location.reload()', 1500);
                     } else {

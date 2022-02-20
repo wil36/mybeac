@@ -174,7 +174,7 @@ class UserController extends Controller
                 $totalprestation = Prestation::where('users_id', '=', $request->id)->sum('montant');
                 $poidMembre = $totalcotisation - $totalprestation;
                 $cat = Category::find($membre->categories_id);
-                return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat, 'poidMembre' => number_format($poidMembre, 0, ',', ' '), 'totalCotisation' => number_format($totalcotisation, 0, ',', ' '), 'totalPrestation' => number_format($totalprestation, 0, ',', ' ')]);
+                return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat, 'poidMembre' => $poidMembre, 'poidMembre2' => number_format(abs($poidMembre), 0, ',', ' '), 'totalCotisation' => number_format($totalcotisation, 0, ',', ' '), 'totalPrestation' => number_format($totalprestation, 0, ',', ' ')]);
             } else {
                 abort(404);
             }

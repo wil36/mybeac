@@ -1,8 +1,6 @@
 @extends('layouts.template')
 
 @section('css')
-
-
 @endsection
 
 @section('contenu')
@@ -66,7 +64,7 @@
                                                                     class="sub-text">@lang('Libelle')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Montant')</span>
+                                                                    class="sub-text">@lang('Montant (FCFA)')</span>
                                                             </th>
                                                             <th class="text-right nk-tb-col nk-tb-col-tools"><span
                                                                     class="sub-text">Action</span></th>
@@ -272,5 +270,4 @@
             $(".loader").addClass("d-none");
         </script>
     @endif
-
 @endsection

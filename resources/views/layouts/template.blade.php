@@ -25,9 +25,7 @@
     $userinfo = Auth::user();
 @endphp
     class="no-touch nk-nio-theme                                                       
-                                 @if ($userinfo->theme == 1)
-    dark-mode
-    @endif">
+                                 @if ($userinfo->theme == 1) dark-mode @endif">
     ">
     <div class="nk-app-root">
         <!-- main @s -->
@@ -232,6 +230,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    {{-- <script src="{!! asset('assets/js/charts/chart-ecommerce.js?ver=2.2.0') !!}"></script> --}}
+
 
     @yield('script')
     <script>
@@ -256,6 +256,11 @@
                 }
             });
         });
+
+
+        function nombresAvecEspaces(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        }
     </script>
 
 </body>

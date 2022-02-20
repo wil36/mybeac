@@ -2,7 +2,6 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css"> --}}
-
 @endsection
 
 @section('contenu')
@@ -132,7 +131,7 @@
                                                                     class="sub-text">@lang('Categorie')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Montant')</span>
+                                                                    class="sub-text">@lang('Montant (FCFA)')</span>
                                                             </th>
                                                             <th class="nk-tb-col"><span
                                                                     class="sub-text">@lang('Status')</span>
@@ -212,6 +211,7 @@
             var liste = new Array();
             data.each(function(value, index) {
                 if ($("#customCheck" + value.id).prop("checked")) {
+                    value.montant = value.montant.replace(' ', '');
                     liste.push(value);
                 }
             });
@@ -240,8 +240,8 @@
                         data.errors.forEach(element => {
                             error = error + element + "<br>";
                         });
-                        Swal.fire('errors',
-                            error, 'error', );
+                        Swal.fire('Oops !',
+                            error, 'warning', );
                         if (!$.isEmptyObject(data.error)) {
                             $('#alert-javascript').removeClass('d-none');
                             $('#alert-javascript').text(data.error);
@@ -289,13 +289,13 @@
                     $("#customCheck" + value.id).prop("checked", true);
                     if ({{ Carbon\Carbon::now()->format('m') }} == '03' ||
                         {{ Carbon\Carbon::now()->format('m') }} == '12') {
-                        montant_en_cour += value.montant * 2;
+                        montant_en_cour += Number(value.montant.replace(' ', '')) * 2;
                     } else {
-                        montant_en_cour += value.montant;
+                        montant_en_cour += Number(value.montant.replace(' ', ''));
                     }
                 });
-                $('#montant_seance').val(montant_en_cour);
-                $('#montant_seance2').val(montant_en_cour);
+                $('#montant_seance').val(nombresAvecEspaces(montant_en_cour));
+                $('#montant_seance2').val(nombresAvecEspaces(montant_en_cour));
             } else {
                 data.each(function(value, index) {
                     $("#customCheck" + value.id).prop("checked", false);
@@ -317,15 +317,15 @@
                 } else {
                     if ({{ Carbon\Carbon::now()->format('m') }} == '03' ||
                         {{ Carbon\Carbon::now()->format('m') }} == '12') {
-                        montant_en_cour += value.montant * 2;
+                        montant_en_cour += Number(value.montant.replace(' ', '')) * 2;
                     } else {
-                        montant_en_cour += value.montant;
+                        montant_en_cour += Number(value.montant.replace(' ', ''));
                     }
                 }
 
             });
-            $('#montant_seance').val(montant_en_cour);
-            $('#montant_seance2').val(montant_en_cour);
+            $('#montant_seance').val(nombresAvecEspaces(montant_en_cour));
+            $('#montant_seance2').val(nombresAvecEspaces(montant_en_cour));
             if (test == false) {
                 $("#customCheckAll").prop("checked", true);
             }
@@ -446,5 +446,4 @@
         });
         $(".loader").addClass("d-none");
     </script>
-
 @endsection

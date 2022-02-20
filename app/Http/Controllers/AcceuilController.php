@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Cotisation;
+use App\Models\Prestation;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -9,10 +12,60 @@ use Illuminate\Support\Facades\Auth;
 
 class AcceuilController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        return view('pages.acceuil');
+        $id = Auth::user()->id;
+        $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement', 'profile_photo_path')->where('id', $id)->first();
+        $totalcotisation = Cotisation::where('users_id', '=', $id)->sum('montant');
+        $totalprestation = Prestation::where('users_id', '=', $id)->sum('montant');
+        $totalcotisationglobal = Cotisation::sum('montant');
+        $totalprestationglobal = Prestation::sum('montant');
+        $nbmembre = User::count();
+        $nbprestation = Prestation::count();
+        $poidMembre = $totalcotisation - $totalprestation;
+        $cat = Category::find($membre->categories_id);
+        return view('pages.acceuil', [
+            'nbprestation' => number_format(abs($nbprestation), 0, ',', ' '),
+            'nbmembre' =>  number_format(abs($nbmembre), 0, ',', ' '),
+            'totalcotisationglobal' => number_format(abs($totalcotisationglobal), 0, ',', ' '),
+            'totalprestationglobal' => number_format(abs($totalprestationglobal), 0, ',', ' '),
+            'membre' => $membre,
+            'category' => $cat,
+            'poidMembre' => $poidMembre,
+            'poidMembre2' => number_format(abs($poidMembre), 0, ',', ' '),
+            'totalCotisation' => number_format($totalcotisation, 0, ',', ' '),
+            'totalPrestation' => number_format($totalprestation, 0, ',', ' ')
+        ]);
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function infomembre(Request $request)
+    {
+        try {
+            if ($request->id != null) {
+                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement', 'profile_photo_path')->where('id', $request->id)->first();
+                $totalcotisation = Cotisation::where('users_id', '=', $request->id)->sum('montant');
+                $totalprestation = Prestation::where('users_id', '=', $request->id)->sum('montant');
+                $poidMembre = $totalcotisation - $totalprestation;
+                $cat = Category::find($membre->categories_id);
+                return view('pages.informationmembre', ['membre' => $membre, 'category' => $cat, 'poidMembre' => $poidMembre, 'poidMembre2' => number_format(abs($poidMembre), 0, ',', ' '), 'totalCotisation' => number_format($totalcotisation, 0, ',', ' '), 'totalPrestation' => number_format($totalprestation, 0, ',', ' ')]);
+            } else {
+                abort(404);
+            }
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
 
     public function changeTheme()
     {

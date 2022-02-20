@@ -49,7 +49,7 @@ class CategoryController extends Controller
                     return $data->libelle;
                 })
                 ->addColumn("montant", function ($data) {
-                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
+                    return number_format($data->montant, 0, ',', ' ');
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">

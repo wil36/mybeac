@@ -61,7 +61,7 @@ class CotisationController extends Controller
                     return $data->nom;
                 })
                 ->addColumn("montant", function ($data) {
-                    return $data->montant;
+                    return number_format($data->montant, 0, ',', ' ');
                 })
                 ->addColumn("prenom", function ($data) {
                     return $data->prenom;
@@ -134,7 +134,7 @@ class CotisationController extends Controller
             </div>";
                 })
                 ->addColumn("montant", function ($data) {
-                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
+                    return number_format($data->montant, 0, ',', ' ');
                 })
                 ->addColumn("numero_seance", function ($data) {
                     return $data->numero_seance;
@@ -170,13 +170,16 @@ class CotisationController extends Controller
     {
         try {
             $validator = FacadesValidator::make($request->all(), [
-                'liste' => ['required'],
                 'date' => ['required', 'date', 'date_format:Y-m-d'],
                 'num_seance' => ['required', 'integer'],
             ]);
             if ($validator->fails()) {
                 return response()
                     ->json(['errors' => $validator->errors()->all()]);
+            }
+            if (!isset($request['liste'])) {
+                return response()
+                    ->json(["errors" => ["Veuillez sélectionner un membre."]]);
             }
             foreach ($request->liste as $item) {
                 $cotisation = new Cotisation();
@@ -193,7 +196,7 @@ class CotisationController extends Controller
             $montant_global = Cotisation::sum('montant');
             return response()->json(["success" => "Enregistrement éffectuer !", 'montant' => $montant_global]);
         } catch (Exception $e) {
-            return response()->json(["error" => "Une erreur s'est produite."]);
+            return response()->json(["error" => $e->getMessage()]);
         }
     }
 
