@@ -2,7 +2,6 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css"> --}}
-
 @endsection
 
 @section('contenu')
@@ -123,14 +122,53 @@
                                                                         </x-input>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-12">
+                                                                {{-- <div class="col-md-12">
                                                                     <div class="form-group">
                                                                         <x-input name='statut'
                                                                             :value="isset($ayantsdroits) ? $ayantsdroits->statut : ''"
                                                                             input='select'
-                                                                            :options='[["name"=>"","value"=>""],["name"=>"Conjoint","value"=>"Conjoint"],["name"=>"Enfant","value"=>"Enfant"],["name"=>"Père","value"=>"Père"],["name"=>"Mère","value"=>"Mère"], ["name"=>"Tuteur","value"=>"Tuteur"],["name"=>"Tatrice","value"=>"Tatrice"],["name"=>"Bénéficiaire","value"=>"Bénéficiaire"],]'
+                                                                            :options='[["name"=>"","value"=>""],["name"=>"Conjoint","value"=>"Conjoint"],["name"=>"Enfant","value"=>"Enfant"],["name"=>"{{ $father->type_parent == 0 ? 'Parent' : 'Tuteur ou tutrice' }}","value"=>"Parent"],["name"=>"Tuteur ou tutrice","value"=>"Tuteur"],["name"=>"Tatrice","value"=>"Tatrice"],["name"=>"Bénéficiaire","value"=>"Bénéficiaire"],]'
                                                                             :required="true" title="Statut *">
                                                                         </x-input>
+                                                                    </div>
+                                                                </div> --}}
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label style="font-weight: bold;"
+                                                                            for="statut">Statut *</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <select class="form-select form-control"
+                                                                                id="statut" required name="statut">
+                                                                                @isset($ayantsdroits)
+                                                                                    <option value="{{ $ayantsdroits->id }}">
+                                                                                        {{ $ayantsdroits->statut == 'Tuteur' ? 'Tuteur ou tutrice' : $ayantsdroits->statut }}
+                                                                                    </option>
+                                                                                @endisset
+                                                                                <option value="">
+                                                                                </option>
+                                                                                <option value="Conjoint">
+                                                                                    @lang('Conjoint')
+                                                                                </option>
+                                                                                <option value="Enfant">
+                                                                                    @lang('Enfant')
+                                                                                </option>
+                                                                                @if ($father->type_parent == 0)
+                                                                                    <option value="Parent">
+                                                                                        @lang('Parent')
+                                                                                    </option>
+                                                                                @else
+                                                                                    <option value="Tuteur">
+                                                                                        @lang('Tuteur ou tutrice')
+                                                                                    </option>
+                                                                                @endif
+                                                                                <option value="Tatrice">
+                                                                                    @lang('Tatrice')
+                                                                                </option>
+                                                                                <option value="Bénéficiaire">
+                                                                                    @lang('Bénéficiaire')
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
@@ -305,9 +343,8 @@
                 '<option value=""></option>',
                 '<option value="Conjoint">Conjoint</option>',
                 '<option value="Enfant">Enfant</option>',
-                '<option value="Père">Père</option>',
-                '<option value="Mère">Mère</option>',
-                '<option value="Tuteur">Tuteur</option>',
+                {{ $father->type_parent }} == 0 ? '<option value="Parent">Parent</option>' :
+                '<option value="Tuteur">Tuteur ou tutrice</option>',
                 '<option value="Tatrice">Tatrice</option>',
                 '<option value="Bénéficiaire">Bénéficiaire</option>',
             );
@@ -318,8 +355,9 @@
             $("#lab_cni").text('Choisir un fichier ');
             $("#lab_acte_naissance").text('Choisir un fichier ');
             @if (Route::currentRouteName() === 'ayantsdroits.edit')
-                history.pushState({}, null, "{{ route('membre.index') }}");
-                window.setTimeout('location.reload()', 1500);
+                // history.pushState({}, null, "{{ route('membre.index') }}");
+                // window.setTimeout('location.reload()', 1500);
+                window.setTimeout(' history.back();', 1500);
             @endif
         }
     </script>

@@ -119,6 +119,7 @@ class TypePrestationController extends Controller
             $validator = FacadesValidator::make($request->all(), [
                 'libelle' => ['required', 'string', 'max:255', 'unique:type_prestations,libelle'],
                 'montant' => ['required', 'numeric'],
+                'supp' => ['required'],
             ]);
             if ($validator->fails()) {
                 return response()
@@ -128,6 +129,7 @@ class TypePrestationController extends Controller
             $typeprestation  = new TypePrestation();
             $typeprestation['libelle'] = $request['libelle'];
             $typeprestation['montant'] = $request['montant'];
+            $typeprestation['delete_ayant_droit'] = $request['supp'] == 'true' ? 1 : 0;
             $typeprestation->save();
             DB::commit();
 
@@ -180,6 +182,7 @@ class TypePrestationController extends Controller
                         $query->where('id', '!=', $request['id']);
                     })
                 ],
+                'supp' => ['required'],
                 'montant' => ['required', 'numeric'],
             ]);
             if ($validator->fails()) {
@@ -190,6 +193,7 @@ class TypePrestationController extends Controller
             $typeprestation = TypePrestation::findOrFail($id);
             $typeprestation['libelle'] = $request['libelle'];
             $typeprestation['montant'] = $request['montant'];
+            $typeprestation['delete_ayant_droit'] = $request['supp'] == 'true' ? 1 : 0;
             $typeprestation->save();
             DB::commit();
 

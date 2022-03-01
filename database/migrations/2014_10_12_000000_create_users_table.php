@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('role')->default('agent');
             $table->boolean('theme')->default(0);
             $table->boolean('status')->default(1);
+            $table->boolean('type_parent')->default(0); //0 pour mere ou pere et 1 pour tuteur ou tutrice
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

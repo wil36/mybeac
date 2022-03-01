@@ -45,7 +45,7 @@
                                             <div class='user-avatar-lg bg-primary d-flex justify-content-left'
                                                 style="height: 150px; width: 150px">
                                                 <img class='object-cover w-8 h-8 rounded-full popup-image'
-                                                    src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                    src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=c7932b&size=150&color=fff' }}"
                                                     alt='' />
                                             </div>
                                             <div class="row user-info text-left">
@@ -115,7 +115,7 @@
                                                 <div class="col-md-12">
                                                     <h5>Poids du membre :
                                                         <span
-                                                            style="color: {{ $poidMembre < 0 ? 'red' : '#1ee0ac' }};">{{ $poidMembre2 }}
+                                                            style="color: {{ $poidMembre < 0 ? 'red' : '#c7932b' }};">{{ $poidMembre2 }}
                                                             FCFA</span>
                                                     </h5>
                                                 </div>
@@ -136,8 +136,13 @@
                                                             des prestations</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#tabItem3">Liste
-                                                            des ayant droits</a>
+                                                        <a class="nav-link" data-toggle="tab"
+                                                            href="#tabItem3">@lang('Liste des ayant droit')</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-toggle="tab"
+                                                            href="#tabItem4">@lang('Liste des ayant droit
+                                                            décédés')</a>
                                                     </li>
                                                 </ul>
                                                 <div class="tab-content">
@@ -217,10 +222,51 @@
                                                                     class="btn btn-primary"><em
                                                                         class="icon ni ni-plus"></em></a>
                                                             </div>
-                                                            <h3 class="text-center col-md-10">Liste des ayant droits</h3>
+                                                            <h3 class="text-center col-md-10">@lang('Liste des ayant droit')
+                                                            </h3>
                                                         </div>
                                                         <div class="table-responsive">
                                                             <table class="nk-tb-list nk-tb-ulist" id="ayantdroitList"
+                                                                data-auto-responsive="true">
+                                                                <thead>
+                                                                    <tr class="nk-tb-item nk-tb-head">
+                                                                        <th class="nk-tb-col" hidden><span
+                                                                                class="sub-text"></span></th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Nom')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Liens de
+                                                                                parenté avec le membre')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Cni')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Acte de
+                                                                                naissance')</span>
+                                                                        </th>
+                                                                        <th class="nk-tb-col"><span
+                                                                                class="sub-text">@lang('Certificat de
+                                                                                vie')</span>
+                                                                        </th>
+                                                                        <th class="text-right nk-tb-col nk-tb-col-tools">
+                                                                            <span class="sub-text">Action</span>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="tabItem4">
+                                                        <div class="row m-md-2">
+
+                                                            <h3 class="text-center col-md-10">@lang('Liste des ayant droit
+                                                                décédés')</h3>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="nk-tb-list nk-tb-ulist" id="ayantdroitListdecede"
                                                                 data-auto-responsive="true">
                                                                 <thead>
                                                                     <tr class="nk-tb-item nk-tb-head">
@@ -526,6 +572,91 @@
                     },
                 ]
             });
+            $('#ayantdroitListdecede').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                pageLength: 10,
+                paginate: true,
+                info: true,
+                language: {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                    "sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+                },
+                buttons: [
+                    'copy', 'excel', 'pdf'
+                ],
+                ajax: "{{ route('ayantsdroitsListForUserdecede', $membre->id) }}",
+                order: [
+                    [0, "desc"]
+                ],
+                columns: [{
+                        "data": 'updated_at',
+                        "name": 'updated_at',
+                        "visible": false,
+                        "className": 'nk-tb-col nk-tb-col-check'
+                    },
+                    {
+                        "data": 'nom',
+                        "name": 'nom',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'liens',
+                        "name": 'liens',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'cni',
+                        "name": 'cni',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'acte_naissance',
+                        "name": 'acte_naissance',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'certificat_vie',
+                        "name": 'certificat_vie',
+                        "className": 'nk-tb-col'
+                    },
+                    {
+                        "data": 'Actions',
+                        "name": 'Actions',
+                        "orderable": false,
+                        "serachable": false,
+                        "className": 'nk-tb-col nk-tb-col-tools'
+                    },
+                ]
+            });
         });
 
         $(document).on('click', '.delete-data-cot', function(e) {
@@ -607,6 +738,58 @@
                             if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
                                 Swal.fire(
                                     'Supprimer!',
+                                    data.success,
+                                    'success'
+                                )
+                                window.setTimeout('location.reload()', 1500);
+                            } else {
+                                Swal.fire(
+                                    'Erreur!',
+                                    data.error,
+                                    'error'
+                                )
+                            }
+                            $("html, body").animate({
+                                scrollTop: 0
+                            }, "slow");
+                        },
+                        error: function(data) {
+                            Swal.fire('Une erreur s\'est produite.',
+                                'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+                                'error');
+
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.active-data-ayant', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data_id');
+            Swal.fire({
+                title: 'Voulez-vous vraiment activer cette ayant droit décédé ?',
+                text: "Vous êtes en train de vouloir activer un ayant droit décédé ! Assurez-vous que c'est bien la bonne !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Annuler',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('ayantdroits.active') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            id: id,
+                        },
+                        success: function(data) {
+                            if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+                                Swal.fire(
+                                    'Activer!',
                                     data.success,
                                     'success'
                                 )

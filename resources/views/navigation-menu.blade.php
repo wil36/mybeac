@@ -85,7 +85,7 @@
                                     class="flex text-sm transition border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
                                     <img class="object-cover w-8 h-8 rounded-full"
                                         src="
-                                        {{ isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                        {{ isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=c7932b&size=150&color=fff' }}"
                                         alt="" />
                                 </button>
                             @else

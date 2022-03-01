@@ -27,9 +27,9 @@ class AyantDroitController extends Controller
 
         try {
             $data = AyantDroit::select("id", "nom", "prenom", "statut")->where(function ($query) use ($request) {
-                $query->where('nom', 'like', '%' . $request->search . '%')->where('users_id', $request->id);
+                $query->where('nom', 'like', '%' . $request->search . '%')->where('users_id', $request->id)->where('deces', '!=', '1');
             })->orWhere(function ($query) use ($request) {
-                $query->where('prenom', 'like', '%' . $request->search . '%')->where('users_id', $request->id);
+                $query->where('prenom', 'like', '%' . $request->search . '%')->where('users_id', $request->id)->where('deces', '!=', '1');
             })
                 ->limit(5)->get();
             $resp = array();
@@ -45,7 +45,7 @@ class AyantDroitController extends Controller
     public function ayantsdroitsListForUser(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select id, nom, prenom, cni, acte_naissance, certificat_vie, created_at, statut from ayant_droits where users_id=' . $request->id));
+            $data = DB::select(DB::raw('select id, nom, prenom, cni, acte_naissance, certificat_vie, created_at, statut from ayant_droits where users_id=' . $request->id . ' and deces <> 1'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -75,7 +75,7 @@ class AyantDroitController extends Controller
                     return isset($data->acte_naissance) ?  '<a class="btn btn-btn" href="' . asset('storage/acte_naissance/' . $data->acte_naissance) . '" > <em class="icon ni ni-download"></em></a>' : 'Aucun';
                 })
                 ->addColumn("certificat_vie", function ($data) {
-                    return '<a class="btn" href="' . asset('storage/certificat_vie/' . $data->certificat_vie) . '" > <em class="icon ni ni-download"></em></a>';
+                    return isset($data->certificat_vie) ?  '<a class="btn btn-btn" href="' . asset('storage/certificat_vie/' . $data->certificat_vie) . '" > <em class="icon ni ni-download"></em></a>' : 'Aucun';
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">
@@ -111,6 +111,87 @@ class AyantDroitController extends Controller
         }
     }
 
+
+    public function ayantsdroitsListForUserdecede(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select id, nom, prenom, cni, acte_naissance, certificat_vie, created_at, statut from ayant_droits where users_id=' . $request->id . ' and deces = 1'));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("nom", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>AYD</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . $data->nom . ' ' . $data->prenom . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("liens", function ($data) {
+                    return $data->statut;
+                })
+                ->addColumn("cni", function ($data) {
+                    return isset($data->cni) ?  '<a class="btn" href="' . asset('storage/cni/' . $data->cni) . '" ><em class="icon ni ni-download"></em></a>' : 'Aucun';
+                })
+                ->addColumn("acte_naissance", function ($data) {
+                    return isset($data->acte_naissance) ?  '<a class="btn btn-btn" href="' . asset('storage/acte_naissance/' . $data->acte_naissance) . '" > <em class="icon ni ni-download"></em></a>' : 'Aucun';
+                })
+                ->addColumn("certificat_vie", function ($data) {
+                    return isset($data->certificat_vie) ?  '<a class="btn btn-btn" href="' . asset('storage/certificat_vie/' . $data->certificat_vie) . '" > <em class="icon ni ni-download"></em></a>' : 'Aucun';
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
+               
+                <li class="nk-tb-action-hidden">
+                    <a href="' . route('ayantsdroits.edit', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Modifier">
+                        <em class="icon ni ni-edit"></em>
+                    </a>
+                </li>
+                <li class="nk-tb-action-hidden">
+                    <a href="" data_id="' . $data->id . '" class="btn btn-trigger btn-icon active-data-ayant" data-toggle="tooltip" data-placement="top" title="Activer">
+                       <em class="icon ni ni-regen"></em>
+                    </a>
+                </li>
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="link-list-opt no-bdr">
+                                <li><a href="' . route('ayantsdroits.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
+                                 
+                                <li><a href="" class="active-data-ayant" data_id="' . $data->id . '"><em class="icon ni ni-regen"></em><span>Activer</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['nom', 'Actions', 'cni', 'certificat_vie', 'acte_naissance'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function ayantdroitactive(Request $request)
+    {
+        try {
+            $ayantsdroits = AyantDroit::find($request->id);
+            $ayantsdroits->deces = 0;
+            $ayantsdroits->save();
+            return response()->json(["success" => "Enregistrement éffectuer !"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -119,7 +200,7 @@ class AyantDroitController extends Controller
     public function create($id)
     {
         try {
-            $user = User::select('nom', 'matricule', 'prenom', 'email')->where('id', $id)->first();
+            $user = User::select('nom', 'matricule', 'prenom', 'email', 'type_parent')->where('id', $id)->first();
             return view('pages.addayantsdroits', ['father' => $user, 'id' => $id]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -147,6 +228,22 @@ class AyantDroitController extends Controller
             return response()
                 ->json(['errors' => $validator->errors()->all()]);
         }
+        if ($request['statut'] == 'Parent' || $request['statut'] == 'Tuteur') {
+            if ($request->hasFile('cni') == false) {
+                return response()
+                ->json(['errors' => ["La cni est obligatoire."]]);
+            }
+        }
+        if ($request['statut'] == 'Enfant') {
+           if ($request->hasFile('acte_naissance') == false) {
+            return response()
+            ->json(['errors' => ["L'acte de naissance est obligatoire."]]);
+           }
+        }
+         if ($request->hasFile('certificat_vie') == false) {
+            return response()
+             ->json(['errors' => ["Le certificat de vie est obligatoire."]]);
+         }
         try {
             DB::beginTransaction();
             $ayantsdroits  = new AyantDroit();

@@ -34,12 +34,12 @@
                 <div class="nk-sidebar-element nk-sidebar-head">
                     <div class="nk-sidebar-brand">
                         <a href="{{ route('dashboard') }}" class="logo-link">
-                            <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
-                                srcset="{{ asset('images/logo.png') }}" alt="logo">
-                            <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo.png') }}"
-                                srcset="{{ asset('images/logo.png') }}" alt="logo-dark">
-                            {{-- <img class="logo-small logo-img logo-img-small" src="{{ asset('images/logo.png') }}"
-                                srcset="{{ asset('images/logo.png') }}" alt="logo-small"> --}}
+                            {{-- <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo2.png') }}"
+                                srcset="{{ asset('images/logo2.png') }}" alt="logo"> --}}
+                            <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo2.png') }}"
+                                srcset="{{ asset('images/logo2.png') }}" alt="logo-dark">
+                            <img class="logo-small logo-img logo-img-small" src="{{ asset('images/logo.png') }}"
+                                srcset="{{ asset('images/logo.png') }}" alt="logo-small">
                         </a>
                     </div>
                     <div class="nk-menu-trigger mr-n2">
@@ -146,7 +146,7 @@
                                                     {{ $userinfo->prenom }}</span>
                                                 <div class="user-avatar sm">
                                                     <img class="object-cover w-8 h-8 rounded-full"
-                                                        src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                        src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=c7932b&size=150&color=fff' }}"
                                                         alt="" />
                                                 </div>
                                             </div>
@@ -157,7 +157,7 @@
                                                     <div class="user-avatar">
                                                         <img class="object-cover w-8 h-8 rounded-full popup-image"
                                                             data-toggle="modal" data-target="#view-photo-modal"
-                                                            src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                            src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=c7932b&size=150&color=fff' }}"
                                                             alt="" />
                                                     </div>
                                                     <div class="user-info">

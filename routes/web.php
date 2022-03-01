@@ -29,6 +29,7 @@ Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
 
         //ayant droits
         Route::get('ayantsdroitsListForUser/{id}', [AyantDroitController::class, 'ayantsdroitsListForUser'])->name('ayantsdroitsListForUser');
+        Route::get('ayantsdroitsListForUserdecede/{id}', [AyantDroitController::class, 'ayantsdroitsListForUserdecede'])->name('ayantsdroitsListForUserdecede');
     }
 );
 // Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
@@ -66,6 +67,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('ayantsdroits/{id}', [AyantDroitController::class, 'create'])->name('ayantsdroits.create');
     Route::post('/getAyantsDroit/{id}', [AyantDroitController::class, 'getAyantsDroit'])->name('getAyantsDroit');
     Route::post('ayantsdroits/{ids}', [AyantDroitController::class, 'update'])->name('ayantsdroits.update');
+    Route::post('activeayantdroit', [AyantDroitController::class, 'ayantdroitactive'])->name('ayantdroits.active');
     Route::post('deleteayantsdroits', [AyantDroitController::class, 'deleteayantdroits'])->name('ayantsdroits.delete');
     Route::get('ayantsdroits/delete', function () {
         abort(404);

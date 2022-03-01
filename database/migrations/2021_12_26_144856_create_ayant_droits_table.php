@@ -20,6 +20,7 @@ class CreateAyantDroitsTable extends Migration
             $table->string('statut');
             $table->text('cni')->nullable();
             $table->text('acte_naissance')->nullable();
+            $table->boolean('deces')->default(0); //0 si non et 1 si oui
             $table->text('certificat_vie')->nullable();
             $table->foreignId('users_id')
                 ->constrained()

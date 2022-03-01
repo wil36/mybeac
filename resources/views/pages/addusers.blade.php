@@ -2,7 +2,6 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css"> --}}
-
 @endsection
 
 @section('contenu')
@@ -47,7 +46,7 @@
                                                     <img class='object-cover w-8 h-8 rounded-full popup-image'
                                                         data-toggle="modal" data-target="#view-photo-modal" id="show_img"
                                                         {{-- @dd(public_path('picture_profile\\' . $user->profile_photo_path)) --}}
-                                                        src='{{ isset($user)? (isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=1ee0ac&size=150&color=fff'): 'https://ui-avatars.com/api/?name=Membre&background=1ee0ac&size=150&color=fff' }}'
+                                                        src='{{ isset($user)? (isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=c7932b&size=150&color=fff'): 'https://ui-avatars.com/api/?name=Membre&background=c7932b&size=150&color=fff' }}'
                                                         alt='' />
                                                 </div>
                                                 <input type="file" class="p-md-5" id="pictureupload"
@@ -80,7 +79,8 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <x-input name='nationalité'
-                                                            :value="isset($user) ? $user->nationalité : ''" input='text'
+                                                            :value="isset($user) ? $user->nationalité : ''" input='select'
+                                                            :options='[["name"=>"","value"=>""],["name"=>"Camerounaise","value"=>"Camerounaise"],["name"=>"Centrafricaine","value"=>"Centrafricaine"],["name"=>"Congolaise","value"=>"Congolaise"],["name"=>"Gabonaise","value"=>"Gabonaise"],["name"=>"Guinéenne","value"=>"Guinéenne"],["name"=>"Tchadienne","value"=>"Tchadienne"]]'
                                                             :required="true" title="Nationalité *">
                                                         </x-input>
                                                     </div>
@@ -88,7 +88,9 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <x-input name='agence' :value="isset($user) ? $user->agence : ''"
-                                                            input='text' :required="true" title="Agence *">
+                                                            input='select'
+                                                            :options='[["name"=>"","value"=>""],["name"=>"Ouest","value"=>"Ouest"],["name"=>"Centre","value"=>"Centre"],["name"=>"Est","value"=>"Est"],["name"=>"Extrême-Nord	","value"=>"Extrême-Nord"],["name"=>"Littoral","value"=>"Littoral"],["name"=>"Nord","value"=>"Nord"],["name"=>"Adamaoua","value"=>"Adamaoua"],["name"=>"Nord-Ouest","value"=>"Nord-Ouest"],["name"=>"Sud","value"=>"Sud"],["name"=>"Sud-Ouest","value"=>"Sud-Ouest"]]'
+                                                            :required="true" title="Agence *">
                                                         </x-input>
                                                     </div>
                                                 </div>
@@ -156,13 +158,23 @@
                                                         </x-input>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <x-input name='role'
                                                             :value="isset($user) ? $user->role=='admin'?'Administrateur':'Membre' : ''"
                                                             input='select'
                                                             :options='[["name"=>"","value"=>""],["name"=>"Administrateur","value"=>"admin"],["name"=>"Membre","value"=>"agent"]]'
                                                             :required="true" title="Grade *">
+                                                        </x-input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <x-input name='type_parent'
+                                                            :value="isset($user) ? $user->type_parent=='0'?'Vivant':'Non vivant' : ''"
+                                                            input='select'
+                                                            :options='[["name"=>"","value"=>""],["name"=>"Vivant","value"=>"0"],["name"=>"Non vivant","value"=>"1"]]'
+                                                            :required="true" title="Etat de vie des parents *">
                                                         </x-input>
                                                     </div>
                                                 </div>
@@ -210,6 +222,7 @@
             let listCategorie = $("#listCategorie").val();
             let sexe = $("#sexe").val();
             let role = $("#role").val();
+            let type_parent = $("#type_parent").val();
 
             var formData = new FormData();
             formData.append('matricule', matricule);
@@ -227,6 +240,7 @@
             formData.append('sexe', sexe);
             formData.append('listCategorie', listCategorie);
             formData.append('picture', picture);
+            formData.append('type_parent', type_parent);
 
             $.ajax({
                 headers: {
@@ -330,8 +344,9 @@
 
         function clearFormUser() {
             @if (Route::currentRouteName() === 'membre.edit')
-                history.pushState({}, null, "{{ route('membre.index') }}");
-                window.setTimeout('location.reload()', 1500);
+                // history.pushState({}, null, "{{ route('membre.index') }}");
+                // window.setTimeout('location.reload()', 1500);
+                window.setTimeout(' history.back();', 1500);
             @endif
             $('#formUser').attr('action', "{{ route('membre.store') }}");
             $('#formUser').attr('method', "POST");
@@ -341,8 +356,8 @@
             $("#matricule").val('');
             $("#nom").val('');
             $("#prenom").val('');
-            $("#nationalité").val('');
-            $("#agence").val('');
+            $("#nationalité").text('');
+            $("#agence").text('');
             $("#email").val('');
             $("#tel").val('');
             $("#dateNaissance").val('');

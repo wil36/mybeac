@@ -17,6 +17,7 @@ class CreateTypePrestationsTable extends Migration
             $table->id();
             $table->string('libelle');
             $table->double('montant')->default(0);
+            $table->boolean('delete_ayant_droit')->default(0); //0 pour non et 1 pour oui
             $table->timestamps();
         });
     }

@@ -2,7 +2,6 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css"> --}}
-
 @endsection
 
 @section('contenu')
@@ -39,7 +38,7 @@
                                 <div class="card">
                                     <div class="card-inner">
                                         <form method="POST" id="formTypeprestation"
-                                            action="{{ Route::currentRouteName() === 'typeprestation.edit' ? route('typeprestation.update', $typeprestation->id) : route('typeprestation.store') }}">
+                                            action="{{ Route::currentRouteName() === 'typeprestation.edit'? route('typeprestation.update', $typeprestation->id): route('typeprestation.store') }}">
                                             @csrf
                                             <div class="row g-gs">
                                                 <div class="col-md-12">
@@ -56,6 +55,15 @@
                                                             :value="isset($typeprestation) ? floatval($typeprestation->montant) : ''"
                                                             input='number' :required="true" title="Montant * (FCFA)">
                                                         </x-input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="supp"
+                                                            {{ isset($typeprestation) ? ($typeprestation->delete_ayant_droit == 1 ? 'checked' : '') : '' }}>
+                                                        <label class="custom-control-label" for="supp"
+                                                            style="font-weight: bold;">@lang('Suppression du
+                                                            membre')</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -89,7 +97,10 @@
             e.preventDefault();
             var libelle = $("#libelle").val();
             var montant = $("#montant").val();
-
+            var supp = false;
+            if ($('#supp').prop("checked") == true) {
+                var supp = true;
+            }
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -100,6 +111,7 @@
                 data: {
                     libelle: libelle,
                     montant: montant,
+                    supp: supp,
                 },
                 success: function(data) {
                     if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
@@ -145,9 +157,11 @@
             $("#libelle").val('');
             $("#libelle").focus();
             $("#montant").val('');
+            $('#supp').prop("checked", false);
             @if (Route::currentRouteName() === 'typeprestation.edit')
-                history.pushState({}, null, "{{ route('typeprestation.index') }}");
-                window.setTimeout('location.reload()', 1500);
+                // history.pushState({}, null, "{{ route('typeprestation.index') }}");
+                // window.setTimeout('location.reload()', 1500);
+                window.setTimeout(' history.back();', 1500);
             @endif
         }
     </script>

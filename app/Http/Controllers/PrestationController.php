@@ -217,6 +217,14 @@ class PrestationController extends Controller
             $prestation['ayant_droits_id'] = $request['listAyantDroit'];
 
             $prestation->save();
+            $type_prestation = TypePrestation::findOrFail($prestation['type_prestation_id']);
+            if (isset($type_prestation)) {
+                if ($type_prestation->delete_ayant_droit == '1') {
+                    $ayant_droit = AyantDroit::findOrFail($prestation['ayant_droits_id']);
+                    $ayant_droit->deces = 1;
+                    $ayant_droit->save();
+                }
+            }
             DB::commit();
 
             return response()->json(["success" => "Enregistrement éffectuer !"]);

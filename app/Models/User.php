@@ -45,6 +45,7 @@ class User extends Authenticatable
         'categories_id',
         'email_verified_at',
         'profile_photo_path',
+        'type_parent',
     ];
 
     function category()

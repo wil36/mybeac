@@ -591,7 +591,6 @@
             // });
         </script>
     @endsection
-
 @else
     @section('contenu')
         <div class="nk-content">
@@ -635,7 +634,7 @@
                                                 <div class='user-avatar-lg bg-primary d-flex justify-content-left'
                                                     style="height: 150px; width: 150px">
                                                     <img class='object-cover w-8 h-8 rounded-full popup-image'
-                                                        src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                        src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=c7932b&size=150&color=fff' }}"
                                                         alt='' />
                                                 </div>
                                                 <div class="row user-info text-left">

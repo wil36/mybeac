@@ -17,7 +17,7 @@
 
 .email-body { width: 96%; max-width: 620px; margin: 0 auto; background: #ffffff; }
 
-.email-success { border-bottom: #1ee0ac; }
+.email-success { border-bottom: #c7932b; }
 
 .email-warning { border-bottom: #f4bd0e; }
 
@@ -41,7 +41,7 @@
 
 .email-heading-s3 { font-size: 18px; color: #854fff; font-weight: 400; margin-bottom: 8px; }
 
-.email-heading-success { color: #1ee0ac; }
+.email-heading-success { color: #c7932b; }
 
 .email-heading-warning { color: #f4bd0e; }
 

@@ -12,6 +12,7 @@ class TypePrestation extends Model
     protected $fillable = [
         'libelle',
         'montant',
+        'delete_ayant_droit',
     ];
 
     function prestations()

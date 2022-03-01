@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AyantDroit;
 use App\Models\Category;
 use App\Models\Cotisation;
 use App\Models\Prestation;
@@ -51,7 +52,7 @@ class UserController extends Controller
                     } else {
                         return '<div class="user-card">
                 <div class="user-avatar bg-dim-primary d-none d-sm-flex">
-                     <img class="object-cover w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=' . $data->nom . '&background=1ee0ac&color=fff" alt="" />
+                     <img class="object-cover w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=' . $data->nom . '&background=c7932b&color=fff" alt="" />
                 </div>
                 <div class="user-info">
                     <span class="tb-lead">' . $data->matricule . '</span>
@@ -211,6 +212,7 @@ class UserController extends Controller
                 'dateHadhésion' => 'date d\'hadésion',
                 'tel' => 'numéro de téléphone',
                 'listCategorie' => 'Categorie',
+                'type_parent' => 'Etat de vie des parents'
             );
             $validator = FacadesValidator::make($request->all(), [
                 'matricule' => ['required', 'max:255', 'unique:users,matricule'],
@@ -226,6 +228,7 @@ class UserController extends Controller
                 'dateHadhésion' => ['required', 'date', 'date_format:Y-m-d'],
                 'listCategorie' => ['required', 'integer'],
                 'role' => ['required', 'string'],
+                'type_parent' => ['required', 'integer'],
             ]);
             // dd(date('Y-m-d', strtotime(now())));
             $validator->setAttributeNames($attributeNames);
@@ -248,6 +251,7 @@ class UserController extends Controller
             $user['date_recrutement'] = date("Y-m-d", strtotime($request['dateHadhésion']));
             $user['role'] = $request['role'];
             $user['categories_id'] = $request['listCategorie'];
+            $user['type_parent'] = $request['type_parent'];
             $user['theme'] = 0;
             $user['status'] = 1;
             $user['email_verified_at'] = now();
@@ -333,6 +337,7 @@ class UserController extends Controller
                 'dateHadhésion' => ['required', 'date', 'date_format:Y-m-d'],
                 'listCategorie' => ['required', 'integer'],
                 'role' => ['required', 'string'],
+                'type_parent' => ['required', 'integer'],
                 // 'picture' => ['max:2048', 'file', 'mimes:jpeg,png,doc,docs,pdf']
             ]);
             $validator->setAttributeNames($attributeNames);
@@ -354,14 +359,28 @@ class UserController extends Controller
             $user['date_hadésion'] = date("Y-m-d", strtotime($request['dateRecrutement']));
             $user['date_recrutement'] = date("Y-m-d", strtotime($request['dateHadhésion']));
             $user['role'] = $request['role'];
+            $user['type_parent'] = $request['type_parent'];
             $user['categories_id'] = $request['listCategorie'];
             $expath = $user['profile_photo_path'];
             if ($request->hasFile('picture') && $request->file('picture')->isValid()) {
                 $path3 = $request->file('picture')->store('public/images/picture_profile');
                 $user['profile_photo_path'] = basename($path3);
             }
-
             $user->save();
+            if ($request['type_parent'] == '0') {
+                $ayantsdroits = AyantDroit::where('users_id', $request['id'])->where('statut', 'Tuteur')->get();
+                foreach ($ayantsdroits as $ad) {
+                    $ad['deces'] = 1;
+                    $ad->save();
+                }
+            } else {
+                $ayantsdroits = AyantDroit::where('users_id', $request['id'])->where('statut', 'Parent')->get();
+                foreach ($ayantsdroits as $ad) {
+                    $ad['deces'] = 1;
+                    $ad->save();
+                }
+            }
+
             DB::commit();
             if ($request->hasFile('picture') && $request->file('picture')->isValid()) {
                 if (Storage::exists('public/images/picture_profile/' . $expath)) {

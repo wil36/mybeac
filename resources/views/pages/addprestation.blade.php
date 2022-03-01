@@ -45,7 +45,7 @@
                                             <div class='user-avatar-lg bg-primary d-flex justify-content-center'
                                                 style="height: 150px; width: 150px">
                                                 <img class='object-cover w-8 h-8 rounded-full'
-                                                    src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=1ee0ac&size=150&color=fff' }}"
+                                                    src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=c7932b&size=150&color=fff' }}"
                                                     alt='' />
                                             </div>
                                             <div class="row user-info">
@@ -208,8 +208,7 @@
                         Swal.fire(data.success,
                             'Votre requête s\'est terminer avec succèss', 'success', );
                         clearformPrestation();
-                        history.back();
-                        window.setTimeout('location.reload()', 1500);
+                        window.setTimeout(' history.back();', 1500);
                         // history.pushState({}, null, "{{ route('membre.index') }}");
                         // window.setTimeout('location.reload()', 1500);
                     } else {
