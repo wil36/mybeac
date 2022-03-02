@@ -62,7 +62,7 @@
                                                         <input type="checkbox" class="custom-control-input" id="supp"
                                                             {{ isset($typeprestation) ? ($typeprestation->delete_ayant_droit == 1 ? 'checked' : '') : '' }}>
                                                         <label class="custom-control-label" for="supp"
-                                                            style="font-weight: bold;">@lang('Suppression du
+                                                            style="font-weight: bold;">@lang('Desactivation du
                                                             membre')</label>
                                                     </div>
                                                 </div>
