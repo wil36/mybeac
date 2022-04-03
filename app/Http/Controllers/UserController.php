@@ -27,10 +27,16 @@ class UserController extends Controller
         return view('pages.users');
     }
 
+    /**
+     * getUser donne la liste des membres de l'association qui ne sont pas exclut, décédé, ou encore qui ne sont pas en retraite
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function getUser(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id'));
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -113,8 +119,18 @@ class UserController extends Controller
                     </a>
                 </li>
                 <li class="nk-tb-action-hidden">
-                    <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon delete-data-user" data-toggle="tooltip" data-placement="top" title="Supprimer">
-                       <em class="icon ni ni-trash"></em>
+                    <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon exclure-data-user" data-toggle="tooltip" data-placement="top" title="Exclure le membre">
+                      <em class="icon ni ni-ripple"></em>
+                    </a>
+                </li>
+                 <li class="nk-tb-action-hidden">
+                    <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon deces-data-user" data-toggle="tooltip" data-placement="top" title="Activer le decès">
+                      <em class="icon ni ni-ripple"></em>
+                    </a>
+                </li>
+                 <li class="nk-tb-action-hidden">
+                    <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon retraite-data-user" data-toggle="tooltip" data-placement="top" title="Activer la retraite">
+                      <em class="icon ni ni-ripple"></em>
                     </a>
                 </li>
                  <li class="nk-tb-action-hidden">
@@ -140,11 +156,13 @@ class UserController extends Controller
                 <li>
                     <div class="drodown">
                         <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                        <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-menu dropdown-menu-left">
                             <ul class="link-list-opt no-bdr">
                                 <li><a href="' . route('membre.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
-                                <li><a href="" class="delete-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-trash"></em><span>Supprimer</span></a></li>
-                                <li><a href="" class="delete-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-reload-alt"></em><span>Supprimer la double authentification</span></a></li>
+                                <li><a href="" class="exclure-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-ripple"></em><span>Exclure le membre</span></a></li>
+                                <li><a href="" class="deces-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-ripple"></em><span>Activer le decès</span></a></li>
+                                <li><a href="" class="retraite-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-ripple"></em><span>Activer la retraite</span></a></li>
+                                <li><a href="" class="dbauth-delete" data_id="' . $data->id . '" ><em class="icon ni ni-reload-alt"></em><span>Supprimer la double authentification</span></a></li>
                                 <li><a href="' . route('ayantsdroits.create', $data->id) . '" > <em class="icon ni ni-user-add-fill"></em><span>Ajouter un ayant droit</span></a></li>
                                 <li><a href="' . route('prestation.create', $data->id) . '" > <em class="icon ni ni-property-add"></em><span>Ajouter une prestation</span></a></li>
                                 <li><a href="' . route('membre.info', $data->id) . '" > <em class="icon ni ni-expand"></em><span>Detail du membre</span></a></li>
@@ -155,6 +173,309 @@ class UserController extends Controller
             </ul>';
                 })->setRowClass("nk-tb-item")
                 ->rawColumns(['matricule', 'Actions', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function getMembreDecede()
+    {
+        return view('pages.liste_des_membres_decede');
+    }
+
+    /**
+     * getMembreDecedeAjax liste des utilisateurs décédés
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getMembreDecedeAjax(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces = 1'));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("select", function ($data) {
+                    return '<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" onclick="setCheckBox();" name="registrations[]" value="' . $data->id . '" id="customCheck' . $data->id . '">
+     <label class="custom-control-label" for="customCheck' . $data->id . '"></label>
+</div>';
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("matricule", function ($data) {
+                    if (isset($data->profile_photo_path)) {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full popup-image" data-toggle="modal" data-target="#view-photo-modal" src="' . asset('picture_profile/' . $data->profile_photo_path)  . '" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    } else {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=' . $data->nom . '&background=c7932b&color=fff" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    }
+                })
+                ->addColumn("nom", function ($data) {
+                    return $data->nom;
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("prenom", function ($data) {
+                    return $data->prenom;
+                })
+                ->addColumn("nationalité", function ($data) {
+                    return $data->nationalité;
+                })
+                ->addColumn("agence", function ($data) {
+                    return $data->agence;
+                })
+                ->addColumn("tel", function ($data) {
+                    return $data->tel;
+                })
+                ->addColumn("sexe", function ($data) {
+                    return $data->sexe;
+                })
+                ->addColumn("category", function ($data) {
+                    return $data->libelle;
+                })
+                ->editColumn("status", function ($data) {
+
+                    return ' <td class="nk-tb-col tb-col-md">
+                <span class="badge badge-outline-success">Décédé</span>
+            </td>';
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
+               
+              
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                           
+                        </div>
+                    </div>
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['matricule', 'select', 'status', 'Actions',])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function getMembreRetraite()
+    {
+        return view('pages.liste_des_membres_retraite');
+    }
+
+    /**
+     * getMembreDecedeAjax liste des utilisateurs retraités
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getMembreRetraiteAjax(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.retraite = 1'));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("select", function ($data) {
+                    return '<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" onclick="setCheckBox();" name="registrations[]" value="' . $data->id . '" id="customCheck' . $data->id . '">
+     <label class="custom-control-label" for="customCheck' . $data->id . '"></label>
+</div>';
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("matricule", function ($data) {
+                    if (isset($data->profile_photo_path)) {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full popup-image" data-toggle="modal" data-target="#view-photo-modal" src="' . asset('picture_profile/' . $data->profile_photo_path)  . '" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    } else {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=' . $data->nom . '&background=c7932b&color=fff" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    }
+                })
+                ->addColumn("nom", function ($data) {
+                    return $data->nom;
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("prenom", function ($data) {
+                    return $data->prenom;
+                })
+                ->addColumn("nationalité", function ($data) {
+                    return $data->nationalité;
+                })
+                ->addColumn("agence", function ($data) {
+                    return $data->agence;
+                })
+                ->addColumn("tel", function ($data) {
+                    return $data->tel;
+                })
+                ->addColumn("sexe", function ($data) {
+                    return $data->sexe;
+                })
+                ->addColumn("category", function ($data) {
+                    return $data->libelle;
+                })
+                ->editColumn("status", function ($data) {
+
+                    return ' <td class="nk-tb-col tb-col-md">
+                <span class="badge badge-outline-success">Décédé</span>
+            </td>';
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
+               
+              
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                           
+                        </div>
+                    </div>
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['matricule', 'select', 'status', 'Actions',])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function getMembreExclus()
+    {
+        return view('pages.liste_des_membres_exclut');
+    }
+
+    /**
+     * getMembreDecedeAjax liste des utilisateurs retraités
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getMembreExclusAjax(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.exclut = 1'));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("select", function ($data) {
+                    return '<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" onclick="setCheckBox();" name="registrations[]" value="' . $data->id . '" id="customCheck' . $data->id . '">
+     <label class="custom-control-label" for="customCheck' . $data->id . '"></label>
+</div>';
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("matricule", function ($data) {
+                    if (isset($data->profile_photo_path)) {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full popup-image" data-toggle="modal" data-target="#view-photo-modal" src="' . asset('picture_profile/' . $data->profile_photo_path)  . '" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    } else {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=' . $data->nom . '&background=c7932b&color=fff" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    }
+                })
+                ->addColumn("nom", function ($data) {
+                    return $data->nom;
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("prenom", function ($data) {
+                    return $data->prenom;
+                })
+                ->addColumn("nationalité", function ($data) {
+                    return $data->nationalité;
+                })
+                ->addColumn("agence", function ($data) {
+                    return $data->agence;
+                })
+                ->addColumn("tel", function ($data) {
+                    return $data->tel;
+                })
+                ->addColumn("sexe", function ($data) {
+                    return $data->sexe;
+                })
+                ->addColumn("category", function ($data) {
+                    return $data->libelle;
+                })
+                ->editColumn("status", function ($data) {
+
+                    return ' <td class="nk-tb-col tb-col-md">
+                <span class="badge badge-outline-success">Décédé</span>
+            </td>';
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
+               
+              
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                           
+                        </div>
+                    </div>
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['matricule', 'select', 'status', 'Actions',])
                 ->make(true);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -405,11 +726,37 @@ class UserController extends Controller
     //     return back()->with("status", "Suppression éffectuer avec succès");
     // }
 
-    public function deletemembre(Request $request)
+    public function excluremembre(Request $request)
     {
         try {
-            User::find($request->id)->delete();
-            return response()->json(["success" => "Suppression éffectuer avec succès"]);
+            $user = User::findOrFail($request->id);
+            $user->exclut = 1;
+            $user->save();
+            return response()->json(["success" => "Effectuer avec succès"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function decesmembre(Request $request)
+    {
+        try {
+            $user = User::findOrFail($request->id);
+            $user->deces = 1;
+            $user->save();
+            return response()->json(["success" => "Effectuer avec succès"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function retraitemembre(Request $request)
+    {
+        try {
+            $user = User::findOrFail($request->id);
+            $user->retraite = 1;
+            $user->save();
+            return response()->json(["success" => "Effectuer avec succès"]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

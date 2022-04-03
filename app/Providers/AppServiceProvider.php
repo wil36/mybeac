@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\{Blade, View, Route};
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         setlocale(LC_TIME, config('app.locale'));
+        Carbon::setUTF8(true);
+        Carbon::setLocale(config('app.locale'));
         view()->composer('layouts.template', function ($view) {
             $title = config('titles.' . Route::currentRouteName());
             $view->with(compact('title'));

@@ -45,16 +45,12 @@
 									<span class="sr-only">Loading...</span>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<a href="{{ route('membre.create') }}" class="btn btn-primary"><em class="icon ni ni-plus"></em></a>
-							</div>
 							<div class="card">
 								<div class="nk-block nk-block-lg">
-									{{-- <button class="btn btn-primary right" style="position: relative">Test</button> --}}
 									<div class="card card-preview">
 										<div class="card-inner">
-											<div class="table-responsive" style="padding-bottom: 75px; padding-top: 75px;">
-												<table class="nk-tb-list nk-tb-ulist" id="userList" data-auto-responsive="false">
+											<div class="table-responsive">
+												<table class="nk-tb-list nk-tb-ulist" id="userListDecede" data-auto-responsive="false">
 													<thead>
 														<tr class="nk-tb-item nk-tb-head">
 															<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
@@ -115,220 +111,12 @@
 	<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 
-	<script>
-	 $(document).on('click', '.exclure-data-user', function(e) {
-	  e.preventDefault();
-	  var id = $(this).attr('data_id');
-	  console.log(id);
-	  Swal.fire({
-	   title: 'Voulez-vous vraiment exclure ce membre ?',
-	   text: "Vous êtes en train de vouloir exclure un membre ! Assurez-vous que c'est bien le bon !",
-	   icon: 'warning',
-	   showCancelButton: true,
-	   confirmButtonText: 'Oui',
-	   cancelButtonText: 'Annuler',
-	  }).then((result) => {
-	   if (result.value) {
-	    $.ajax({
-	     headers: {
-	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	     },
-	     url: "{{ route('user.exclure') }}",
-	     type: "POST",
-	     dataType: 'json',
-	     data: {
-	      id: id,
-	     },
-	     success: function(data) {
-	      if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	       Swal.fire(
-	        'Effectuer !',
-	        data.success,
-	        'success'
-	       )
-	       window.setTimeout('location.reload()', 1500);
-	      } else {
-	       Swal.fire(
-	        'Erreur!',
-	        data.error,
-	        'error'
-	       )
-	      }
-	      $("html, body").animate({
-	       scrollTop: 0
-	      }, "slow");
-	     },
-	     error: function(data) {
-	      Swal.fire('Une erreur s\'est produite.',
-	       'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	       'error');
 
-	     }
-	    });
-	   }
-	  });
-	 });
-
-	 $(document).on('click', '.deces-data-user', function(e) {
-	  e.preventDefault();
-	  var id = $(this).attr('data_id');
-	  Swal.fire({
-	   title: 'Voulez-vous vraiment activer le decès de ce membre ?',
-	   text: "Vous êtes en train de vouloir activer le decès d'un membre ! Assurez-vous que c'est bien le bon !",
-	   icon: 'warning',
-	   showCancelButton: true,
-	   confirmButtonText: 'Oui',
-	   cancelButtonText: 'Annuler',
-	  }).then((result) => {
-	   if (result.value) {
-	    $.ajax({
-	     headers: {
-	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	     },
-	     url: "{{ route('user.deces') }}",
-	     type: "POST",
-	     dataType: 'json',
-	     data: {
-	      id: id,
-	     },
-	     success: function(data) {
-	      if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	       Swal.fire(
-	        'Effectuer !',
-	        data.success,
-	        'success'
-	       )
-	       window.setTimeout('location.reload()', 1500);
-	      } else {
-	       Swal.fire(
-	        'Erreur!',
-	        data.error,
-	        'error'
-	       )
-	      }
-	      $("html, body").animate({
-	       scrollTop: 0
-	      }, "slow");
-	     },
-	     error: function(data) {
-	      Swal.fire('Une erreur s\'est produite.',
-	       'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	       'error');
-
-	     }
-	    });
-	   }
-	  });
-	 });
-
-	 $(document).on('click', '.retraite-data-user', function(e) {
-	  e.preventDefault();
-	  var id = $(this).attr('data_id');
-	  Swal.fire({
-	   title: 'Voulez-vous vraiment activer la retraite de ce membre ?',
-	   text: "Vous êtes en train de vouloir activer la retriate d'un membre ! Assurez-vous que c'est bien le bon !",
-	   icon: 'warning',
-	   showCancelButton: true,
-	   confirmButtonText: 'Oui',
-	   cancelButtonText: 'Annuler',
-	  }).then((result) => {
-	   if (result.value) {
-	    $.ajax({
-	     headers: {
-	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	     },
-	     url: "{{ route('user.retraite') }}",
-	     type: "POST",
-	     dataType: 'json',
-	     data: {
-	      id: id,
-	     },
-	     success: function(data) {
-	      if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	       Swal.fire(
-	        'Effectuer !',
-	        data.success,
-	        'success'
-	       )
-	       window.setTimeout('location.reload()', 1500);
-	      } else {
-	       Swal.fire(
-	        'Erreur!',
-	        data.error,
-	        'error'
-	       )
-	      }
-	      $("html, body").animate({
-	       scrollTop: 0
-	      }, "slow");
-	     },
-	     error: function(data) {
-	      Swal.fire('Une erreur s\'est produite.',
-	       'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	       'error');
-
-	     }
-	    });
-	   }
-	  });
-	 });
-
-	 $(document).on('click', '.dbauth-delete', function(e) {
-	  e.preventDefault();
-	  var id = $(this).attr('data_id');
-	  Swal.fire({
-	   title: 'Voulez-vous vraiment supprimer ?',
-	   text: "Vous êtes en train de vouloir supprimer la méthode de double authentification sur un compte utilisateur ! Assurez-vous que c'est bien la bonne !",
-	   icon: 'warning',
-	   showCancelButton: true,
-	   confirmButtonText: 'Oui',
-	   cancelButtonText: 'Annuler',
-	  }).then((result) => {
-	   if (result.value) {
-	    $.ajax({
-	     headers: {
-	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	     },
-	     url: "{{ route('user.doubleauthdelete') }}",
-	     type: "POST",
-	     dataType: 'json',
-	     data: {
-	      id: id,
-	     },
-	     success: function(data) {
-	      if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	       Swal.fire(
-	        'Supprimer!',
-	        data.success,
-	        'success'
-	       )
-	      } else {
-	       Swal.fire(
-	        'Erreur!',
-	        data.error,
-	        'error'
-	       )
-	      }
-	      $("html, body").animate({
-	       scrollTop: 0
-	      }, "slow");
-	     },
-	     error: function(data) {
-	      Swal.fire('Une erreur s\'est produite.',
-	       'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	       'error');
-
-	     }
-	    });
-	   }
-	  });
-	 });
-	</script>
 
 	@if (config('app.locale') == 'fr')
 		<script>
 		 $(document).ready(function() {
-		  $('#userList').DataTable({
+		  $('#userListDecede').DataTable({
 		   processing: true,
 		   serverSide: true,
 		   autoWidth: false,
@@ -369,7 +157,7 @@
 		   buttons: [
 		    'copy', 'excel', 'pdf'
 		   ],
-		   ajax: "{{ route('getuser') }}",
+		   ajax: "{{ route('getMembreRetraiteAjax') }}",
 		   order: [
 		    [0, "desc"]
 		   ],
@@ -447,6 +235,7 @@
 		    {
 		     "data": 'Actions',
 		     "name": 'Actions',
+		     "visible": false,
 		     "orderable": false,
 		     "serachable": false,
 		     "className": 'nk-tb-col nk-tb-col-tools'
@@ -459,7 +248,7 @@
 	@else
 		<script>
 		 $(document).ready(function() {
-		  $('#userList').DataTable({
+		  $('#userListDecede').DataTable({
 		   processing: true,
 		   serverSide: true,
 		   autoWidth: false,
@@ -474,37 +263,76 @@
 		   ],
 		   // scrollX: true,
 		   // "order": [[ 0, "desc" ]],
-		   ajax: "{{ route('getuser') }}",
+		   ajax: "{{ route('getMembreRetraiteAjax') }}",
 		   order: [
 		    [0, "desc"]
 		   ], //or asc 
-		   columns: [
-		    // {
-		    //     "data": 'id',
-		    //     "name": 'id',
-		    //     "className": 'nk-tb-col nk-tb-col-check'
-		    // },
-		    {
+		   columns: [{
 		     "data": 'updated_at',
 		     "name": 'updated_at',
 		     "visible": false,
 		     "className": 'nk-tb-col nk-tb-col-check'
 		    },
 		    {
-		     "data": 'name',
-		     "name": 'name',
+		     "data": 'matricule',
+		     "name": 'matricule',
 		     "className": 'nk-tb-col '
 		    },
 		    {
-		     "data": 'email',
-		     "name": 'email',
+		     "data": 'nom',
+		     "name": 'nom',
+		     "className": 'nk-tb-col '
+		    },
+		    {
+		     "data": 'prenom',
+		     "name": 'prenom',
+		     "className": 'nk-tb-col '
+		    },
+		    {
+		     "data": 'sexe',
+		     "name": 'sexe',
+		     "className": 'nk-tb-col '
+		    },
+		    {
+		     "data": 'nationalité',
+		     "name": 'nationalité',
+		     "className": 'nk-tb-col '
+		    },
+		    {
+		     "data": 'agence',
+		     "name": 'agence',
+		     "className": 'nk-tb-col '
+		    },
+		    // {
+		    //     "data": 'email',
+		    //     "name": 'email',
+		    //     "className": 'nk-tb-col '
+		    // },
+		    {
+		     "data": 'tel',
+		     "name": 'tel',
 		     "className": 'nk-tb-col'
 		    },
 		    {
-		     "data": 'role',
-		     "name": 'role',
+		     "data": 'category',
+		     "name": 'category',
 		     "className": 'nk-tb-col'
 		    },
+		    // {
+		    //     "data": 'dateNais',
+		    //     "name": 'dateNais',
+		    //     "className": 'nk-tb-col'
+		    // },
+		    // {
+		    //     "data": 'dateRecru',
+		    //     "name": 'dateRecru',
+		    //     "className": 'nk-tb-col'
+		    // },
+		    // {
+		    //     "data": 'dateHade',
+		    //     "name": 'dateHade',
+		    //     "className": 'nk-tb-col'
+		    // },
 		    {
 		     "data": 'status',
 		     "name": 'status',
@@ -513,6 +341,7 @@
 		    {
 		     "data": 'Actions',
 		     "name": 'Actions',
+		     "visible": false,
 		     "orderable": false,
 		     "serachable": false,
 		     "className": 'nk-tb-col nk-tb-col-tools'
@@ -525,6 +354,6 @@
 	@endif
 
 	{{-- <script src="{{ mix('js/app.js') }}">
-    </script>
-    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script> --}}
+</script>
+<script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script> --}}
 @endsection

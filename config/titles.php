@@ -7,7 +7,13 @@ return [
         'index' => 'Liste des membres',
         'create' => 'Ajout d\'un nouveau membre',
         'edit' => 'Modification d\'un membre',
+        'getMembreDecede' => 'Liste des membres décédés',
+        'getMembreRetraite' => 'Liste des membres retraités',
+        'getMembreExclus' => 'Liste des membres exclus',
         'cotisation' => 'Cotisation de ' . $mytime->format('M Y'),
+        'historiquecotisationannuel' => 'Historiques annuels de cotisation',
+        'historiquecotisationmensuel' => 'Historiques mensuels de cotisation',
+        'historiquecotisationmensuelDetailMembre' => 'Liste des membres de la cotisation',
     ],
     'categories' => [
         'index' => 'Liste des catégories',

@@ -36,9 +36,17 @@ Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
 
 Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration')->group(function () {
     //Route for Users
-    Route::post('membre/delete', [UserController::class, 'deletemembre'])->name('user.delete');
+    Route::post('membre/exclure', [UserController::class, 'excluremembre'])->name('user.exclure');
+    Route::post('membre/deces', [UserController::class, 'decesmembre'])->name('user.deces');
+    Route::post('membre/retraite', [UserController::class, 'retraitemembre'])->name('user.retraite');
     Route::post('membre/doubleauthdelete', [UserController::class, 'doubleauthdelete'])->name('user.doubleauthdelete');
     Route::get('/getuser', [UserController::class, 'getUser'])->name('getuser');
+    Route::get('/get-membres-décédé', [UserController::class, 'getMembreDecedeAjax'])->name('getMembreDecedeAjax');
+    Route::get('/Liste-des-membres-décédés', [UserController::class, 'getMembreDecede'])->name('membre.getMembreDecede');
+    Route::get('/get-membres-retraité', [UserController::class, 'getMembreRetraiteAjax'])->name('getMembreRetraiteAjax');
+    Route::get('/Liste-des-membres-retraités', [UserController::class, 'getMembreRetraite'])->name('membre.getMembreRetraite');
+    Route::get('/get-membres-exclus', [UserController::class, 'getMembreExclusAjax'])->name('getMembreExclusAjax');
+    Route::get('/Liste-des-membres-exclus', [UserController::class, 'getMembreExclus'])->name('membre.getMembreExclus');
     Route::resource('membre', UserController::class)->except(['show', 'update']);
     Route::get('membre/delete', function () {
         abort(404);
@@ -111,7 +119,16 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('/getusercotisation/{date}', [CotisationController::class, 'getUserCotisation'])->name('getUserCotisation');
     Route::get('users/cotisations', [CotisationController::class, 'cotisation'])->name('membre.cotisation');
     Route::post('savecotisations', [CotisationController::class, 'savecotisation'])->name('membre.savecotisation');
-    Route::POST('deletecotisations', [CotisationController::class, 'deletecotisations'])->name('membre.deletecotisation');
+    Route::post('deletecotisations', [CotisationController::class, 'deletecotisations'])->name('membre.deletecotisation');
+    Route::get('cotisations/historique-annuel', [CotisationController::class, 'historiqueAnnuelCotisation'])->name('membre.historiquecotisationannuel');
+    Route::get('cotisations/historique-mensuel', [CotisationController::class, 'historiqueMensuelCotisation'])->name('membre.historiquecotisationmensuel');
+    Route::get('cotisations/historique-mensuel/detail-des-membres/{date}', [CotisationController::class, 'historiqueMensuelCotisationDetailMembre'])->name('membre.historiquecotisationmensuelDetailMembre');
+
+    //requette ajaxpour data table historique des cotisations
+    Route::get('historique-annuel-cotisations', [CotisationController::class, 'getHistoriqueAnnuelCotisation'])->name('cotisation.historique.annuel');
+    Route::get('historique-mensuel-cotisations', [CotisationController::class, 'getHistoriqueMensuelCotisation'])->name('cotisation.historique.mensuel');
+    Route::get('/getUserDetailCotisationHistoriqueMensuel/{date}', [CotisationController::class, 'getUserDetailCotisationHistoriqueMensuel'])->name('cotisation.getUserDetailCotisationHistoriqueMensuel');
+    Route::post('cotisation-mensuel-membre', [CotisationController::class, 'getHistoriqueMensuelCotisation'])->name('cotisation.historique.mensuel.membre');
 });
 
 

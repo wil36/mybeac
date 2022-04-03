@@ -31,6 +31,9 @@ class CreateUsersTable extends Migration
             $table->boolean('theme')->default(0);
             $table->boolean('status')->default(1);
             $table->boolean('type_parent')->default(0); //0 pour mere ou pere et 1 pour tuteur ou tutrice
+            $table->boolean('deces')->default(0); //0 pour non decéder et 1 pour decécder
+            $table->boolean('retraite')->default(0); //0 pour non retraiter et 1 pour retraiter
+            $table->boolean('exclut')->default(0); //0 pour non exclut et 1 pour exclut
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
