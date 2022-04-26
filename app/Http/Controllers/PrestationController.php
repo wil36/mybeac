@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AyantDroit;
+use App\Models\Caisse;
 use App\Models\Prestation;
 use App\Models\TypePrestation;
 use App\Models\User;
@@ -169,7 +170,6 @@ class PrestationController extends Controller
         try {
             if ($request->id != null) {
                 $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $request->id)->first();
-                // dd($membre);
                 if ($membre == null) {
                     abort(404);
                 }
@@ -202,11 +202,18 @@ class PrestationController extends Controller
                 'date' => ['required', 'date', 'date_format:Y-m-d'],
                 'listAyantDroit' => ['required', 'integer'],
             ]);
-            // dd(date('Y-m-d', strtotime(now())));
             $validator->setAttributeNames($attributeNames);
             if ($validator->fails()) {
                 return response()
                     ->json(['errors' => $validator->errors()->all()]);
+            }
+            $montantCaissePrincipal = Caisse::select('principal')->first();
+            if ($montantCaissePrincipal->principal < $request->montant) {
+                return response()->json(["error" => "Le montant de la prestation est superieur au montant de la caisse actuel."]);
+            }
+            $nombrePrestation = Prestation::where('users_id', $request->id)->where('type_prestation_id', $request->typePrestation)->where('ayant_droits_id', $request->listAyantDroit)->count();
+            if (isset($nombrePrestation) && $nombrePrestation > 0) {
+                return response()->json(["error" => "Cette prestation a déjà été effectuée. Veuillez changer les informations"]);
             }
             DB::beginTransaction();
             $prestation  = new Prestation();
@@ -217,6 +224,10 @@ class PrestationController extends Controller
             $prestation['ayant_droits_id'] = $request['listAyantDroit'];
 
             $prestation->save();
+
+            $caisse = Caisse::first();
+            $caisse->principal = $caisse->principal - $request['montant'];
+            $caisse->save();
             $type_prestation = TypePrestation::findOrFail($prestation['type_prestation_id']);
             if (isset($type_prestation)) {
                 if ($type_prestation->delete_ayant_droit == '1') {

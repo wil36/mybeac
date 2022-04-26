@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController};
+use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController};
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -129,6 +129,9 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('historique-mensuel-cotisations', [CotisationController::class, 'getHistoriqueMensuelCotisation'])->name('cotisation.historique.mensuel');
     Route::get('/getUserDetailCotisationHistoriqueMensuel/{date}', [CotisationController::class, 'getUserDetailCotisationHistoriqueMensuel'])->name('cotisation.getUserDetailCotisationHistoriqueMensuel');
     Route::post('cotisation-mensuel-membre', [CotisationController::class, 'getHistoriqueMensuelCotisation'])->name('cotisation.historique.mensuel.membre');
+
+    //Route for caisse
+    Route::get('caisse', [CaisseController::class, 'index'])->name('caisse.index');
 });
 
 

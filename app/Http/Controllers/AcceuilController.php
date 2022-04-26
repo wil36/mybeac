@@ -9,6 +9,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AcceuilController extends Controller
 {
@@ -29,6 +30,10 @@ class AcceuilController extends Controller
         $nbprestation = Prestation::count();
         $poidMembre = $totalcotisation - $totalprestation;
         $cat = Category::find($membre->categories_id);
+        $listeCotisation = DB::select(DB::raw(
+            "SELECT SUM(co.montant) AS nombre, MONTH(co.date) as dat FROM cotisations co GROUP BY YEAR(co.date), MONTH(co.date) ORDER BY co.date desc"
+        ));
+        $listePrestation = DB::select(DB::raw("SELECT SUM(pr.montant) AS nombre, MONTH(pr.date) as dat FROM prestations pr GROUP BY YEAR(pr.date), MONTH(pr.date) ORDER BY pr.date desc"));
         return view('pages.acceuil', [
             'nbprestation' => number_format(abs($nbprestation), 0, ',', ' '),
             'nbmembre' =>  number_format(abs($nbmembre), 0, ',', ' '),
@@ -36,6 +41,8 @@ class AcceuilController extends Controller
             'totalprestationglobal' => number_format(abs($totalprestationglobal), 0, ',', ' '),
             'membre' => $membre,
             'category' => $cat,
+            'listeCotisation' => $listeCotisation,
+            'listePrestation' => $listePrestation,
             'poidMembre' => $poidMembre,
             'poidMembre2' => number_format(abs($poidMembre), 0, ',', ' '),
             'totalCotisation' => number_format($totalcotisation, 0, ',', ' '),

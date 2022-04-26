@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caisse;
 use App\Models\Cotisation;
 use App\Models\User;
 use Carbon\Carbon;
@@ -22,9 +23,7 @@ class CotisationController extends Controller
     {
         try {
             $montant_global = Cotisation::sum('montant');
-            // $last_numero_seance = Cotisation::select('numero_seance')->where('date', '!=', Carbon::now()->format('Y-m-d'))->latest()->first() ?? 0;
             $last_numero_seance = DB::select(DB::raw('select max(numero_seance) as num from cotisations co where Month(co.date) < ' . Carbon::now()->format('m') . ' and Year(co.date) <= ' . Carbon::now()->format('Y')));
-            // dd($last_numero_seance[0]->num);
             return view('pages.cotisation', ['montant_global' => number_format($montant_global ?? 0, 0, ',', ' '), 'numero_seance' => number_format(isset($last_numero_seance[0]->num) ? $last_numero_seance[0]->num + 1 : 0 + 1, 0, ',', ' ')]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -353,7 +352,7 @@ class CotisationController extends Controller
                 ->rawColumns(['annee', 'Actions'])
                 ->make(true);
         } catch (Exception $e) {
-            return response()->json(["error" => $e->getMessage()]);
+            return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
 
@@ -441,22 +440,28 @@ class CotisationController extends Controller
                 return response()
                     ->json(["errors" => ["Veuillez sélectionner un membre."]]);
             }
+            $montantCotisationEnCour = 0;
             foreach ($request->liste as $item) {
                 $cotisation = new Cotisation();
                 $cotisation->date = $request->date;
                 if (date('m', strtotime($request->date)) == 03 || date('m', strtotime($request->date)) == 12) {
                     $cotisation->montant = $item['montant'] * 2;
+                    $montantCotisationEnCour += $item['montant'] * 2;
                 } else {
                     $cotisation->montant = $item['montant'];
+                    $montantCotisationEnCour += $item['montant'];
                 }
                 $cotisation->numero_seance = $request->num_seance;
                 $cotisation->users_id = $item['id'];
                 $cotisation->save();
             }
+            $caisse = Caisse::first();
+            $caisse->principal = $caisse->principal + $montantCotisationEnCour;
+            $caisse->save();
             $montant_global = Cotisation::sum('montant');
             return response()->json(["success" => "Enregistrement éffectuer !", 'montant' => $montant_global]);
         } catch (Exception $e) {
-            return response()->json(["error" => $e->getMessage()]);
+            return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
 

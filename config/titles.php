@@ -1,7 +1,8 @@
 <?php
 $mytime = Carbon\Carbon::now();
 return [
-    'dashboard' => 'Informations',
+    'dashboard' => 'Tableau de Bord',
+    'caisse' => ['index' => 'Etat de caisse de la mutuelle',],
     'membre' => [
         'info' => 'Information sur les membres',
         'index' => 'Liste des membres',

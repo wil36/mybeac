@@ -116,11 +116,15 @@ class TypePrestationController extends Controller
     public function store(Request $request)
     {
         try {
+            $attributeNames = array(
+                'libelle' => 'libelle de la prestation',
+            );
             $validator = FacadesValidator::make($request->all(), [
                 'libelle' => ['required', 'string', 'max:255', 'unique:type_prestations,libelle'],
                 'montant' => ['required', 'numeric'],
                 'supp' => ['required'],
             ]);
+            $validator->setAttributeNames($attributeNames);
             if ($validator->fails()) {
                 return response()
                     ->json(['errors' => $validator->errors()->all()]);

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Caisse;
 use App\Models\Category;
 use App\Models\TypePrestation;
 use App\Models\User;
@@ -62,6 +63,17 @@ class DatabaseSeeder extends Seeder
                 'status' => 1,
                 'email_verified_at' => now(),
                 'password' => Hash::make('1234'),
+            ]);
+        });
+
+        // \App\Models\Caisse::factory(10)->create();
+        Caisse::withoutEvents(function () {
+            // Create 1 caisse
+            Caisse::create([
+                'principal' => '0',
+                'quantine' => '0',
+                'emprunt' => '0',
+                'prestation' => '0',
             ]);
         });
     }

@@ -2,11 +2,18 @@
 
 return [
     'Acceuil' => [
-        'name' => "Informations",
+        'name' => "Tableau de bord",
         'route' => 'dashboard',
-        'icon' => 'icon ni ni-dashboard-fill',
+        'icon' => 'icon ni ni-bar-chart-alt',
         'routes' => ['dashboard'],
         'role'   => 'agent',
+    ],
+    'Caisse' => [
+        'name' => "Etat de caisse",
+        'route' => 'caisse.index',
+        'icon' => 'icon ni ni-dashboard-fill',
+        'routes' => ['caisse.index'],
+        'role'   => 'admin',
     ],
     'Catégorie' => [
         'name' => "Gestion des catégories",
@@ -103,7 +110,7 @@ return [
         'role'   => 'admin',
         'childrens' => [
             [
-                'name'  => 'Tout les membres',
+                'name'  => 'Liste des membres de la mutuelle',
                 'role'  => 'admin',
                 'route' => 'membre.index',
                 'altRoute' => '',
