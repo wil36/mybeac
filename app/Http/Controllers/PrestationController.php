@@ -7,6 +7,7 @@ use App\Models\Caisse;
 use App\Models\Prestation;
 use App\Models\TypePrestation;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
@@ -22,6 +23,48 @@ class PrestationController extends Controller
     public function index()
     {
         return view('pages.prestation');
+    }
+
+    /**
+     * historiqueAnnuelPrestation avoir l'interface de l'historique des Prestations annuelles
+     *
+     * @return void
+     */
+    public function historiqueAnnuelPrestation()
+    {
+        try {
+            return view('pages.historiqueannuelprestation');
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * historiqueMensuelPrestation avoir l'interface de l'historique des Prestations Mensuelles
+     *
+     * @return void
+     */
+    public function historiqueMensuelPrestation()
+    {
+        try {
+            return view('pages.historiquemensuelprestation');
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * historiqueMensuelPrestationDetailMembre avoir l'interface du detail des membre ayants cotiser durant un mois
+     *
+     * @return void
+     */
+    public function historiqueMensuelPrestationDetailMembre(Request $request)
+    {
+        try {
+            return view('pages.listedesmembresdeprestationmensuel', ['dateDeRecherche' => $request->date]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
     }
 
     public function getprestationList(Request $request)
@@ -93,6 +136,12 @@ class PrestationController extends Controller
         }
     }
 
+    /**
+     * getprestationListForUser
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function getprestationListForUser(Request $request)
     {
         try {
@@ -154,6 +203,202 @@ class PrestationController extends Controller
             </ul>';
                 })->setRowClass("nk-tb-item")
                 ->rawColumns(['libelle', 'Actions', 'date', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+
+    /**
+     * getUserDetailPrestationHistoriqueMensuel liste des utilisateurs ayant cotiser durant une date passé à partir du request
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getUserDetailPrestationHistoriqueMensuel(Request $request)
+    {
+        try {
+            $tabDate = explode('-', $request->date);
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca, prestations po where ca.id=us.categories_id and us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("select", function ($data) {
+                    return '<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" onclick="setCheckBox();" name="registrations[]" value="' . $data->id . '" id="customCheck' . $data->id . '">
+     <label class="custom-control-label" for="customCheck' . $data->id . '"></label>
+</div>';
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->editColumn("matricule", function ($data) {
+                    if (isset($data->profile_photo_path)) {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full popup-image" data-toggle="modal" data-target="#view-photo-modal" src="' . asset('picture_profile/' . $data->profile_photo_path)  . '" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    } else {
+                        return '<div class="user-card">
+                <div class="user-avatar bg-dim-primary d-none d-sm-flex">
+                     <img class="object-cover w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=' . $data->nom . '&background=c7932b&color=fff" alt="" />
+                </div>
+                <div class="user-info">
+                    <span class="tb-lead">' . $data->matricule . '</span>
+                </div>
+            </div>';
+                    }
+                })
+                ->addColumn("nom", function ($data) {
+                    return $data->nom;
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("prenom", function ($data) {
+                    return $data->prenom;
+                })
+                ->addColumn("nationalité", function ($data) {
+                    return $data->nationalité;
+                })
+                ->addColumn("agence", function ($data) {
+                    return $data->agence;
+                })
+                ->addColumn("tel", function ($data) {
+                    return $data->tel;
+                })
+                ->addColumn("sexe", function ($data) {
+                    return $data->sexe;
+                })
+                ->addColumn("category", function ($data) {
+                    return $data->libelle;
+                })
+                ->editColumn("status", function ($data) {
+                    if ($data->status) {
+                        return ' <td class="nk-tb-col tb-col-md">
+                    <span class="badge badge-outline-success">Actif</span>
+                </td>';
+                    } else {
+                        return ' <td class="nk-tb-col tb-col-md">
+                <span class="badge badge-outline-danger">Inactif</span>
+            </td>';
+                    }
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
+               
+              
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                           
+                        </div>
+                    </div>
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['matricule', 'select', 'status', 'Actions',])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+
+    /**
+     * getHistoriqueAnnuelPrestation historique annuel ajax datatable
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getHistoriqueAnnuelPrestation(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('SELECT Year(po.date) AS annee, SUM(po.montant) AS montant FROM Prestations po GROUP BY YEAR(po.date) ORDER BY YEAR(po.date) desc'));
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn("annee", function ($data) {
+                    return "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+               HA
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>$data->annee</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
+               
+                <li class="nk-tb-action-hidden">
+                   
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['annee', 'Actions'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * getHistoriqueMensuelPrestattion historique mensuel ajax datatable   
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getHistoriqueMensuelPrestation(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.id) AS nombre_user FROM Prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
+
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn("annee", function ($data) {
+                    return "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+               HM
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>$data->annee</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("mois", function ($data) {
+                    $date = Carbon::create()->day(1)->month($data->mois);
+                    return $date->Format('M');
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
+                })
+                ->addColumn("nb_user", function ($data) {
+                    return number_format($data->nombre_user, 0, ',', ' ');
+                })
+                ->addColumn('Actions', function ($data) {
+                    return '<ul class="nk-tb-actions gx-1">
+                     <li class="nk-tb-action-hidden">
+                    <a href="' . route('membre.historiqueprestationmensuelDetailMembre', $data->annee . '-' . $data->mois) . '" class="btn btn-trigger btn-icon delete-data-cot" data-toggle="tooltip" data-placement="top" title="Detail de la ligne">
+                       <em class="icon ni ni-expand"></em>
+                    </a>
+                </li>
+                <li class="nk-tb-action-hidden">
+                   
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['annee', 'Actions'])
                 ->make(true);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);

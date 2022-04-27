@@ -114,6 +114,14 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
         abort(404);
     });
     Route::post('prestation/{id}', [PrestationController::class, 'update'])->name('prestation.update');
+    Route::get('prestations/historique-annuel', [PrestationController::class, 'historiqueAnnuelPrestation'])->name('membre.historiqueprestationannuel');
+    Route::get('prestations/historique-mensuel', [PrestationController::class, 'historiqueMensuelPrestation'])->name('membre.historiqueprestationmensuel');
+    Route::get('prestations/historique-mensuel/detail-des-membres/{date}', [PrestationController::class, 'historiqueMensuelPrestationDetailMembre'])->name('membre.historiqueprestationmensuelDetailMembre');
+
+    //requette ajax pour data table historique des prestations
+    Route::get('historique-annuel-prestations', [PrestationController::class, 'getHistoriqueAnnuelPrestation'])->name('prestation.historique.annuel');
+    Route::get('historique-mensuel-prestations', [PrestationController::class, 'getHistoriqueMensuelPrestation'])->name('prestation.historique.mensuel');
+    Route::get('/getUserDetailPrestationHistoriqueMensuel/{date}', [PrestationController::class, 'getUserDetailPrestationHistoriqueMensuel'])->name('prestation.getUserDetailPrestationHistoriqueMensuel');
 
     //Route for cotisation
     Route::get('/getusercotisation/{date}', [CotisationController::class, 'getUserCotisation'])->name('getUserCotisation');
@@ -124,11 +132,10 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('cotisations/historique-mensuel', [CotisationController::class, 'historiqueMensuelCotisation'])->name('membre.historiquecotisationmensuel');
     Route::get('cotisations/historique-mensuel/detail-des-membres/{date}', [CotisationController::class, 'historiqueMensuelCotisationDetailMembre'])->name('membre.historiquecotisationmensuelDetailMembre');
 
-    //requette ajaxpour data table historique des cotisations
+    //requette ajax pour data table historique des cotisations
     Route::get('historique-annuel-cotisations', [CotisationController::class, 'getHistoriqueAnnuelCotisation'])->name('cotisation.historique.annuel');
     Route::get('historique-mensuel-cotisations', [CotisationController::class, 'getHistoriqueMensuelCotisation'])->name('cotisation.historique.mensuel');
     Route::get('/getUserDetailCotisationHistoriqueMensuel/{date}', [CotisationController::class, 'getUserDetailCotisationHistoriqueMensuel'])->name('cotisation.getUserDetailCotisationHistoriqueMensuel');
-    Route::post('cotisation-mensuel-membre', [CotisationController::class, 'getHistoriqueMensuelCotisation'])->name('cotisation.historique.mensuel.membre');
 
     //Route for caisse
     Route::get('caisse', [CaisseController::class, 'index'])->name('caisse.index');

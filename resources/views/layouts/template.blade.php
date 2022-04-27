@@ -23,9 +23,7 @@
 
 <body @php
 	$userinfo = Auth::user();
-@endphp
-	class="no-touch nk-nio-theme                                                       
-                                 @if ($userinfo->theme == 1) dark-mode @endif">
+@endphp class="no-touch nk-nio-theme @if ($userinfo->theme == 1) dark-mode @endif">
 	">
 	<div class="nk-app-root">
 		<!-- main @s -->
@@ -34,8 +32,8 @@
 				<div class="nk-sidebar-element nk-sidebar-head">
 					<div class="nk-sidebar-brand">
 						<a href="{{ route('dashboard') }}" class="logo-link">
-							{{-- <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo2.png') }}"
-                                srcset="{{ asset('images/logo2.png') }}" alt="logo"> --}}
+							<img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo2.png') }}"
+								srcset="{{ asset('images/logo2.png') }}" alt="logo">
 							<img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo2.png') }}"
 								srcset="{{ asset('images/logo2.png') }}" alt="logo-dark">
 							<img class="logo-small logo-img logo-img-small" src="{{ asset('images/logo.png') }}"
@@ -73,12 +71,10 @@
 											@endphp
 										@endif
 										@isset($elements['childrens'])
-											<x-menu-items :icon="$elements['icon']" :route="$elements['route']" :sub="$elements['name']"
-												:routes="$elements['routes']" :childrens="$elements['childrens']">
+											<x-menu-items :icon="$elements['icon']" :route="$elements['route']" :sub="$elements['name']" :routes="$elements['routes']" :childrens="$elements['childrens']">
 											</x-menu-items>
 										@else
-											<x-menu-items :icon="$elements['icon']" :route="$elements['route']" :sub="$elements['name']"
-												:routes="$elements['routes']">
+											<x-menu-items :icon="$elements['icon']" :route="$elements['route']" :sub="$elements['name']" :routes="$elements['routes']">
 											</x-menu-items>
 										@endisset
 									@endif

@@ -39,7 +39,7 @@ return [
     'Prestation' => [
         'name' => "Gestion des prestations",
         'route' => 'membre.index',
-        'routes' => ['typeprestation.index', 'typeprestation.create', 'typeprestation.edit', 'prestation.index', 'prestation.create', 'prestation.deit'],
+        'routes' => ['typeprestation.index', 'typeprestation.create', 'typeprestation.edit', 'prestation.index', 'prestation.create', 'prestation.deit', 'membre.historiqueprestationannuel', 'membre.historiqueprestationmensuel', 'membre.historiqueprestationmensuelDetailMembre'],
         'icon' => 'icon ni ni-sign-waves-alt',
         'role'   => 'admin',
         'childrens' => [
@@ -64,13 +64,13 @@ return [
             [
                 'name'  => 'Historique mensuel',
                 'role'  => 'admin',
-                'route' => 'prestation.index',
+                'route' => 'membre.historiqueprestationmensuel',
                 'altRoute' => '',
             ],
             [
                 'name'  => 'Historique annuel',
                 'role'  => 'admin',
-                'route' => 'prestation.index',
+                'route' => 'membre.historiqueprestationannuel',
                 'altRoute' => '',
             ],
         ],
@@ -79,6 +79,60 @@ return [
         'name' => "Gestion des cotisations",
         'route' => 'membre.index',
         'routes' => ['membre.cotisation', 'membre.historiquecotisationannuel', 'membre.historiquecotisationmensuel', 'membre.historiquecotisationmensuelDetailMembre'],
+        'icon' => 'icon ni ni-coins',
+        'role'   => 'admin',
+        'childrens' => [
+            [
+                'name'  => 'Liste des membres pour cotisation',
+                'role'  => 'admin',
+                'route' => 'membre.cotisation',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Historique mensuel',
+                'role'  => 'admin',
+                'route' => 'membre.historiquecotisationmensuel',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Historique annuel',
+                'role'  => 'admin',
+                'route' => 'membre.historiquecotisationannuel',
+                'altRoute' => '',
+            ],
+        ],
+    ],
+    'Quantine' => [
+        'name' => "Gestion de la quantine",
+        'route' => 'membre.index',
+        'routes' => [],
+        'icon' => 'icon ni ni-bag-fill',
+        'role'   => 'admin',
+        'childrens' => [
+            [
+                'name'  => 'Liste des membres pour cotisation',
+                'role'  => 'admin',
+                'route' => 'membre.cotisation',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Historique mensuel',
+                'role'  => 'admin',
+                'route' => 'membre.historiquecotisationmensuel',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Historique annuel',
+                'role'  => 'admin',
+                'route' => 'membre.historiquecotisationannuel',
+                'altRoute' => '',
+            ],
+        ],
+    ],
+    'Emprunt' => [
+        'name' => "Gestion des emprunts",
+        'route' => 'membre.index',
+        'routes' => [],
         'icon' => 'icon ni ni-money',
         'role'   => 'admin',
         'childrens' => [
