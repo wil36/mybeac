@@ -45,7 +45,12 @@
 									<span class="sr-only">Loading...</span>
 								</div>
 							</div>
-							<h2 style="text-align: center;">{{ DateTime::createFromFormat('Y-m', $dateDeRecherche)->format('M Y') }}</h2>
+							@php
+								$tabDate = explode('-', $dateDeRecherche);
+							@endphp
+							<h2 style="text-align: center;">
+								{{ isset($tabDate[1]) && isset($tabDate[0])? DateTime::createFromFormat('Y-m', $dateDeRecherche)->format('M Y'): 'La date est le mauvais format' }}
+							</h2>
 							<div class="card">
 								<div class="nk-block nk-block-lg">
 									<div class="card card-preview">

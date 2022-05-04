@@ -40,6 +40,7 @@ class User extends Authenticatable
         'date_recrutement',
         'role',
         'theme',
+        'status_matrimonial',
         'sexe',
         'deces',
         'retraite',

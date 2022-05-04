@@ -59,7 +59,7 @@
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Montant')</span>
 															</th>
-															<th class="nk-tb-col"><span class="sub-text">@lang('Nombre de prestation')</span>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Nombre de membre')</span>
 															</th>
 															<th class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text"></span>
 															</th>

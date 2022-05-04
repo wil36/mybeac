@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('role')->default('agent');
             $table->boolean('theme')->default(0);
             $table->boolean('status')->default(1);
+            $table->string('status_matrimonial')->default("Célibataire");
             $table->boolean('type_parent')->default(0); //0 pour mere ou pere et 1 pour tuteur ou tutrice
             $table->boolean('deces')->default(0); //0 pour non decéder et 1 pour decécder
             $table->boolean('retraite')->default(0); //0 pour non retraiter et 1 pour retraiter

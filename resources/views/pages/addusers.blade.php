@@ -44,7 +44,7 @@
 													style="height: 150px; width: 150px; margin-bottom: 20px;">
 													<img class='popup-image h-8 w-8 rounded-full object-cover' data-toggle="modal"
 														data-target="#view-photo-modal" id="show_img" {{-- @dd(public_path('picture_profile\\' . $user->profile_photo_path)) --}}
-														src="{{ isset($user)? (isset($user->profile_photo_path)? asset('picture_profile/' . $user->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=c7932b&size=150&color=fff'): 'https://ui-avatars.com/api/?name=Membre&background=c7932b&size=150&color=fff' }}"
+														src="{{ isset($user) ? (isset($user->profile_photo_path) ? asset('picture_profile/' . $user->profile_photo_path) : 'https://ui-avatars.com/api/?name=' . $user->nom . '&background=c7932b&size=150&color=fff') : 'https://ui-avatars.com/api/?name=Membre&background=c7932b&size=150&color=fff' }}"
 														alt='' />
 												</div>
 												<input type="file" class="p-md-5" id="pictureupload" accept=".jpg, .jpeg, .png, .webp" value="">
@@ -164,6 +164,19 @@
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
+														<x-input name='status_matrimonial' :value="isset($user) ? $user->status_matrimonial : ''" input='select' :options="[
+														    ['name' => '', 'value' => ''],
+														    ['name' => 'Marié', 'value' => 'Marié'],
+														    ['name' => 'Célibataire', 'value' => 'Célibataire'],
+														    ['name' => 'Divorcé', 'value' => 'Divorcé'],
+														    ['name' => 'Veuf(ve)', 'value' => 'Veuf(ve)'],
+														]" :required="true"
+															title="Statut matrimonial *">
+														</x-input>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
 														<x-input name='role' :value="isset($user) ? ($user->role == 'admin' ? 'Administrateur' : 'Membre') : ''" input='select' :options="[
 														    ['name' => '', 'value' => ''],
 														    ['name' => 'Administrateur', 'value' => 'admin'],
@@ -173,7 +186,7 @@
 														</x-input>
 													</div>
 												</div>
-												<div class="col-md-6">
+												<div class="col-md-12">
 													<div class="form-group">
 														<x-input name='type_parent' :value="isset($user) ? ($user->type_parent == '0' ? 'Vivant' : 'Non vivant') : ''" input='select' :options="[
 														    ['name' => '', 'value' => ''],
@@ -228,6 +241,7 @@
 	  let sexe = $("#sexe").val();
 	  let role = $("#role").val();
 	  let type_parent = $("#type_parent").val();
+	  let status_matrimonial = $("#status_matrimonial").val();
 
 	  var formData = new FormData();
 	  formData.append('matricule', matricule);
@@ -246,7 +260,7 @@
 	  formData.append('listCategorie', listCategorie);
 	  formData.append('picture', picture);
 	  formData.append('type_parent', type_parent);
-
+	  formData.append('status_matrimonial', status_matrimonial);
 	  $.ajax({
 	   headers: {
 	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -281,6 +295,7 @@
 	      'Votre requête s\'est terminer avec succèss', 'success', );
 	     clearFormUser();
 	    } else {
+	     $('.btn-submit-user').attr('disabled', false);
 	     if (!$.isEmptyObject(data.error)) {
 	      $('#alert-javascript').removeClass('d-none');
 	      $('#alert-javascript').text(data.error);
@@ -294,7 +309,6 @@
 	       $('#alert-javascript').append(error);
 	      }
 	     }
-	     $('.btn-submit-user').attr('disabled', false);
 	    }
 	    $("html, body").animate({
 	     scrollTop: 0
@@ -350,9 +364,8 @@
 
 	 function clearFormUser() {
 	@if (Route::currentRouteName() === 'membre.edit')
-		// history.pushState({}, null, "{{ route('membre.index') }}");
-		// window.setTimeout('location.reload()', 1500);
-		window.setTimeout(' history.back();', 1500);
+		history.pushState({}, null, "{{ route('membre.index') }}");
+		window.setTimeout('location.reload()', 1600);
 	@endif
 	  $('#formUser').attr('action', "{{ route('membre.store') }}");
 	  $('#formUser').attr('method', "POST");

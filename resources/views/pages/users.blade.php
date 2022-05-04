@@ -66,6 +66,8 @@
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Sexe')</span>
 															</th>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Statut matrimonial')</span>
+															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Nationalité')</span>
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Agence')</span>
@@ -324,205 +326,141 @@
 	  });
 	 });
 	</script>
-
-	@if (config('app.locale') == 'fr')
-		<script>
-		 $(document).ready(function() {
-		  $('#userList').DataTable({
-		   processing: true,
-		   serverSide: true,
-		   autoWidth: false,
-		   pageLength: 10,
-		   paginate: true,
-		   info: true,
-		   language: {
-		    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
-		    "sEmptyTable": "Aucune donnée disponible dans le tableau",
-		    "sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
-		    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-		    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-		    "sInfoPostFix": "",
-		    "sInfoThousands": ",",
-		    "sLengthMenu": "Afficher _MENU_ éléments",
-		    "sLoadingRecords": "Chargement...",
-		    "sProcessing": "Traitement...",
-		    "sSearch": "Rechercher :",
-		    "sZeroRecords": "Aucun élément correspondant trouvé",
-		    "oPaginate": {
-		     "sFirst": "Premier",
-		     "sLast": "Dernier",
-		     "sNext": "Suivant",
-		     "sPrevious": "Précédent"
-		    },
-		    "oAria": {
-		     "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-		     "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-		    },
-		    "select": {
-		     "rows": {
-		      "_": "%d lignes sélectionnées",
-		      "0": "Aucune ligne sélectionnée",
-		      "1": "1 ligne sélectionnée"
-		     }
-		    }
-		   },
-		   buttons: [
-		    'copy', 'excel', 'pdf'
-		   ],
-		   ajax: "{{ route('getuser') }}",
-		   order: [
-		    [0, "desc"]
-		   ],
-		   columns: [{
-		     "data": 'updated_at',
-		     "name": 'updated_at',
-		     "visible": false,
-		     "className": 'nk-tb-col nk-tb-col-check'
-		    },
-		    {
-		     "data": 'matricule',
-		     "name": 'matricule',
-		     "className": 'nk-tb-col '
-		    },
-		    {
-		     "data": 'nom',
-		     "name": 'nom',
-		     "className": 'nk-tb-col '
-		    },
-		    {
-		     "data": 'prenom',
-		     "name": 'prenom',
-		     "className": 'nk-tb-col '
-		    },
-		    {
-		     "data": 'sexe',
-		     "name": 'sexe',
-		     "className": 'nk-tb-col '
-		    },
-		    {
-		     "data": 'nationalité',
-		     "name": 'nationalité',
-		     "className": 'nk-tb-col '
-		    },
-		    {
-		     "data": 'agence',
-		     "name": 'agence',
-		     "className": 'nk-tb-col '
-		    },
-		    // {
-		    //     "data": 'email',
-		    //     "name": 'email',
-		    //     "className": 'nk-tb-col '
-		    // },
-		    {
-		     "data": 'tel',
-		     "name": 'tel',
-		     "className": 'nk-tb-col'
-		    },
-		    {
-		     "data": 'category',
-		     "name": 'category',
-		     "className": 'nk-tb-col'
-		    },
-		    // {
-		    //     "data": 'dateNais',
-		    //     "name": 'dateNais',
-		    //     "className": 'nk-tb-col'
-		    // },
-		    // {
-		    //     "data": 'dateRecru',
-		    //     "name": 'dateRecru',
-		    //     "className": 'nk-tb-col'
-		    // },
-		    // {
-		    //     "data": 'dateHade',
-		    //     "name": 'dateHade',
-		    //     "className": 'nk-tb-col'
-		    // },
-		    {
-		     "data": 'status',
-		     "name": 'status',
-		     "className": 'nk-tb-col'
-		    },
-		    {
-		     "data": 'Actions',
-		     "name": 'Actions',
-		     "orderable": false,
-		     "serachable": false,
-		     "className": 'nk-tb-col nk-tb-col-tools'
-		    },
-		   ]
-		  });
-		 });
-		 $(".loader").addClass("d-none");
-		</script>
-	@else
-		<script>
-		 $(document).ready(function() {
-		  $('#userList').DataTable({
-		   processing: true,
-		   serverSide: true,
-		   autoWidth: false,
-		   pageLength: 10,
-		   paginate: true,
-		   info: true,
-		   language: {
-		    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json",
-		   },
-		   buttons: [
-		    'copy', 'excel', 'pdf'
-		   ],
-		   // scrollX: true,
-		   // "order": [[ 0, "desc" ]],
-		   ajax: "{{ route('getuser') }}",
-		   order: [
-		    [0, "desc"]
-		   ], //or asc 
-		   columns: [
-		    // {
-		    //     "data": 'id',
-		    //     "name": 'id',
-		    //     "className": 'nk-tb-col nk-tb-col-check'
-		    // },
-		    {
-		     "data": 'updated_at',
-		     "name": 'updated_at',
-		     "visible": false,
-		     "className": 'nk-tb-col nk-tb-col-check'
-		    },
-		    {
-		     "data": 'name',
-		     "name": 'name',
-		     "className": 'nk-tb-col '
-		    },
-		    {
-		     "data": 'email',
-		     "name": 'email',
-		     "className": 'nk-tb-col'
-		    },
-		    {
-		     "data": 'role',
-		     "name": 'role',
-		     "className": 'nk-tb-col'
-		    },
-		    {
-		     "data": 'status',
-		     "name": 'status',
-		     "className": 'nk-tb-col'
-		    },
-		    {
-		     "data": 'Actions',
-		     "name": 'Actions',
-		     "orderable": false,
-		     "serachable": false,
-		     "className": 'nk-tb-col nk-tb-col-tools'
-		    },
-		   ]
-		  });
-		 });
-		 $(".loader").addClass("d-none");
-		</script>
-	@endif
+	<script>
+	 $(document).ready(function() {
+	  $('#userList').DataTable({
+	   processing: true,
+	   serverSide: true,
+	   autoWidth: false,
+	   pageLength: 10,
+	   paginate: true,
+	   info: true,
+	   language: {
+	    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+	    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+	    "sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
+	    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+	    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+	    "sInfoPostFix": "",
+	    "sInfoThousands": ",",
+	    "sLengthMenu": "Afficher _MENU_ éléments",
+	    "sLoadingRecords": "Chargement...",
+	    "sProcessing": "Traitement...",
+	    "sSearch": "Rechercher :",
+	    "sZeroRecords": "Aucun élément correspondant trouvé",
+	    "oPaginate": {
+	     "sFirst": "Premier",
+	     "sLast": "Dernier",
+	     "sNext": "Suivant",
+	     "sPrevious": "Précédent"
+	    },
+	    "oAria": {
+	     "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+	     "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+	    },
+	    "select": {
+	     "rows": {
+	      "_": "%d lignes sélectionnées",
+	      "0": "Aucune ligne sélectionnée",
+	      "1": "1 ligne sélectionnée"
+	     }
+	    }
+	   },
+	   buttons: [
+	    'copy', 'excel', 'pdf'
+	   ],
+	   ajax: "{{ route('getuser') }}",
+	   order: [
+	    [0, "desc"]
+	   ],
+	   columns: [{
+	     "data": 'updated_at',
+	     "name": 'updated_at',
+	     "visible": false,
+	     "className": 'nk-tb-col nk-tb-col-check'
+	    },
+	    {
+	     "data": 'matricule',
+	     "name": 'matricule',
+	     "className": 'nk-tb-col '
+	    },
+	    {
+	     "data": 'nom',
+	     "name": 'nom',
+	     "className": 'nk-tb-col '
+	    },
+	    {
+	     "data": 'prenom',
+	     "name": 'prenom',
+	     "className": 'nk-tb-col '
+	    },
+	    {
+	     "data": 'sexe',
+	     "name": 'sexe',
+	     "className": 'nk-tb-col '
+	    },
+	    {
+	     "data": 'status_matrimonial',
+	     "name": 'status_matrimonial',
+	     "className": 'nk-tb-col '
+	    },
+	    {
+	     "data": 'nationalité',
+	     "name": 'nationalité',
+	     "className": 'nk-tb-col '
+	    },
+	    {
+	     "data": 'agence',
+	     "name": 'agence',
+	     "className": 'nk-tb-col '
+	    },
+	    // {
+	    //     "data": 'email',
+	    //     "name": 'email',
+	    //     "className": 'nk-tb-col '
+	    // },
+	    {
+	     "data": 'tel',
+	     "name": 'tel',
+	     "className": 'nk-tb-col'
+	    },
+	    {
+	     "data": 'category',
+	     "name": 'category',
+	     "className": 'nk-tb-col'
+	    },
+	    // {
+	    //     "data": 'dateNais',
+	    //     "name": 'dateNais',
+	    //     "className": 'nk-tb-col'
+	    // },
+	    // {
+	    //     "data": 'dateRecru',
+	    //     "name": 'dateRecru',
+	    //     "className": 'nk-tb-col'
+	    // },
+	    // {
+	    //     "data": 'dateHade',
+	    //     "name": 'dateHade',
+	    //     "className": 'nk-tb-col'
+	    // },
+	    {
+	     "data": 'status',
+	     "name": 'status',
+	     "className": 'nk-tb-col'
+	    },
+	    {
+	     "data": 'Actions',
+	     "name": 'Actions',
+	     "orderable": false,
+	     "serachable": false,
+	     "className": 'nk-tb-col nk-tb-col-tools'
+	    },
+	   ]
+	  });
+	 });
+	 $(".loader").addClass("d-none");
+	</script>
 
 	{{-- <script src="{{ mix('js/app.js') }}">
     </script>

@@ -7,13 +7,13 @@
 				<div class="row g-gs">
 					<div class="container-fluid">
 						<div class="row g-gs">
-							<div class="col-xxl-3 col-sm-6">
+							<div class="col-xxl-6 col-sm-6">
 								<div class="card">
 									<div class="nk-ecwg nk-ecwg6">
 										<div class="card-inner">
 											<div class="card-title-group">
 												<div class="card-title">
-													<h6 class="title">Nombre total de membre</h6>
+													<h6 class="title">@lang('Nombre total de membre dans la mutuelle')</h6>
 												</div>
 											</div>
 											<div class="data">
@@ -31,18 +31,39 @@
 									</div><!-- .nk-ecwg -->
 								</div><!-- .card -->
 							</div><!-- .col -->
-							<div class="col-xxl-3 col-sm-6">
+							<div class="col-xxl-6 col-sm-6">
 								<div class="card">
 									<div class="nk-ecwg nk-ecwg6">
 										<div class="card-inner">
 											<div class="card-title-group">
 												<div class="card-title">
-													<h6 class="title">Nombre total de prestation</h6>
+													<h6 class="title">@lang('Montant total des dons')</h6>
 												</div>
 											</div>
 											<div class="data">
 												<div class="data-group">
-													<div class="amount">{{ $nbprestation }}</div>
+													<div class="amount">0 FCFA</div>
+													<div class="nk-ecwg6-ck">
+														<canvas class="ecommerce-line-chart-s3" id="todayVisitors"></canvas>
+													</div>
+												</div>
+											</div>
+										</div><!-- .card-inner -->
+									</div><!-- .nk-ecwg -->
+								</div><!-- .card -->
+							</div><!-- .col -->
+							<div class="col-xxl-6 col-sm-6">
+								<div class="card">
+									<div class="nk-ecwg nk-ecwg6">
+										<div class="card-inner">
+											<div class="card-title-group">
+												<div class="card-title">
+													<h6 class="title">@lang('Montant global des cotisations')</h6>
+												</div>
+											</div>
+											<div class="data">
+												<div class="data-group">
+													<div class="amount">{{ $totalcotisationglobal }} FCFA</div>
 													<div class="nk-ecwg6-ck">
 														<canvas class="ecommerce-line-chart-s3" id="todayRevenue"></canvas>
 													</div>
@@ -52,41 +73,20 @@
 									</div><!-- .nk-ecwg -->
 								</div><!-- .card -->
 							</div><!-- .col -->
-							<div class="col-xxl-3 col-sm-6">
+							<div class="col-xxl-6 col-sm-6">
 								<div class="card">
 									<div class="nk-ecwg nk-ecwg6">
 										<div class="card-inner">
 											<div class="card-title-group">
 												<div class="card-title">
-													<h6 class="title">Montant global de cotisation (FCFA)</h6>
+													<h6 class="title">@lang('Montant global des prestations')</h6>
 												</div>
 											</div>
 											<div class="data">
 												<div class="data-group">
-													<div class="amount">{{ $totalcotisationglobal }}</div>
+													<div class="amount">{{ $totalprestationglobal }} FCFA</div>
 													<div class="nk-ecwg6-ck">
 														<canvas class="ecommerce-line-chart-s3" id="todayCustomers"></canvas>
-													</div>
-												</div>
-											</div>
-										</div><!-- .card-inner -->
-									</div><!-- .nk-ecwg -->
-								</div><!-- .card -->
-							</div><!-- .col -->
-							<div class="col-xxl-3 col-sm-6">
-								<div class="card">
-									<div class="nk-ecwg nk-ecwg6">
-										<div class="card-inner">
-											<div class="card-title-group">
-												<div class="card-title">
-													<h6 class="title">Montant global de prestation (FCFA)</h6>
-												</div>
-											</div>
-											<div class="data">
-												<div class="data-group">
-													<div class="amount">{{ $totalprestationglobal }}</div>
-													<div class="nk-ecwg6-ck">
-														<canvas class="ecommerce-line-chart-s3" id="todayVisitors"></canvas>
 													</div>
 												</div>
 											</div>
@@ -101,7 +101,7 @@
 											<div class="card-title-group mb-3">
 												<div class="card-title">
 													<h6 class="title">Visualisation graphique des cotisations et
-														prestations ({{ Carbon\Carbon::now()->isoFormat('Y') }}).</h6>
+														prestations ({{ Carbon\Carbon::now()->isoFormat('Y') }})</h6>
 												</div>
 
 											</div>
@@ -640,7 +640,7 @@
 											<div class='user-card user-card-s2'>
 												<div class='user-avatar-lg bg-primary d-flex justify-content-left' style="height: 150px; width: 150px">
 													<img class='popup-image h-8 w-8 rounded-full object-cover'
-														src="{{ isset($membre->profile_photo_path)? asset('picture_profile/' . $membre->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=c7932b&size=150&color=fff' }}"
+														src="{{ isset($membre->profile_photo_path) ? asset('picture_profile/' . $membre->profile_photo_path) : 'https://ui-avatars.com/api/?name=' . $membre->nom . '&background=c7932b&size=150&color=fff' }}"
 														alt='' />
 												</div>
 												<div class="row user-info text-left">

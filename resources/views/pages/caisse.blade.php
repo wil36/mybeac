@@ -8,24 +8,48 @@
 					<div class="container-fluid">
 						<div class="row g-gs">
 							<div class="col-md-12">
-								<h4>@lang('Etat de la caisse principale')</h4>
+								<h4>@lang('Etat des caisses')</h4>
 							</div>
 						</div>
 						<div class="row g-gs">
-							<div class="col-xxl-3 col-sm-6">
+							<div class="col-xxl-6 col-sm-6">
 								<div class="card">
 									<div class="nk-ecwg nk-ecwg6">
 										<div class="card-inner">
 											<div class="card-title-group">
 												<div class="card-title">
-													<h6 class="title">@lang('Montant solde principal (FCFA)')</h6>
+													<h6 class="title">@lang('Montant caise principal')</h6>
 												</div>
 											</div>
 											<div class="data">
 												<div class="data-group">
-													<div class="amount">{{ $principal }}</div>
+													<div class="amount">Solde : {{ $principal }} FCFA</div>
 													<div class="nk-ecwg6-ck">
 														<canvas class="ecommerce-line-chart-s3" id="todayOrders"></canvas>
+													</div>
+												</div>
+												{{-- <div class="info"><span class="change up text-danger"><em
+															class="icon ni ni-arrow-long-up"></em>4.63%</span><span> vs. last
+														week</span></div> --}}
+											</div>
+										</div><!-- .card-inner -->
+									</div><!-- .nk-ecwg -->
+								</div><!-- .card -->
+							</div><!-- .col -->
+							<div class="col-xxl-6 col-sm-6">
+								<div class="card">
+									<div class="nk-ecwg nk-ecwg6">
+										<div class="card-inner">
+											<div class="card-title-group">
+												<div class="card-title">
+													<h6 class="title">@lang('Montant caisse cantine')</h6>
+												</div>
+											</div>
+											<div class="data">
+												<div class="data-group">
+													<div class="amount">Solde : 0 FCFA</div>
+													<div class="nk-ecwg6-ck">
+														<canvas class="ecommerce-line-chart-s3" id="todayRevenue"></canvas>
 													</div>
 												</div>
 												{{-- <div class="info"><span class="change up text-danger"><em
@@ -40,7 +64,7 @@
 					</div>
 				</div>
 				<br>
-				<div class="row g-gs">
+				{{-- <div class="row g-gs">
 					<div class="container-fluid">
 						<div class="row g-gs">
 							<div class="col-md-12">
@@ -54,12 +78,12 @@
 										<div class="card-inner">
 											<div class="card-title-group">
 												<div class="card-title">
-													<h6 class="title">@lang('Montant solde quantine (FCFA)')</h6>
+													<h6 class="title">@lang('Solde')</h6>
 												</div>
 											</div>
 											<div class="data">
 												<div class="data-group">
-													<div class="amount">{{ $quantine }}</div>
+													<div class="amount">{{ $quantine }} FCFA</div>
 													<div class="nk-ecwg6-ck">
 														<canvas class="ecommerce-line-chart-s3" id="todayRevenue"></canvas>
 													</div>
@@ -75,12 +99,12 @@
 										<div class="card-inner">
 											<div class="card-title-group">
 												<div class="card-title">
-													<h6 class="title">@lang('Montant solde des emprunts (FCFA)')</h6>
+													<h6 class="title">>@lang('Solde')</h6>
 												</div>
 											</div>
 											<div class="data">
 												<div class="data-group">
-													<div class="amount">{{ $emprunt }}</div>
+													<div class="amount">{{ $emprunt }} FCFA</div>
 													<div class="nk-ecwg6-ck">
 														<canvas class="ecommerce-line-chart-s3" id="todayCustomers"></canvas>
 													</div>
@@ -92,7 +116,7 @@
 							</div><!-- .col -->
 						</div>
 					</div>
-				</div>
+				</div> --}}
 			</div>
 		</div>
 	@endsection

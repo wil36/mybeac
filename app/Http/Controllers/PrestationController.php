@@ -220,7 +220,9 @@ class PrestationController extends Controller
     {
         try {
             $tabDate = explode('-', $request->date);
-            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca, prestations po where ca.id=us.categories_id and us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            $data = DB::select(DB::raw('select us.id, us.nom, us.prenom, us.profile_photo_path, us.created_at, us.matricule, SUM(po.users_id) AS nb_prest, SUM(po.montant) as montant from users us, prestations po where us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ' group by po.users_id'));
+            // $montant = DB::select(DB::raw('select sum(po.montant) as montant from users us, prestations po where us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            //TODO : Afficher le montant total de la prestation pour chaque utilisateur
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -259,42 +261,27 @@ class PrestationController extends Controller
                 ->addColumn("nom", function ($data) {
                     return $data->nom;
                 })
-                ->addColumn("montant", function ($data) {
-                    return number_format($data->montant, 0, ',', ' ');
-                })
+                // ->addColumn("montant", function ($data) {
+                //     return number_format($data->montant, 0, ',', ' ');
+                // })
                 ->addColumn("prenom", function ($data) {
                     return $data->prenom;
                 })
-                ->addColumn("nationalité", function ($data) {
-                    return $data->nationalité;
+                ->addColumn("nb_prestation", function ($data) {
+                    return  number_format($data->nb_prest, 0, ',', ' ');
                 })
-                ->addColumn("agence", function ($data) {
-                    return $data->agence;
-                })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
-                })
-                ->addColumn("sexe", function ($data) {
-                    return $data->sexe;
-                })
-                ->addColumn("category", function ($data) {
-                    return $data->libelle;
-                })
-                ->editColumn("status", function ($data) {
-                    if ($data->status) {
-                        return ' <td class="nk-tb-col tb-col-md">
-                    <span class="badge badge-outline-success">Actif</span>
-                </td>';
-                    } else {
-                        return ' <td class="nk-tb-col tb-col-md">
-                <span class="badge badge-outline-danger">Inactif</span>
-            </td>';
-                    }
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ') . " FCFA";
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">
                
-              
+               </li>
+                  <li class="nk-tb-action-hidden">
+                    <a href="' . route('membre.info', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Detail du membre">
+                      <em class="icon ni ni-expand"></em>
+                    </a>
+                </li>
                 <li>
                     <div class="drodown">
                         <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
@@ -305,10 +292,10 @@ class PrestationController extends Controller
                 </li>
             </ul>';
                 })->setRowClass("nk-tb-item")
-                ->rawColumns(['matricule', 'select', 'status', 'Actions',])
+                ->rawColumns(['matricule', 'select',  'Actions',])
                 ->make(true);
         } catch (Exception $e) {
-            return response()->json(["error" => "Une erreur s'est produite."]);
+            return response()->json(["error" => $e->getMessage()]);
         }
     }
 
@@ -362,7 +349,7 @@ class PrestationController extends Controller
     public function getHistoriqueMensuelPrestation(Request $request)
     {
         try {
-            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.id) AS nombre_user FROM Prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
+            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.users_id) AS nombre_user FROM Prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
 
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
@@ -414,7 +401,7 @@ class PrestationController extends Controller
     {
         try {
             if ($request->id != null) {
-                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $request->id)->first();
+                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'profile_photo_path')->where('id', $request->id)->first();
                 if ($membre == null) {
                     abort(404);
                 }

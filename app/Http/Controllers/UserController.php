@@ -36,7 +36,7 @@ class UserController extends Controller
     public function getUser(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -74,6 +74,9 @@ class UserController extends Controller
                 })
                 ->addColumn("sexe", function ($data) {
                     return $data->sexe;
+                })
+                ->addColumn("status_matrimonial", function ($data) {
+                    return $data->status_matrimonial;
                 })
                 ->addColumn("nationalité", function ($data) {
                     return $data->nationalité;
@@ -125,12 +128,13 @@ class UserController extends Controller
                 </li>
                  <li class="nk-tb-action-hidden">
                     <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon deces-data-user" data-toggle="tooltip" data-placement="top" title="Activer le decès">
-                      <em class="icon ni ni-ripple"></em>
+                       <em class="icon ni ni-check-thick" style="color:red;"></em>
+
                     </a>
                 </li>
                  <li class="nk-tb-action-hidden">
                     <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon retraite-data-user" data-toggle="tooltip" data-placement="top" title="Activer la retraite">
-                      <em class="icon ni ni-ripple"></em>
+                      <em class="icon ni ni-check-thick" style="color:orange;"></em>
                     </a>
                 </li>
                  <li class="nk-tb-action-hidden">
@@ -160,8 +164,8 @@ class UserController extends Controller
                             <ul class="link-list-opt no-bdr">
                                 <li><a href="' . route('membre.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
                                 <li><a href="" class="exclure-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-ripple"></em><span>Exclure le membre</span></a></li>
-                                <li><a href="" class="deces-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-ripple"></em><span>Activer le decès</span></a></li>
-                                <li><a href="" class="retraite-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-ripple"></em><span>Activer la retraite</span></a></li>
+                                <li><a href="" class="deces-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-check-thick" style="color:red;"></em><span>Activer le decès</span></a></li>
+                                <li><a href="" class="retraite-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-check-thick" style="color:orange;"></em><span>Activer la retraite</span></a></li>
                                 <li><a href="" class="dbauth-delete" data_id="' . $data->id . '" ><em class="icon ni ni-reload-alt"></em><span>Supprimer la double authentification</span></a></li>
                                 <li><a href="' . route('ayantsdroits.create', $data->id) . '" > <em class="icon ni ni-user-add-fill"></em><span>Ajouter un ayant droit</span></a></li>
                                 <li><a href="' . route('prestation.create', $data->id) . '" > <em class="icon ni ni-property-add"></em><span>Ajouter une prestation</span></a></li>
@@ -532,8 +536,9 @@ class UserController extends Controller
                 'dateRecrutement' => 'date de recrutement',
                 'dateHadhésion' => 'date d\'hadésion',
                 'tel' => 'numéro de téléphone',
-                'listCategorie' => 'Categorie',
-                'type_parent' => 'Etat de vie des parents'
+                'listCategorie' => 'categorie',
+                'type_parent' => 'etat de vie des parents',
+                'status_matrimonial' => 'statut matrimonial'
             );
             $validator = FacadesValidator::make($request->all(), [
                 'matricule' => ['required', 'max:255', 'unique:users,matricule'],
@@ -550,8 +555,8 @@ class UserController extends Controller
                 'listCategorie' => ['required', 'integer'],
                 'role' => ['required', 'string'],
                 'type_parent' => ['required', 'integer'],
+                'status_matrimonial' => ['required', 'string', 'max:50'],
             ]);
-            // dd(date('Y-m-d', strtotime(now())));
             $validator->setAttributeNames($attributeNames);
             if ($validator->fails()) {
                 return response()
@@ -573,6 +578,7 @@ class UserController extends Controller
             $user['role'] = $request['role'];
             $user['categories_id'] = $request['listCategorie'];
             $user['type_parent'] = $request['type_parent'];
+            $user['status_matrimonial'] = $request['status_matrimonial'];
             $user['theme'] = 0;
             $user['status'] = 1;
             $user['email_verified_at'] = now();
@@ -636,6 +642,7 @@ class UserController extends Controller
                 'dateRecrutement' => 'date de recrutement',
                 'dateHadhésion' => 'date d\'hadésion',
                 'tel' => 'numéro de téléphone',
+                'status_matrimonial' => 'statut matrimonial',
                 'listCategorie' => 'Categorie',
             );
             $validator = FacadesValidator::make($request->all(), [
@@ -658,6 +665,10 @@ class UserController extends Controller
                 'dateHadhésion' => ['required', 'date', 'date_format:Y-m-d'],
                 'listCategorie' => ['required', 'integer'],
                 'role' => ['required', 'string'],
+                'status_matrimonial' => [
+                    'required',
+                    'string'
+                ],
                 'type_parent' => ['required', 'integer'],
                 // 'picture' => ['max:2048', 'file', 'mimes:jpeg,png,doc,docs,pdf']
             ]);
@@ -681,6 +692,7 @@ class UserController extends Controller
             $user['date_recrutement'] = date("Y-m-d", strtotime($request['dateHadhésion']));
             $user['role'] = $request['role'];
             $user['type_parent'] = $request['type_parent'];
+            $user['status_matrimonial'] = $request['status_matrimonial'];
             $user['categories_id'] = $request['listCategorie'];
             $expath = $user['profile_photo_path'];
             if ($request->hasFile('picture') && $request->file('picture')->isValid()) {
