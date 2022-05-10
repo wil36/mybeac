@@ -66,6 +66,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Cotisation::class);
     }
+    function dons()
+    {
+        return $this->hasMany(Dons::class);
+    }
 
 
     /**

@@ -221,8 +221,6 @@ class PrestationController extends Controller
         try {
             $tabDate = explode('-', $request->date);
             $data = DB::select(DB::raw('select us.id, us.nom, us.prenom, us.profile_photo_path, us.created_at, us.matricule, SUM(po.users_id) AS nb_prest, SUM(po.montant) as montant from users us, prestations po where us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ' group by po.users_id'));
-            // $montant = DB::select(DB::raw('select sum(po.montant) as montant from users us, prestations po where us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
-            //TODO : Afficher le montant total de la prestation pour chaque utilisateur
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -535,7 +533,6 @@ class PrestationController extends Controller
                 'date' => ['required', 'date', 'date_format:Y-m-d'],
                 'listAyantDroit' => ['required', 'integer'],
             ]);
-            // dd(date('Y-m-d', strtotime(now())));
             $validator->setAttributeNames($attributeNames);
             if ($validator->fails()) {
                 return response()
@@ -543,13 +540,16 @@ class PrestationController extends Controller
             }
             DB::beginTransaction();
             $prestation  = Prestation::find($request->ids);
+            $last_montant = $prestation->montant;
             $prestation['date'] = $request['date'];
             $prestation['montant'] = $request['montant'];
             $prestation['users_id'] = $request['id'];
             $prestation['type_prestation_id'] = explode('|', $request['typePrestation'])[0];
             $prestation['ayant_droits_id'] = $request['listAyantDroit'];
-
             $prestation->save();
+            $caisse = Caisse::first();
+            $caisse->principal = $caisse->principal + $last_montant - $request['montant'];
+            $caisse->save();
             DB::commit();
 
             return response()->json(["success" => "Enregistrement éffectuer !"]);
@@ -567,7 +567,13 @@ class PrestationController extends Controller
     public function deleteprestation(Request $request)
     {
         try {
-            Prestation::find($request->id)->delete();
+            DB::beginTransaction();
+            $prestation = Prestation::find($request->id);
+            $caisse = Caisse::first();
+            $caisse->principal = $caisse->principal + $prestation->montant;
+            $caisse->save();
+            $prestation->delete();
+            DB::commit();
             return response()->json(["success" => "Suppression éffectuer avec succès"]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);

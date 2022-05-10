@@ -159,20 +159,20 @@ return [
     'Dons' => [
         'name' => "Gestion des dons",
         'route' => 'membre.index',
-        'routes' => [],
+        'routes' => ['dons.create', 'dons.index', 'dons.edit'],
         'icon' => 'icon ni ni-money',
         'role'   => 'admin',
         'childrens' => [
             [
                 'name'  => 'Liste des dons effectués',
                 'role'  => 'admin',
-                'route' => 'membre.cotisation',
+                'route' => 'dons.index',
                 'altRoute' => '',
             ],
             [
                 'name'  => 'Ajouter un don',
                 'role'  => 'admin',
-                'route' => 'membre.historiquecotisationmensuel',
+                'route' => 'dons.create',
                 'altRoute' => '',
             ],
         ],

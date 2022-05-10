@@ -510,6 +510,40 @@ class UserController extends Controller
     }
 
     /**
+     * getCategories recupération des membres par ajax
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function getUserAjaxCombobox(Request $request)
+    {
+        try {
+            $data = User::select("id", "matricule", "nom", "prenom")->where(function ($query) use ($request) {
+                $query->where('matricule', 'like', '%' . $request->search . '%');
+            })->orWhere(function ($query) use ($request) {
+                $query->where(
+                    'nom',
+                    'like',
+                    '%' . $request->search . '%'
+                );
+            })->orWhere(function ($query) use ($request) {
+                $query->where(
+                    'prenom',
+                    'like',
+                    '%' . $request->search . '%'
+                );
+            })->limit(5)->get();
+            $resp = array();
+            foreach ($data as $e) {
+                $resp[] = array('id' => $e->id, 'text' => $e->matricule . "   |  " . $e->nom . ' ' . $e->prenom, 'value' => $e->id);
+            }
+            return response()->json($resp);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

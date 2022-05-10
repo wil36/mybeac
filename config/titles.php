@@ -39,4 +39,9 @@ return [
         'create' => 'Ajout d\'une prestation',
         'edit' => 'Modification d\'une prestation',
     ],
+    'dons' => [
+        'index' => 'Liste des dons',
+        'create' => 'Ajout d\'un don',
+        'edit' => 'Modification d\'un don',
+    ],
 ];

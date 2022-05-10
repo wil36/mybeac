@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController};
+use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController, DonsController};
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::post('membre/retraite', [UserController::class, 'retraitemembre'])->name('user.retraite');
     Route::post('membre/doubleauthdelete', [UserController::class, 'doubleauthdelete'])->name('user.doubleauthdelete');
     Route::get('/getuser', [UserController::class, 'getUser'])->name('getuser');
+    Route::post('/get_user_pour_combobox', [UserController::class, 'getUserAjaxCombobox'])->name('getuserAjaxCombobox');
     Route::get('/get-membres-décédé', [UserController::class, 'getMembreDecedeAjax'])->name('getMembreDecedeAjax');
     Route::get('/Liste-des-membres-décédés', [UserController::class, 'getMembreDecede'])->name('membre.getMembreDecede');
     Route::get('/get-membres-retraité', [UserController::class, 'getMembreRetraiteAjax'])->name('getMembreRetraiteAjax');
@@ -139,6 +140,14 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
 
     //Route for caisse
     Route::get('caisse', [CaisseController::class, 'index'])->name('caisse.index');
+
+    //Route for Dons
+    Route::resource('dons', DonsController::class)->except(['show', 'delete', 'update']);
+    Route::post('dons/{id}', [DonsController::class, 'update'])->name(
+        'dons.update'
+    );
+    Route::get('/getdons', [DonsController::class, 'getDons'])->name('getDons');
+    Route::post('deleteDonc', [DonsController::class, 'destroy'])->name('dons.delete');
 });
 
 
