@@ -38,7 +38,7 @@
 								<div class="card">
 									<div class="card-inner">
 										<form method="POST" id="formCategorie"
-											action="{{ Route::currentRouteName() === 'categories.edit'? route('categories.update', $categorie->id): route('categories.store') }}">
+											action="{{ Route::currentRouteName() === 'categories.edit' ? route('categories.update', $categorie->id) : route('categories.store') }}">
 											@csrf
 											<div class="row g-gs">
 												<div class="col-md-12">
@@ -76,7 +76,6 @@
 			</div>
 		</div>
 	</div>
-
 @endsection
 
 
@@ -148,10 +147,10 @@
 	  $("#code").val('');
 	  $("#libelle").val('');
 	  $("#montant").val('');
-	@if (Route::currentRouteName() === 'categories.edit')
-		history.pushState({}, null, "{{ route('categories.index') }}");
-		window.setTimeout('location.reload()', 1500);
-	@endif
+	  @if (Route::currentRouteName() === 'categories.edit')
+	   history.pushState({}, null, "{{ route('categories.index') }}");
+	   window.setTimeout('location.reload()', 1500);
+	  @endif
 	  $('.btn-submit-categorie').attr('disabled', false);
 	 }
 	</script>

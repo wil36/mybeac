@@ -17,7 +17,7 @@ class CreateCotisationsTable extends Migration
         Schema::create('cotisations', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date')->default(Carbon::now());
-            $table->double('montant')->default(0);
+            $table->decimal('montant', 18, 2)->default(0);
             $table->boolean('statut')->default(true);
             $table->integer('numero_seance')->default(0);
             $table->foreignId('users_id')

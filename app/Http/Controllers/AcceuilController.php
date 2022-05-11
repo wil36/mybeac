@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Cotisation;
+use App\Models\Dons;
 use App\Models\Prestation;
 use App\Models\User;
 use Exception;
@@ -26,6 +27,7 @@ class AcceuilController extends Controller
         $totalprestation = Prestation::where('users_id', '=', $id)->sum('montant');
         $totalcotisationglobal = Cotisation::sum('montant');
         $totalprestationglobal = Prestation::sum('montant');
+        $totalDons = Dons::sum('montant');
         $nbmembre = User::count();
         $nbprestation = Prestation::count();
         $poidMembre = $totalcotisation - $totalprestation;
@@ -43,10 +45,11 @@ class AcceuilController extends Controller
             'category' => $cat,
             'listeCotisation' => $listeCotisation,
             'listePrestation' => $listePrestation,
+            'totalDons' => number_format(abs($totalDons), 0, ',', ' '),
             'poidMembre' => $poidMembre,
             'poidMembre2' => number_format(abs($poidMembre), 0, ',', ' '),
             'totalCotisation' => number_format($totalcotisation, 0, ',', ' '),
-            'totalPrestation' => number_format($totalprestation, 0, ',', ' ')
+            'totalPrestation' => number_format($totalprestation, 0, ',', ' '),
         ]);
     }
 

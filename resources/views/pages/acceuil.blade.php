@@ -42,7 +42,7 @@
 											</div>
 											<div class="data">
 												<div class="data-group">
-													<div class="amount">0 FCFA</div>
+													<div class="amount">{{ $totalDons }} FCFA</div>
 													<div class="nk-ecwg6-ck">
 														<canvas class="ecommerce-line-chart-s3" id="todayVisitors"></canvas>
 													</div>

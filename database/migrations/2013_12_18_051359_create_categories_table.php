@@ -17,7 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('code');
             $table->string('libelle');
-            $table->double('montant')->default(0);
+            $table->decimal('montant', 18, 2)->default(0);
             $table->timestamps();
         });
     }

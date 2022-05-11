@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
                 'categories_id' => 1,
                 'theme' => 0,
                 'status' => 1,
+                'agence' => 'Ouest',
                 'email_verified_at' => now(),
                 'password' => Hash::make('1234'),
             ]);

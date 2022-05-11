@@ -18,7 +18,7 @@ class CreateDonsTable extends Migration
             $table->id();
             $table->string('nom');
             $table->string('prenom');
-            $table->float('montant')->default(0);
+            $table->decimal('montant', 18, 2)->default(0);
             $table->dateTime('date')->default(Carbon::now());
             $table->string('email')->nullable();
             $table->string('tel');

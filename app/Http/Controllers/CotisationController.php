@@ -440,6 +440,7 @@ class CotisationController extends Controller
                 return response()
                     ->json(["errors" => ["Veuillez sélectionner un membre."]]);
             }
+            DB::beginTransaction();
             $montantCotisationEnCour = 0;
             foreach ($request->liste as $item) {
                 $cotisation = new Cotisation();
@@ -459,7 +460,8 @@ class CotisationController extends Controller
             $caisse->principal = $caisse->principal + $montantCotisationEnCour;
             $caisse->save();
             $montant_global = Cotisation::sum('montant');
-            return response()->json(["success" => "Enregistrement éffectuer !", 'montant' => $montant_global]);
+            DB::commit();
+            return response()->json(["success" => "Enregistrement éffectuer !", 'montant' => number_format($montant_global ?? 0, 0, ',', ' ')]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

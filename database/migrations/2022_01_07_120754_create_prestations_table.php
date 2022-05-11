@@ -18,7 +18,7 @@ class CreatePrestationsTable extends Migration
             $table->id();
             $table->dateTime('date')->default(Carbon::now());
             $table->boolean('status')->default(true);
-            $table->double('montant')->default(0);
+            $table->decimal('montant', 18, 2)->default(0);
             $table->foreignId('users_id')
                 ->constrained()
                 ->onDelete('cascade')

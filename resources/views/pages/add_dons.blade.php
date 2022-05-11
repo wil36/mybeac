@@ -73,7 +73,7 @@
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
-																<x-input name='montant1' :value="isset($don) && $don->type == 'interne' ? $don->montant : ''" input='number' :required="true" title="Montant du don *">
+																<x-input name='montant1' :value="isset($don) && $don->type == 'interne' ? abs($don->montant) : ''" input='number' :required="true" title="Montant du don *">
 																</x-input>
 															</div>
 														</div>
@@ -122,7 +122,7 @@
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
-																<x-input name='montant2' :value="isset($don) && $don->type == 'externe' ? $don->montant : ''" input='number' :required="true" title="Montant du don *">
+																<x-input name='montant2' :value="isset($don) && $don->type == 'externe' ? abs($don->montant) : ''" input='number' :required="true" title="Montant du don *">
 																</x-input>
 															</div>
 														</div>
@@ -152,11 +152,11 @@
 @section('script')
 	<script>
 	 $(document).ready(function() {
-	@if (Route::currentRouteName() === 'dons.edit' && isset($don) && $don->type == 'externe')
-		$("#membre_externe").prop("checked", true);
-		$('#interne').attr('hidden', true);
-		$('#externe').attr('hidden', false);
-	@endif
+	  @if (Route::currentRouteName() === 'dons.edit' && isset($don) && $don->type == 'externe')
+	   $("#membre_externe").prop("checked", true);
+	   $('#interne').attr('hidden', true);
+	   $('#externe').attr('hidden', false);
+	  @endif
 	 });
 	 $('#membre_interne').change(function() {
 	  $('#interne').attr('hidden', false);
@@ -285,10 +285,10 @@
 	 });
 
 	 function clearFormUser() {
-	@if (Route::currentRouteName() === 'dons.edit')
-		history.pushState({}, null, "{{ route('dons.index') }}");
-		window.setTimeout('location.reload()', 1600);
-	@endif
+	  @if (Route::currentRouteName() === 'dons.edit')
+	   history.pushState({}, null, "{{ route('dons.index') }}");
+	   window.setTimeout('location.reload()', 1600);
+	  @endif
 	  $('#formUser').attr('action', "{{ route('dons.store') }}");
 	  $('#formUser').attr('method', "POST");
 	  $('#alert-javascript').addClass('d-none');

@@ -15,10 +15,10 @@ class CreateCaissesTable extends Migration
     {
         Schema::create('caisses', function (Blueprint $table) {
             $table->id();
-            $table->double('principal')->default(0);
-            $table->double('quantine')->default(0);
-            $table->double('emprunt')->default(0);
-            $table->double('prestation')->default(0);
+            $table->decimal('principal', 18, 2)->default(0);
+            $table->decimal('quantine', 18, 2)->default(0);
+            $table->decimal('emprunt', 18, 2)->default(0);
+            $table->decimal('prestation', 18, 2)->default(0);
             $table->timestamps();
         });
     }
