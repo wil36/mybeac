@@ -188,10 +188,10 @@
 		  tabMontantPrestationArray.push(0);
 		 }
 		 for (var i = 0; i < tabMontantCotisation.length; i++) {
-		  tabMontantCotisationArray[tabMontantCotisation[i]['dat'] - 1] = tabMontantCotisation[i]['nombre'];
+		  tabMontantCotisationArray[tabMontantCotisation[i]['dat'] - 1] = Math.abs(tabMontantCotisation[i]['nombre']);
 		 }
 		 for (var i = 0; i < tabMontantPrestation.length; i++) {
-		  tabMontantPrestationArray[tabMontantPrestation[i]['dat'] - 1] = tabMontantPrestation[i]['nombre'];
+		  tabMontantPrestationArray[tabMontantPrestation[i]['dat'] - 1] = Math.abs(tabMontantPrestation[i]['nombre']);
 		 }
 		 var salesStatistics = {
 		  labels: ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre",

@@ -2,14 +2,14 @@
 
 return [
     'Acceuil' => [
-        'name' => "Tableau de bord",
+        'name' => "Tableaux de bord",
         'route' => 'dashboard',
         'icon' => 'icon ni ni-bar-chart-alt',
         'routes' => ['dashboard'],
         'role'   => 'agent',
     ],
     'Caisse' => [
-        'name' => "Etat de caisse",
+        'name' => "Caisse",
         'route' => 'caisse.index',
         'icon' => 'icon ni ni-dashboard-fill',
         'routes' => ['caisse.index'],

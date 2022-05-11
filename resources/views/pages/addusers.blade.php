@@ -171,7 +171,7 @@
 														    ['name' => 'Divorcé', 'value' => 'Divorcé'],
 														    ['name' => 'Veuf(ve)', 'value' => 'Veuf(ve)'],
 														]" :required="true"
-															title="Statut matrimonial *">
+															title="Statut matrimonial du membre*">
 														</x-input>
 													</div>
 												</div>
@@ -363,10 +363,10 @@
 	 });
 
 	 function clearFormUser() {
-	@if (Route::currentRouteName() === 'membre.edit')
-		history.pushState({}, null, "{{ route('membre.index') }}");
-		window.setTimeout('location.reload()', 1600);
-	@endif
+	  @if (Route::currentRouteName() === 'membre.edit')
+	   history.pushState({}, null, "{{ route('membre.index') }}");
+	   window.setTimeout('location.reload()', 1600);
+	  @endif
 	  $('#formUser').attr('action', "{{ route('membre.store') }}");
 	  $('#formUser').attr('method', "POST");
 	  $('#alert-javascript').addClass('d-none');
