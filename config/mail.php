@@ -104,8 +104,8 @@ return [
 
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'wtiam35@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'Lykati Delivery'),
+        'address' => env('MAIL_FROM_ADDRESS', 'administration@mabeac-cameroun.org'),
+        'name' => env('MAIL_FROM_NAME', 'Ma beac'),
     ],
 
     /*

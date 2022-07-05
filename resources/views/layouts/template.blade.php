@@ -5,11 +5,11 @@
 <head>
 	<base href="../">
 	<meta charset="utf-8">
-	<meta name="author" content="Softnio">
+	<meta name="author" content="Ma Beac">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description"
-		content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+	<meta name="description" content="Mutelle Ma Beac">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="">
 	<!-- Fav Icon  -->
 	<link rel="shortcut icon" href="{!! asset('images/favicon.png') !!}">
 	<!-- Page Title  -->
@@ -22,7 +22,7 @@
 </head>
 
 <body @php
-	$userinfo = Auth::user();
+$userinfo = Auth::user();
 @endphp class="no-touch nk-nio-theme @if ($userinfo->theme == 1) dark-mode @endif">
 	">
 	<div class="nk-app-root">
@@ -60,7 +60,7 @@
 								@endphp
 								@foreach (config('menu') as $name => $elements)
 									@if ($elements['role'] === auth()->user()->role ||
-    auth()->user()->isAdmin())
+									    auth()->user()->isAdmin())
 										@if ($elements['role'] == 'admin' && $affiche == false)
 											<li class="nk-menu-heading">
 												{{-- <h6 class="overline-title text-primary-alt">@lang('Administration')
@@ -141,7 +141,7 @@
 													{{ $userinfo->prenom }}</span>
 												<div class="user-avatar sm">
 													<img class="h-8 w-8 rounded-full object-cover"
-														src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=c7932b&size=150&color=fff' }}"
+														src="{{ isset($userinfo->profile_photo_path) ? asset('picture_profile/' . $userinfo->profile_photo_path) : 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=c7932b&size=150&color=fff' }}"
 														alt="" />
 												</div>
 											</div>
@@ -152,7 +152,7 @@
 													<div class="user-avatar">
 														<img class="popup-image h-8 w-8 rounded-full object-cover" data-toggle="modal"
 															data-target="#view-photo-modal"
-															src="{{ isset($userinfo->profile_photo_path)? asset('picture_profile/' . $userinfo->profile_photo_path): 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=c7932b&size=150&color=fff' }}"
+															src="{{ isset($userinfo->profile_photo_path) ? asset('picture_profile/' . $userinfo->profile_photo_path) : 'https://ui-avatars.com/api/?name=' . $userinfo->nom . '&background=c7932b&size=150&color=fff' }}"
 															alt="" />
 													</div>
 													<div class="user-info">
@@ -167,8 +167,9 @@
 													<li><a href="{{ route('profile.show') }}"><em
 																class="icon ni ni-lock"></em><span>@lang('Sécurité')</span></a>
 													</li>
-													<li id="dark1"><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span> @lang('Mode
-																Dark')</span></a>
+													<li id="dark1"><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>
+																@lang('Mode
+																																																																Dark')</span></a>
 													</li>
 												</ul>
 											</div>
