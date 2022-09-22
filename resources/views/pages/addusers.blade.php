@@ -88,16 +88,16 @@
 													<div class="form-group">
 														<x-input name='agence' :value="isset($user) ? $user->agence : ''" input='select' :options="[
 														    ['name' => '', 'value' => ''],
-														    ['name' => 'Ouest', 'value' => 'Ouest'],
-														    ['name' => 'Centre', 'value' => 'Centre'],
-														    ['name' => 'Est', 'value' => 'Est'],
-														    ['name' => 'Extrême-Nord	', 'value' => 'Extrême-Nord'],
-														    ['name' => 'Littoral', 'value' => 'Littoral'],
-														    ['name' => 'Nord', 'value' => 'Nord'],
-														    ['name' => 'Adamaoua', 'value' => 'Adamaoua'],
-														    ['name' => 'Nord-Ouest', 'value' => 'Nord-Ouest'],
-														    ['name' => 'Sud', 'value' => 'Sud'],
-														    ['name' => 'Sud-Ouest', 'value' => 'Sud-Ouest'],
+														    ['name' => 'Bafoussam', 'value' => 'Bafoussam'],
+														    ['name' => 'Yaounde', 'value' => 'Yaounde'],
+														    ['name' => 'Bertoua', 'value' => 'Bertoua'],
+														    ['name' => 'Maroua', 'value' => 'Maroua'],
+														    ['name' => 'Douala', 'value' => 'Douala'],
+														    ['name' => 'Garoua', 'value' => 'Garoua'],
+														    ['name' => 'Ngaoundéré', 'value' => 'Ngaoundéré'],
+														    ['name' => 'Bamenda', 'value' => 'Bamenda'],
+														    ['name' => 'Ebolowa', 'value' => 'Ebolowa'],
+														    ['name' => 'Buéa', 'value' => 'Buéa'],
 														]" :required="true"
 															title="Agence *">
 														</x-input>
@@ -170,8 +170,8 @@
 														    ['name' => 'Célibataire', 'value' => 'Célibataire'],
 														    ['name' => 'Divorcé', 'value' => 'Divorcé'],
 														    ['name' => 'Veuf(ve)', 'value' => 'Veuf(ve)'],
-														]" :required="true"
-															title="Statut matrimonial du membre*">
+														]"
+															:required="true" title="Statut matrimonial du membre*">
 														</x-input>
 													</div>
 												</div>
@@ -220,183 +220,189 @@
 
 @section('script')
 	<script>
-	 $('.btn-submit-user').click(function(e) {
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  $('.btn-submit-user').attr('disabled', true);
-	  e.preventDefault();
-	  let picture = ($('#pictureupload')[0].files)[0] ?? null;
-	  let matricule = $("#matricule").val();
-	  let nom = $("#nom").val();
-	  let prenom = $("#prenom").val();
-	  let nationalité = $("#nationalité").val();
-	  let agence = $("#agence").val();
-	  let email = $("#email").val();
-	  let tel = $("#tel").val();
-	  let dateNaissance = $("#dateNaissance").val();
-	  let dateRecrutement = $("#dateRecrutement").val();
-	  let dateHadhésion = $("#dateHadhésion").val();
-	  let categorie = $("#categorie").val();
-	  let listCategorie = $("#listCategorie").val();
-	  let sexe = $("#sexe").val();
-	  let role = $("#role").val();
-	  let type_parent = $("#type_parent").val();
-	  let status_matrimonial = $("#status_matrimonial").val();
+		$('.btn-submit-user').click(function(e) {
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			$('.btn-submit-user').attr('disabled', true);
+			e.preventDefault();
+			let picture = ($('#pictureupload')[0].files)[0] ?? null;
+			let matricule = $("#matricule").val();
+			let nom = $("#nom").val();
+			let prenom = $("#prenom").val();
+			let nationalité = $("#nationalité").val();
+			let agence = $("#agence").val();
+			let email = $("#email").val();
+			let tel = $("#tel").val();
+			let dateNaissance = $("#dateNaissance").val();
+			let dateRecrutement = $("#dateRecrutement").val();
+			let dateHadhésion = $("#dateHadhésion").val();
+			let categorie = $("#categorie").val();
+			let listCategorie = $("#listCategorie").val();
+			let sexe = $("#sexe").val();
+			let role = $("#role").val();
+			let type_parent = $("#type_parent").val();
+			let status_matrimonial = $("#status_matrimonial").val();
 
-	  var formData = new FormData();
-	  formData.append('matricule', matricule);
-	  formData.append('nom', nom);
-	  formData.append('prenom', prenom);
-	  formData.append('nationalité', nationalité);
-	  formData.append('agence', agence);
-	  formData.append('email', email);
-	  formData.append('tel', tel);
-	  formData.append('dateNaissance', dateNaissance);
-	  formData.append('dateRecrutement', dateRecrutement);
-	  formData.append('dateHadhésion', dateHadhésion);
-	  formData.append('categorie', categorie);
-	  formData.append('role', role);
-	  formData.append('sexe', sexe);
-	  formData.append('listCategorie', listCategorie);
-	  formData.append('picture', picture);
-	  formData.append('type_parent', type_parent);
-	  formData.append('status_matrimonial', status_matrimonial);
-	  $.ajax({
-	   headers: {
-	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-	   },
-	   url: "" + $('#formUser').attr('action'),
-	   type: "" + $('#formUser').attr('method'),
-	   dataType: 'json',
-	   // data: {
-	   //     matricule: matricule,
-	   //     nom: nom,
-	   //     prenom: prenom,
-	   //     nationalité: nationalité,
-	   //     agence: agence,
-	   //     email: email,
-	   //     tel: tel,
-	   //     dateNaissance: dateNaissance,
-	   //     dateRecrutement: dateRecrutement,
-	   //     dateHadhésion: dateHadhésion,
-	   //     categorie: categorie,
-	   //     role: role,
-	   //     sexe: sexe,
-	   //     listCategorie: listCategorie,
-	   //     picture: picture == null ? null : picture,
-	   // },
-	   data: formData,
-	   contentType: false,
-	   processData: false,
-	   success: function(data) {
-	    if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	     //success
-	     Swal.fire(data.success,
-	      'Votre requête s\'est terminer avec succèss', 'success', );
-	     clearFormUser();
-	    } else {
-	     $('.btn-submit-user').attr('disabled', false);
-	     if (!$.isEmptyObject(data.error)) {
-	      $('#alert-javascript').removeClass('d-none');
-	      $('#alert-javascript').text(data.error);
-	     } else {
-	      if (!$.isEmptyObject(data.errors)) {
-	       var error = "";
-	       data.errors.forEach(element => {
-	        error = error + element + "<br>";
-	       });
-	       $('#alert-javascript').removeClass('d-none');
-	       $('#alert-javascript').append(error);
-	      }
-	     }
-	    }
-	    $("html, body").animate({
-	     scrollTop: 0
-	    }, "slow");
-	   },
-	   error: function(data) {
-	    Swal.fire('Une erreur s\'est produite.',
-	     'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	     'error');
+			var formData = new FormData();
+			formData.append('matricule', matricule);
+			formData.append('nom', nom);
+			formData.append('prenom', prenom);
+			formData.append('nationalité', nationalité);
+			formData.append('agence', agence);
+			formData.append('email', email);
+			formData.append('tel', tel);
+			formData.append('dateNaissance', dateNaissance);
+			formData.append('dateRecrutement', dateRecrutement);
+			formData.append('dateHadhésion', dateHadhésion);
+			formData.append('categorie', categorie);
+			formData.append('role', role);
+			formData.append('sexe', sexe);
+			formData.append('listCategorie', listCategorie);
+			formData.append('picture', picture);
+			formData.append('type_parent', type_parent);
+			formData.append('status_matrimonial', status_matrimonial);
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+				},
+				url: "" + $('#formUser').attr('action'),
+				type: "" + $('#formUser').attr('method'),
+				dataType: 'json',
+				// data: {
+				//     matricule: matricule,
+				//     nom: nom,
+				//     prenom: prenom,
+				//     nationalité: nationalité,
+				//     agence: agence,
+				//     email: email,
+				//     tel: tel,
+				//     dateNaissance: dateNaissance,
+				//     dateRecrutement: dateRecrutement,
+				//     dateHadhésion: dateHadhésion,
+				//     categorie: categorie,
+				//     role: role,
+				//     sexe: sexe,
+				//     listCategorie: listCategorie,
+				//     picture: picture == null ? null : picture,
+				// },
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function(data) {
+					if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+						//success
+						Swal.fire(data.success,
+							'Votre requête s\'est terminer avec succèss', 'success', );
+						clearFormUser();
+					} else {
+						$('.btn-submit-user').attr('disabled', false);
+						if (!$.isEmptyObject(data.error)) {
+							$('#alert-javascript').removeClass('d-none');
+							$('#alert-javascript').text(data.error);
+						} else {
+							if (!$.isEmptyObject(data.errors)) {
+								var error = "";
+								data.errors.forEach(element => {
+									error = error + element + "<br>";
+								});
+								$('#alert-javascript').removeClass('d-none');
+								$('#alert-javascript').append(error);
+							}
+						}
+					}
+					$("html, body").animate({
+						scrollTop: 0
+					}, "slow");
+				},
+				error: function(data) {
+					Swal.fire('Une erreur s\'est produite.',
+						'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+						'error');
 
-	   }
-	  });
+				}
+			});
 
-	 });
-	 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-	 $(document).ready(function() {
-	  loadCategories();
-	 });
+		});
+		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+		$(document).ready(function() {
+			loadCategories();
+		});
 
-	 function loadCategories() {
+		function loadCategories() {
 
-	  $("#listCategorie").select2({
-	   language: "fr",
-	   ajax: {
-	    url: "{{ route('getCategories') }}",
-	    type: 'post',
-	    dataType: 'json',
-	    delay: 250,
-	    data: function(params) {
-	     return {
-	      _token: CSRF_TOKEN,
-	      search: params.term // search term
-	     };
-	    },
-	    processResults: function(data) {
-	     return {
-	      results: data
-	     };
-	    },
-	    cache: true,
-	   }
-	  });
-	 }
+			$("#listCategorie").select2({
+				language: "fr",
+				ajax: {
+					url: "{{ route('getCategories') }}",
+					type: 'post',
+					dataType: 'json',
+					delay: 250,
+					data: function(params) {
+						return {
+							_token: CSRF_TOKEN,
+							search: params.term // search term
+						};
+					},
+					processResults: function(data) {
+						return {
+							results: data
+						};
+					},
+					cache: true,
+				}
+			});
+		}
 
-	 $(function() {
-	  $('#pictureupload').change(function(event) {
-	   var x = URL.createObjectURL(event.target.files[0]);
-	   $('#show_img').attr('src', x);
-	   $('#show_img').attr('height', 150);
-	   $('#show_img').attr('width', 150);
-	  });
-	 });
+		$(function() {
+			$('#pictureupload').change(function(event) {
+				var x = URL.createObjectURL(event.target.files[0]);
+				$('#show_img').attr('src', x);
+				$('#show_img').attr('height', 150);
+				$('#show_img').attr('width', 150);
+			});
+		});
 
-	 function clearFormUser() {
-	  @if (Route::currentRouteName() === 'membre.edit')
-	   history.pushState({}, null, "{{ route('membre.index') }}");
-	   window.setTimeout('location.reload()', 1600);
-	  @endif
-	  $('#formUser').attr('action', "{{ route('membre.store') }}");
-	  $('#formUser').attr('method', "POST");
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  $("#matricule").focus();
-	  $("#matricule").val('');
-	  $("#nom").val('');
-	  $("#prenom").val('');
-	  $("#nationalité").text('');
-	  $("#agence").text('');
-	  $("#email").val('');
-	  $("#tel").val('');
-	  $("#dateNaissance").val('');
-	  $("#dateRecrutement").val('');
-	  $("#dateHadhésion").val('');
-	  $("#role").text('');
-	  $("#sexe").text('');
-	  $("#role").append(
-	   '<option value=""></option><option value="admin">Administrateur</option><option value="agent">Agent</option>'
-	  );
-	  $("#sexe").append(
-	   '<option value=""></option><option value="Masculin">Masculin</option><option value="Feminin">Feminin</option>'
-	  );
-	  $("#listCategorie").empty();
-	  loadCategories();
-	  $("#pictureupload").val('');
-	  $('#show_img').attr('src', '');
-	  $('#show_img').attr('height', 0);
-	  $('#show_img').attr('width', 0);
-	  $('.btn-submit-user').attr('disabled', false);
-	 }
+		function clearFormUser() {
+			@if (Route::currentRouteName() === 'membre.edit')
+				history.pushState({}, null, "{{ route('membre.index') }}");
+				window.setTimeout('location.reload()', 1600);
+			@endif
+			$('#formUser').attr('action', "{{ route('membre.store') }}");
+			$('#formUser').attr('method', "POST");
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			$("#matricule").focus();
+			$("#matricule").val('');
+			$("#nom").val('');
+			$("#prenom").val('');
+			$("#nationalité").text('');
+			$("#agence").text('');
+			$("#email").val('');
+			$("#tel").val('');
+			$("#dateNaissance").val('');
+			$("#dateRecrutement").val('');
+			$("#dateHadhésion").val('');
+			$("#role").text('');
+			$("#sexe").text('');
+			$("#role").append(
+				'<option value=""></option><option value="admin">Administrateur</option><option value="agent">Agent</option>'
+			);
+			$("#sexe").append(
+				'<option value=""></option><option value="Masculin">Masculin</option><option value="Feminin">Feminin</option>'
+			);
+			$("#agence").append(
+				'<option value=""></option><option value="Ouest">Ouest</option><option value="Centre">Centre</option><option value="Est">Est</option><option value="Extrême-Nord">Extrême-Nord</option><option value="Littoral">Littoral</option><option value="Nord">Nord</option><option value="Adamaoua">Adamaoua</option><option value="Nord-Ouest">Nord-Ouest</option><option value="Sud">Sud</option><option value="Sud-Ouest">Sud-Ouest</option>'
+			);
+			$("#nationalité").append(
+				'<option value=""></option><option value="Camerounaise">Camerounaise</option><option value="Centrafricaine">Centrafricaine</option><option value="Congolaise">Congolaise</option><option value="Gabonaise">Gabonaise</option><option value="Guinéenne">Guinéenne</option><option value="Tchadienne">Tchadienne</option>'
+			);
+			$("#listCategorie").empty();
+			loadCategories();
+			$("#pictureupload").val('');
+			$('#show_img').attr('src', '');
+			$('#show_img').attr('height', 0);
+			$('#show_img').attr('width', 0);
+			$('.btn-submit-user').attr('disabled', false);
+		}
 	</script>
 @endsection

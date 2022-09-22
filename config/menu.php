@@ -129,33 +129,33 @@ return [
     //         ],
     //     ],
     // ],
-    // 'Emprunt' => [
-    //     'name' => "Gestion des emprunts",
-    //     'route' => 'membre.index',
-    //     'routes' => [],
-    //     'icon' => 'icon ni ni-invest',
-    //     'role'   => 'admin',
-    //     'childrens' => [
-    //         [
-    //             'name'  => 'Liste des membres pour cotisation',
-    //             'role'  => 'admin',
-    //             'route' => 'membre.cotisation',
-    //             'altRoute' => '',
-    //         ],
-    //         [
-    //             'name'  => 'Historique mensuel',
-    //             'role'  => 'admin',
-    //             'route' => 'membre.historiquecotisationmensuel',
-    //             'altRoute' => '',
-    //         ],
-    //         [
-    //             'name'  => 'Historique annuel',
-    //             'role'  => 'admin',
-    //             'route' => 'membre.historiquecotisationannuel',
-    //             'altRoute' => '',
-    //         ],
-    //     ],
-    // ],
+    'Emprunt' => [
+        'name' => "Gestion des emprunts",
+        'route' => 'membre.index',
+        'routes' => ['emprunt.appelASouscription', 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect', 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin', 'emprunt.showFormUploadLettreDeMotivation'],
+        'icon' => 'icon ni ni-invest',
+        'role'   => 'agent',
+        'childrens' => [
+            [
+                'name'  => 'Contracter un emprunt',
+                'role'  => 'agent',
+                'route' => 'emprunt.appelASouscription',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Liste de mes emprunts',
+                'role'  => 'agent',
+                'route' => 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Liste des emprunts à valider',
+                'role'  => 'admin',
+                'route' => 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin',
+                'altRoute' => '',
+            ],
+        ],
+    ],
     'Dons' => [
         'name' => "Gestion des dons",
         'route' => 'membre.index',

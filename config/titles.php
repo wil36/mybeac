@@ -44,4 +44,10 @@ return [
         'create' => 'Ajout d\'un don',
         'edit' => 'Modification d\'un don',
     ],
+    'emprunt' => [
+        'appelASouscription' => 'Formulaire de souscription à un emprunt',
+        'viewForListOfEmpruntOfUUserWhoIsConnect' => 'Historique de mes emprunts',
+        'viewListEmpruntWhoWatingTheValidationByAdmin' => 'Historique des emprunts à valider',
+        'showFormUploadLettreDeMotivation' => 'Enregistrer la lettre de souscription signée',
+    ]
 ];

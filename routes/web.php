@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController, DonsController};
+use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController, DonsController, EmpruntController};
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -30,11 +30,32 @@ Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
         //ayant droits
         Route::get('ayantsdroitsListForUser/{id}', [AyantDroitController::class, 'ayantsdroitsListForUser'])->name('ayantsdroitsListForUser');
         Route::get('ayantsdroitsListForUserdecede/{id}', [AyantDroitController::class, 'ayantsdroitsListForUserdecede'])->name('ayantsdroitsListForUserdecede');
+
+        //Route for emprunt
+        Route::get('/ajouter-emprunt', [EmpruntController::class, 'appelASouscriptionIndex'])->name('emprunt.appelASouscription');
+        Route::get('/ajouter-lettre-de-souscription/{id}', [EmpruntController::class, 'showFormUploadLettreDeMotivation'])->name('emprunt.showFormUploadLettreDeMotivation');
+        Route::post('/save-emprunt', [EmpruntController::class, 'createEmprunt'])->name('emprunt.saveEmprunt');
+        Route::get('/liste-de-mes-emprunt', [EmpruntController::class, 'viewForListOfEmpruntOfUUserWhoIsConnect'])->name('emprunt.viewForListOfEmpruntOfUUserWhoIsConnect');
+        Route::get('/liste-de-mes-emprunt-ajax', [EmpruntController::class, 'getListOfEmpruntOfUUserWhoIsConnectAjax'])->name('emprunt.getListOfEmpruntOfUUserWhoIsConnectAjax');
+        Route::get('/telecharger-lettre-souscription/{id}', [EmpruntController::class, 'downloadLettreSouscription'])->name('emprunt.download-lettre-souuscription');
+        Route::get('/telecharger-lettre-adjudication/{id}', [EmpruntController::class, 'downloadLettreAjudication'])->name('emprunt.download-lettre-adjudication');
+        Route::get('/telecharger-lettre-engagement/{id}', [EmpruntController::class, 'downloadLettreEngagement'])->name('emprunt.download-lettre-engagement');
+        Route::get('/telecharger-ordre_paiement/{id}', [EmpruntController::class, 'downloadOrdrePaiement'])->name('emprunt.download-ordre_paiement');
+        Route::post('/uploader-lettre-souscription', [EmpruntController::class, 'uploadLettreDeSouscripption'])->name('emprunt.uploader-lettre-souscription');
     }
 );
 // Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration')->group(function () {
+
+
+    //Route for emprunt
+    Route::get('/liste-des-emprunts-a-valider', [EmpruntController::class, 'getViewListEmpruntWhoWatingTheValidationByAdmin'])->name('emprunt.viewListEmpruntWhoWatingTheValidationByAdmin');
+    Route::get('/liste-des-emprunt-à-valider-ajax', [EmpruntController::class, 'getListEmpruntWhoWatingTheValidationByAdminAjax'])->name('emprunt.viewListEmpruntWhoWatingTheValidationByAdminAjax');
+    Route::get('/acepter-le-dossier/{id}', [EmpruntController::class, 'accepterLeDossier'])->name('emprunt.accepterLeDossier');
+    Route::get('/refuser-le-dossier/{id}', [EmpruntController::class, 'refuserLeDossier'])->name('emprunt.refuserLeDossier');
+
+
     //Route for Users
     Route::post('membre/exclure', [UserController::class, 'excluremembre'])->name('user.exclure');
     Route::post('membre/deces', [UserController::class, 'decesmembre'])->name('user.deces');
@@ -105,6 +126,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::post('prestation/{ids}', [PrestationController::class, 'update'])->name('prestation.update');
     Route::post('deleteprestation', [PrestationController::class, 'deleteprestation'])->name('prestation.delete');
     Route::get('prestation/create/{id}', [PrestationController::class, 'create'])->name('prestation.create');
+
     Route::get('prestation/create', function () {
         abort(404);
     });
@@ -173,6 +195,9 @@ Route::get('changelang/{lang}', function ($lang) {
     session()->put('locale', $lang);
     return redirect()->back();
 })->name('lang');
+Route::get('/lettre_souscription', function () {
+    return view('pages.impressions.lettre_souscription');
+});
 
 // Route::get('send-mail', function () {
 

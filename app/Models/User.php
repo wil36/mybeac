@@ -70,7 +70,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Dons::class);
     }
-
+    function emprunts()
+    {
+        return $this->hasMany(Emprunt::class);
+    }
 
     /**
      * The attributes that should be hidden for arrays.
