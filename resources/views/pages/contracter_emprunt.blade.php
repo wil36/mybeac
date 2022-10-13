@@ -50,6 +50,22 @@
 															<div class="row g-gs">
 																<div class="col-md-6">
 																	<div class="custom-control custom-radio">
+																		<input type="radio" required name="type-emprunt" value="BL"
+																			class="custom-control-input type-emprunt" id="bl">
+																		<label class="custom-control-label" for="bl">@lang('Bridge Loan')</label>
+																	</div>
+																</div>
+																<div class="col-md-6">
+																	<div class="custom-control custom-radio">
+																		<input type="radio" required name="type-emprunt" value="ASS"
+																			class="custom-control-input type-emprunt" id="ass">
+																		<label class="custom-control-label" for="ass">@lang('Avance Sur Salaire')</label>
+																	</div>
+																</div>
+															</div>
+															<div class="row g-gs">
+																<div class="col-md-6">
+																	<div class="custom-control custom-radio">
 																		<input type="radio" required name="type-emprunt" value="BLI"
 																			class="custom-control-input type-emprunt" id="bli">
 																		<label class="custom-control-label" for="bli">@lang('Bridge Loan Immo')</label>
@@ -57,18 +73,18 @@
 																</div>
 																<div class="col-md-6">
 																	<div class="custom-control custom-radio">
-																		<input type="radio" required name="type-emprunt" value="BBL"
-																			class="custom-control-input type-emprunt" id="bbl">
-																		<label class="custom-control-label" for="bbl">@lang('Back to Back Loan')</label>
+																		<input type="radio" required name="type-emprunt" value="ASG"
+																			class="custom-control-input type-emprunt" id="asg">
+																		<label class="custom-control-label" for="asg">@lang('Avance Sur Gratification')</label>
 																	</div>
 																</div>
 															</div>
 															<div class="row g-gs">
 																<div class="col-md-6">
 																	<div class="custom-control custom-radio">
-																		<input type="radio" required name="type-emprunt" value="ASS"
-																			class="custom-control-input type-emprunt" id="ass">
-																		<label class="custom-control-label" for="ass">@lang('Avance Sur Solde')</label>
+																		<input type="radio" required name="type-emprunt" value="BBL"
+																			class="custom-control-input type-emprunt" id="bbl">
+																		<label class="custom-control-label" for="bbl">@lang('Back to Back Loan')</label>
 																	</div>
 																</div>
 															</div>
@@ -79,7 +95,13 @@
 																</x-input>
 															</div>
 														</div>
-														<div class="col-md-12">
+														<div class="col-md-12" id="amount_enter_div" hidden>
+															<div class="form-group">
+																<x-input name='montant_enter' :value="isset($don) && $don->type == 'interne' ? abs($don->montant) : ''" input='number' title="Montant de l'emprunt (FCFA) *">
+																</x-input>
+															</div>
+														</div>
+														<div class="col-md-12" id="amount_select_div">
 															<div class="form-group">
 																<x-input name='montant' :value="isset($user) ? $user->status_matrimonial : ''" input='select' :options="[
 																    ['name' => '', 'value' => ''],
@@ -103,7 +125,47 @@
 																    ['name' => '9 000 000', 'value' => '9000000'],
 																    ['name' => '9 500 000', 'value' => '9500000'],
 																    ['name' => '10 000 000', 'value' => '10000000'],
-																]" :required="true"
+																    ['name' => '10 500 000', 'value' => '10500000'],
+																    ['name' => '11 000 000', 'value' => '11000000'],
+																    ['name' => '11 500 000', 'value' => '11500000'],
+																    ['name' => '12 000 000', 'value' => '12000000'],
+																    ['name' => '12 500 000', 'value' => '12500000'],
+																    ['name' => '13 000 000', 'value' => '13000000'],
+																    ['name' => '13 500 000', 'value' => '13500000'],
+																    ['name' => '14 000 000', 'value' => '14000000'],
+																    ['name' => '14 500 000', 'value' => '14500000'],
+																    ['name' => '15 000 000', 'value' => '15000000'],
+																    ['name' => '15 500 000', 'value' => '15500000'],
+																    ['name' => '16 000 000', 'value' => '16000000'],
+																    ['name' => '16 500 000', 'value' => '16500000'],
+																    ['name' => '17 000 000', 'value' => '17000000'],
+																    ['name' => '17 500 000', 'value' => '17500000'],
+																    ['name' => '18 000 000', 'value' => '18000000'],
+																    ['name' => '18 500 000', 'value' => '18500000'],
+																    ['name' => '19 000 000', 'value' => '19000000'],
+																    ['name' => '19 500 000', 'value' => '19500000'],
+																    ['name' => '20 000 000', 'value' => '20000000'],
+																    ['name' => '20 500 000', 'value' => '20500000'],
+																    ['name' => '21 000 000', 'value' => '21000000'],
+																    ['name' => '21 500 000', 'value' => '21500000'],
+																    ['name' => '22 000 000', 'value' => '22000000'],
+																    ['name' => '22 500 000', 'value' => '22500000'],
+																    ['name' => '23 000 000', 'value' => '23000000'],
+																    ['name' => '23 500 000', 'value' => '23500000'],
+																    ['name' => '24 000 000', 'value' => '24000000'],
+																    ['name' => '24 500 000', 'value' => '24500000'],
+																    ['name' => '25 000 000', 'value' => '25000000'],
+																    ['name' => '25 500 000', 'value' => '25500000'],
+																    ['name' => '26 000 000', 'value' => '26000000'],
+																    ['name' => '26 500 000', 'value' => '26500000'],
+																    ['name' => '27 000 000', 'value' => '27000000'],
+																    ['name' => '27 500 000', 'value' => '27500000'],
+																    ['name' => '28 000 000', 'value' => '28000000'],
+																    ['name' => '28 500 000', 'value' => '28500000'],
+																    ['name' => '29 000 000', 'value' => '29000000'],
+																    ['name' => '29 500 000', 'value' => '29500000'],
+																    ['name' => '30 000 000', 'value' => '30000000'],
+																]"
 																	title="Montant de l'emprunt (FCFA) *">
 																</x-input>
 															</div>
@@ -135,21 +197,48 @@
 	<script>
 		$('input:radio[name="type-emprunt"]').click(function(e) {
 			if ($("input[name='type-emprunt']:checked").val() == 'BLI') {
+				$("#amount_select_div").attr("hidden", false);
+				$("#amount_enter_div").attr("hidden", true);
+				// $("#amount_select_div").show();
+				// $("#amount_enter_div").hide();
 				$("#montant").text('');
 				$("#montant").append(
-					'<option value=""></option><option value="2000000">2 000 000</option><option value="2500000">2 500 000</option><option value="3000000">3 000 000</option><option value="3500000">3 500 000</option><option value="4000000">4 000 000</option><option value="4500000">4 500 000</option><option value="5000000">5 000 000</option><option value="5500000">5 500 000</option><option value="6000000">6 000 000</option><option value="6500000">6 500 000</option><option value="7000000">7 000 000</option><option value="7500000">7 500 000</option> <option value="8000000">8 000 000</option><option value="8500000">8 500 000</option><option value="9000000">9 000 000</option><option value="9500000">9 500 000</option><option value="10000000">10 000 000</option>'
+					'<option value=""></option><option value="500000">500 000</option><option value="1000000">1 000 000</option><option value="1500000">1 500 000</option><option value="2000000">2 000 000</option><option value="2500000">2 500 000</option><option value="3000000">3 000 000</option><option value="3500000">3 500 000</option><option value="4000000">4 000 000</option><option value="4500000">4 500 000</option><option value="5000000">5 000 000</option><option value="5500000">5 500 000</option><option value="6000000">6 000 000</option><option value="6500000">6 500 000</option><option value="7000000">7 000 000</option><option value="7500000">7 500 000</option> <option value="8000000">8 000 000</option><option value="8500000">8 500 000</option><option value="9000000">9 000 000</option><option value="9500000">9 500 000</option><option value="10000000">10 000 000</option>' +
+					'<option value="10500000">10 500 000</option><option value="11000000">11 000 000</option><option value="11500000">11 500 000</option><option value="12000000">12 000 000</option><option value="12500000">12 500 000</option><option value="13000000">13 000 000</option><option value="13500000">13 500 000</option><option value="14000000">14 000 000</option><option value="14500000">14 500 000</option><option value="15000000">15 000 000</option><option value="15500000">15 500 000</option><option value="16000000">16 000 000</option><option value="16500000">16 500 000</option><option value="17000000">17 000 000</option><option value="17500000">17 500 000</option> <option value="18000000">18 000 000</option><option value="18500000">18 500 000</option><option value="19000000">19 000 000</option><option value="19500000">19 500 000</option><option value="20000000">20 000 000</option>' +
+					'<option value=""></option><option value="20500000">20 500 000</option><option value="21000000">21 000 000</option><option value="21500000">21 500 000</option><option value="22000000">22 000 000</option><option value="22500000">22 500 000</option><option value="23000000">23 000 000</option><option value="23500000">23 500 000</option><option value="24000000">24 000 000</option><option value="24500000">24 500 000</option><option value="25000000">25 000 000</option><option value="25500000">25 500 000</option><option value="26000000">26 000 000</option><option value="26500000">26 500 000</option><option value="27000000">27 000 000</option><option value="27500000">27 500 000</option> <option value="28000000">28 000 000</option><option value="28500000">28 500 000</option><option value="29000000">29 000 000</option><option value="29500000">29 500 000</option><option value="30000000">30 000 000</option>'
 				);
 			} else {
 				if ($("input[name='type-emprunt']:checked").val() == 'BBL') {
+					$("#amount_select_div").attr("hidden", false);
+					$("#amount_enter_div").attr("hidden", true);
+					// $("#amount_select_div").show();
+					// $("#amount_enter_div").hide();
 					$("#montant").text('');
 					$("#montant").append(
-						'<option value=""></option><option value="500000">500 000</option><option value="1000000">1 000 000</option><option value="1500000">1 500 000</option><option value="2000000">2 000 000</option><option value="2500000">2 500 000</option><option value="3000000">3 000 000</option>'
+						'<option value=""></option><option value="500000">500 000</option><option value="1000000">1 000 000</option><option value="1500000">1 500 000</option><option value="2000000">2 000 000</option><option value="2500000">2 500 000</option><option value="3000000">3 000 000</option><option value="3500000">3 500 000</option><option value="4000000">4 000 000</option><option value="4500000">4 500 000</option><option value="5000000">5 000 000</option><option value="5500000">5 500 000</option><option value="6000000">6 000 000</option><option value="6500000">6 500 000</option><option value="7000000">7 000 000</option><option value="7500000">7 500 000</option> <option value="8000000">8 000 000</option><option value="8500000">8 500 000</option><option value="9000000">9 000 000</option><option value="9500000">9 500 000</option><option value="10000000">10 000 000</option>' +
+						'<option value="10500000">10 500 000</option><option value="11000000">11 000 000</option><option value="11500000">11 500 000</option><option value="12000000">12 000 000</option><option value="12500000">12 500 000</option><option value="13000000">13 000 000</option><option value="13500000">13 500 000</option><option value="14000000">14 000 000</option><option value="14500000">14 500 000</option><option value="15000000">15 000 000</option><option value="15500000">15 500 000</option><option value="16000000">16 000 000</option><option value="16500000">16 500 000</option><option value="17000000">17 000 000</option><option value="17500000">17 500 000</option> <option value="18000000">18 000 000</option><option value="18500000">18 500 000</option><option value="19000000">19 000 000</option><option value="19500000">19 500 000</option><option value="20000000">20 000 000</option>' +
+						'<option value=""></option><option value="20500000">20 500 000</option><option value="21000000">21 000 000</option><option value="21500000">21 500 000</option><option value="22000000">22 000 000</option><option value="22500000">22 500 000</option><option value="23000000">23 000 000</option><option value="23500000">23 500 000</option><option value="24000000">24 000 000</option><option value="24500000">24 500 000</option><option value="25000000">25 000 000</option><option value="25500000">25 500 000</option><option value="26000000">26 000 000</option><option value="26500000">26 500 000</option><option value="27000000">27 000 000</option><option value="27500000">27 500 000</option> <option value="28000000">28 000 000</option><option value="28500000">28 500 000</option><option value="29000000">29 000 000</option><option value="29500000">29 500 000</option><option value="30000000">30 000 000</option>'
 					);
 				} else {
-					$("#montant").text('');
-					$("#montant").append(
-						'<option value=""></option><option value="500000">500 000</option><option value="1000000">1 000 000</option><option value="1500000">1 500 000</option><option value="2000000">2 000 000</option><option value="2500000">2 500 000</option><option value="3000000">3 000 000</option><option value="3500000">3 500 000</option><option value="4000000">4 000 000</option><option value="4500000">4 500 000</option><option value="5000000">5 000 000</option><option value="5500000">5 500 000</option><option value="6000000">6 000 000</option><option value="6500000">6 500 000</option><option value="7000000">7 000 000</option><option value="7500000">7 500 000</option> <option value="8000000">8 000 000</option><option value="8500000">8 500 000</option><option value="9000000">9 000 000</option><option value="9500000">9 500 000</option><option value="10000000">10 000 000</option>'
-					);
+					if ($("input[name='type-emprunt']:checked").val() == 'BL') {
+						$("#amount_select_div").attr("hidden", false);
+						$("#amount_enter_div").attr("hidden", true);
+						// $("#amount_select_div").show();
+						// $("#amount_enter_div").hide();
+						$("#montant").text('');
+						$("#montant").append(
+							'<option value=""></option><option value="500000">500 000</option><option value="1000000">1 000 000</option><option value="1500000">1 500 000</option><option value="2000000">2 000 000</option><option value="2500000">2 500 000</option><option value="3000000">3 000 000</option><option value="3500000">3 500 000</option><option value="4000000">4 000 000</option><option value="4500000">4 500 000</option><option value="5000000">5 000 000</option><option value="5500000">5 500 000</option><option value="6000000">6 000 000</option><option value="6500000">6 500 000</option><option value="7000000">7 000 000</option><option value="7500000">7 500 000</option> <option value="8000000">8 000 000</option><option value="8500000">8 500 000</option><option value="9000000">9 000 000</option><option value="9500000">9 500 000</option><option value="10000000">10 000 000</option>' +
+							'<option value="10500000">10 500 000</option><option value="11000000">11 000 000</option><option value="11500000">11 500 000</option><option value="12000000">12 000 000</option><option value="12500000">12 500 000</option><option value="13000000">13 000 000</option><option value="13500000">13 500 000</option><option value="14000000">14 000 000</option><option value="14500000">14 500 000</option><option value="15000000">15 000 000</option><option value="15500000">15 500 000</option><option value="16000000">16 000 000</option><option value="16500000">16 500 000</option><option value="17000000">17 000 000</option><option value="17500000">17 500 000</option> <option value="18000000">18 000 000</option><option value="18500000">18 500 000</option><option value="19000000">19 000 000</option><option value="19500000">19 500 000</option><option value="20000000">20 000 000</option>' +
+							'<option value=""></option><option value="20500000">20 500 000</option><option value="21000000">21 000 000</option><option value="21500000">21 500 000</option><option value="22000000">22 000 000</option><option value="22500000">22 500 000</option><option value="23000000">23 000 000</option><option value="23500000">23 500 000</option><option value="24000000">24 000 000</option><option value="24500000">24 500 000</option><option value="25000000">25 000 000</option><option value="25500000">25 500 000</option><option value="26000000">26 000 000</option><option value="26500000">26 500 000</option><option value="27000000">27 000 000</option><option value="27500000">27 500 000</option> <option value="28000000">28 000 000</option><option value="28500000">28 500 000</option><option value="29000000">29 000 000</option><option value="29500000">29 500 000</option><option value="30000000">30 000 000</option>'
+						);
+					} else {
+						$("#amount_select_div").attr("hidden", true);
+						$("#amount_enter_div").attr("hidden", false);
+						// $("#amount_select_div").hide();
+						// $("#amount_enter_div").show();
+						$("#montant_enter").text('');
+					}
+
 				}
 			}
 		});
@@ -159,7 +248,9 @@
 			$('.btn-submit').attr('disabled', true);
 			e.preventDefault();
 			let type = $(".type-emprunt:checked").val();
-			let montant = $("#montant").val();
+			let montant = $("input[name='type-emprunt']:checked").val() == 'ASS' || $(
+					"input[name='type-emprunt']:checked").val() == 'ASG' ? $("#montant_enter").val() : $("#montant")
+				.val();
 			let objet = $("#objet").val();
 			var formData = new FormData();
 			if (!$("input[name='type-emprunt']:checked").val()) {

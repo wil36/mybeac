@@ -52,8 +52,12 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     //Route for emprunt
     Route::get('/liste-des-emprunts-a-valider', [EmpruntController::class, 'getViewListEmpruntWhoWatingTheValidationByAdmin'])->name('emprunt.viewListEmpruntWhoWatingTheValidationByAdmin');
     Route::get('/liste-des-emprunt-à-valider-ajax', [EmpruntController::class, 'getListEmpruntWhoWatingTheValidationByAdminAjax'])->name('emprunt.viewListEmpruntWhoWatingTheValidationByAdminAjax');
-    Route::get('/acepter-le-dossier/{id}', [EmpruntController::class, 'accepterLeDossier'])->name('emprunt.accepterLeDossier');
-    Route::get('/refuser-le-dossier/{id}', [EmpruntController::class, 'refuserLeDossier'])->name('emprunt.refuserLeDossier');
+    Route::get('/liste-des-emprunts-valider-par-la-mutuelle', [EmpruntController::class, 'showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual'])->name('emprunt.showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual');
+    Route::get('/liste-des-emprunts-valider-par-la-mutuelle-ajax', [EmpruntController::class, 'getListOfEmpruntWhoIsValidateByTheMutualAjax'])->name('emprunt.getListOfEmpruntWhoIsValidateByTheMutualAjax');
+    Route::get('/liste-des-emprunts-rembourser-par-les-membres', [EmpruntController::class, 'showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember'])->name('emprunt.showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember');
+    Route::get('/liste-des-emprunts-rembourser-par-les-membres-ajax', [EmpruntController::class, 'getListOfEmpruntWhoIsReturnByTheMemberAjax'])->name('emprunt.getListOfEmpruntWhoIsReturnByTheMemberAjax');
+    Route::post('/acepter-le-dossier', [EmpruntController::class, 'accepterLeDossier'])->name('emprunt.accepterLeDossier');
+    Route::post('/refuser-le-dossier', [EmpruntController::class, 'refuserLeDossier'])->name('emprunt.refuserLeDossier');
 
 
     //Route for Users

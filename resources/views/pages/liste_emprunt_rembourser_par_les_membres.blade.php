@@ -64,9 +64,9 @@
 															<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Type d\'emprunt')</span>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Etat du dossier d\'emprunt')</span></th>
-															<th class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">@lang('Action')</span></th>
 														</tr>
 													</thead>
 													<tbody></tbody>
@@ -241,7 +241,7 @@
 				buttons: [
 					'copy', 'excel', 'pdf'
 				],
-				ajax: "{{ route('emprunt.viewListEmpruntWhoWatingTheValidationByAdminAjax') }}",
+				ajax: "{{ route('emprunt.getListOfEmpruntWhoIsReturnByTheMemberAjax') }}",
 				order: [
 					[0, "desc"]
 				],
@@ -262,6 +262,11 @@
 						"className": 'nk-tb-col'
 					},
 					{
+						"data": 'date_fin',
+						"name": 'date_fin',
+						"className": 'nk-tb-col'
+					},
+					{
 						"data": 'montant',
 						"name": 'montant',
 						"className": 'nk-tb-col'
@@ -270,13 +275,6 @@
 						"data": 'status',
 						"name": 'status',
 						"className": 'nk-tb-col'
-					},
-					{
-						"data": 'Actions',
-						"name": 'Actions',
-						"orderable": false,
-						"serachable": false,
-						"className": 'nk-tb-col nk-tb-col-tools'
 					},
 				]
 			});

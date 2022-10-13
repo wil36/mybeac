@@ -132,7 +132,7 @@ return [
     'Emprunt' => [
         'name' => "Gestion des emprunts",
         'route' => 'membre.index',
-        'routes' => ['emprunt.appelASouscription', 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect', 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin', 'emprunt.showFormUploadLettreDeMotivation'],
+        'routes' => ['emprunt.appelASouscription', 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect', 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin', 'emprunt.showFormUploadLettreDeMotivation', 'emprunt.showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual', 'emprunt.showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember'],
         'icon' => 'icon ni ni-invest',
         'role'   => 'agent',
         'childrens' => [
@@ -149,11 +149,29 @@ return [
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Liste des emprunts à valider',
+                'name'  => 'Liste des emprunts en cour d\'étude',
                 'role'  => 'admin',
                 'route' => 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin',
                 'altRoute' => '',
             ],
+            [
+                'name'  => 'Liste des emprunts valider par la mutuelle',
+                'role'  => 'admin',
+                'route' => 'emprunt.showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Enregistrement manuel d\'un emprunt',
+                'role'  => 'admin',
+                'route' => 'emprunt.showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual',
+                'altRoute' => '',
+            ],
+            // [
+            //     'name'  => 'Liste des emprunts rembouser',
+            //     'role'  => 'admin',
+            //     'route' => 'emprunt.showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember',
+            //     'altRoute' => '',
+            // ],
         ],
     ],
     'Dons' => [

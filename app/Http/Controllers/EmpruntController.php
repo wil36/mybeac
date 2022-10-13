@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caisse;
 use App\Models\Emprunt;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Carbon\Carbon;
@@ -141,7 +142,7 @@ class EmpruntController extends Controller
                     <span>EMP</span>
                 </div>
                 <div class='user-info'>
-                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Solde' : ""))) . "</span>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
                 </div>
             </div>";
                 })
@@ -213,6 +214,154 @@ class EmpruntController extends Controller
     }
 
     /**
+     * Cette fonction affiche le formulaire qui affiche la liste des emprunts validés par la mutuelle
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Une Vue
+     */
+    public function showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual()
+    {
+        return view('pages.liste_emprunt_valider_par_la_mutuelle');
+    }
+
+    /**
+     * Une fonction qui permet d'obtenir la liste des emprunts validés par la mutuelle.
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Une liste d'emprunts validés par la mutuelle
+     */
+    public function getListOfEmpruntWhoIsValidateByTheMutualAjax(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'montant', 'etat', 'updated_at', 'date_de_fin')->where('etat', '=', "Dossier accepter");
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("status", function ($data) {
+                    return "<span class='badge badge-outline-success'>Dossier accepter</span>";
+                })
+                ->addColumn('Actions', function ($data) {
+                    return  '<ul class="nk-tb-actions gx-1">
+               
+                  <li class="nk-tb-action-hidden">
+                    <a href="#" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Rembouser l\'emprunt">
+                    <em class="icon ni ni-forward-ios"></em>
+                    </a>
+                </li>
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="link-list-opt no-bdr">
+                                
+                                <li><a href="#"><em class="icon ni ni-forward-ios"></em><span>Rembouser l\'emprunt</span></a></li>
+                                
+                                 
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>';
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * Cette fonction affiche le formulaire qui affiche la liste des emprunts rembouser par le membre
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Une Vue
+     */
+    public function showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember()
+    {
+        return view('pages.liste_emprunt_rembourser_par_les_membres');
+    }
+
+    /**
+     * Une fonction qui permet d'obtenir la liste des emprunts rembourser par le membre.
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Une liste d'emprunts validés par la mutuelle
+     */
+    public function getListOfEmpruntWhoIsReturnByTheMemberAjax(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'montant', 'etat', 'updated_at', 'date_de_fin')->where('etat', '=', "Dossier rembourser");
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("status", function ($data) {
+                    return "<span class='badge badge-outline-success'>Dossier rembourser</span>";
+                })
+                ->setRowClass("nk-tb-item")
+                ->rawColumns(['type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
      * Elle upload la lettre de motivation pour completer le dossier
      * 
      * @param Request request L'objet de la requête.
@@ -259,7 +408,7 @@ class EmpruntController extends Controller
     {
         try {
 
-            $data = Emprunt::select('id', 'type', 'date', 'montant', 'etat', 'updated_at')->where('etat', 'Dossier en etude');
+            $data = Emprunt::select('id', 'type', 'date', 'objet', 'montant', 'link_lettre_souscription', 'etat', 'updated_at')->where('etat', 'Dossier en etude');
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -271,6 +420,9 @@ class EmpruntController extends Controller
                 ->addColumn("date", function ($data) {
                     return $data->date;
                 })
+                ->addColumn("objet", function ($data) {
+                    return $data->objet;
+                })
                 ->editColumn("type", function ($data) {
                     return
                         "<div class='user-card'>
@@ -278,7 +430,7 @@ class EmpruntController extends Controller
                     <span>EMP</span>
                 </div>
                 <div class='user-info'>
-                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Solde' : ""))) . "</span>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
                 </div>
             </div>";
                 })
@@ -290,13 +442,19 @@ class EmpruntController extends Controller
                 })
                 ->addColumn('Actions', function ($data) {
                     return $data->etat == 'Dossier en etude' ? '<ul class="nk-tb-actions gx-1">
+                    
+                 <li class="nk-tb-action-hidden">
+                    <a href="' . asset('upload/' . $data->link_lettre_souscription) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Télécharger la lettre de souscription">
+                        <em class="icon ni ni-download"></em>
+                    </a>
+                </li>
                   <li class="nk-tb-action-hidden">
-                    <a href="' . route('emprunt.accepterLeDossier', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Valider le dossier">
+                    <a  data_id="' . $data->id . '" class="valide-data-emprunt btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Valider le dossier">
                       <em class="icon ni ni-check"></em>
                     </a>
                 </li>
                 <li class="nk-tb-action-hidden">
-                    <a href="' . route('emprunt.refuserLeDossier', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Refuser le dossier">
+                    <a data_id="' . $data->id . '" class="refuse-data-emprunt btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Refuser le dossier">
                         <em class="icon ni ni-cross"></em>
                     </a>
                 </li>
@@ -305,10 +463,12 @@ class EmpruntController extends Controller
                         <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
+                            
+                                <li><a href="' . asset('upload/' . $data->link_lettre_souscription) . '" > <em class="icon ni ni-download"></em><span>Télécharger la lettre de souscription</span></a></li>
                                 
-                                <li><a href="' . route('emprunt.accepterLeDossier', $data->id) . '"><em class="icon ni ni-check"></em><span>Valider le dossier</span></a></li>
+                                <li><a class="valide-data-emprunt" data_id="' . $data->id . '"><em class="icon ni ni-check"></em><span>Valider le dossier</span></a></li>
                                 
-                                <li><a href="' . route('emprunt.refuserLeDossier', $data->id) . '" > <em class="icon ni ni-cross"></em><span>Refuser le dossier</span></a></li>
+                                <li><a class="refuse-data-emprunt" data_id="' . $data->id . '"> <em class="icon ni ni-cross"></em><span>Refuser le dossier</span></a></li>
                             </ul>
                         </div>
                     </div>
@@ -330,7 +490,7 @@ class EmpruntController extends Controller
     public function accepterLeDossier(Request $request)
     {
         $validator = FacadesValidator::make($request->all(), [
-            // 'id' => ['required', 'numeric'],
+            'id' => ['required', 'numeric'],
         ]);
         if ($validator->fails()) {
             return response()
@@ -339,12 +499,20 @@ class EmpruntController extends Controller
         try {
             DB::beginTransaction();
             $emprunt  = Emprunt::find($request->id);
+            $montantCaissePrincipal = Caisse::select('principal')->first();
+            if ($montantCaissePrincipal->principal < $emprunt->montant) {
+                return response()->json(["error" => "Le montant de l'emprunt est superieur au montant de la caisse actuel."]);
+            }
             $emprunt['etat'] = "Dossier accepter";
             $emprunt['date_de_validation'] = Carbon::now();
             $emprunt['date_de_fin'] = Carbon::now()->addMonths(6);
             $emprunt->save();
+
+            $caisse = Caisse::first();
+            $caisse->principal = $caisse->principal - $emprunt->montant;
+            $caisse->save();
             DB::commit();
-            return back();
+            return response()->json(["success" => "Enregistrement éffectuer !", "id" => $emprunt->id, "route" => route('emprunt.showFormUploadLettreDeMotivation', $emprunt->id)]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
@@ -358,7 +526,7 @@ class EmpruntController extends Controller
     public function refuserLeDossier(Request $request)
     {
         $validator = FacadesValidator::make($request->all(), [
-            // 'id' => ['required', 'numeric'],
+            'id' => ['required', 'numeric'],
         ]);
         if ($validator->fails()) {
             return response()
@@ -370,7 +538,7 @@ class EmpruntController extends Controller
             $emprunt['etat'] = "Dossier refuser";
             $emprunt->save();
             DB::commit();
-            return back();
+            return response()->json(["success" => "Enregistrement éffectuer !", "id" => $emprunt->id, "route" => route('emprunt.showFormUploadLettreDeMotivation', $emprunt->id)]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
@@ -413,5 +581,10 @@ class EmpruntController extends Controller
     {
         $emprunt = Emprunt::with('membre')->find((int)$request->id);
         return view('pages.impressions.ordre_paiement', ['emprunt' => $emprunt]);
+    }
+
+    public function getViewEnregistrementManuelD1Emprunt()
+    {
+        # code...
     }
 }

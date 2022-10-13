@@ -49,5 +49,7 @@ return [
         'viewForListOfEmpruntOfUUserWhoIsConnect' => 'Historique de mes emprunts',
         'viewListEmpruntWhoWatingTheValidationByAdmin' => 'Historique des emprunts à valider',
         'showFormUploadLettreDeMotivation' => 'Enregistrer la lettre de souscription signée',
+        'showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual' => 'Liste des emprunts valider par la mutuelle',
+        'showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember' => 'Liste des emprunts rembouser par les membres',
     ]
 ];

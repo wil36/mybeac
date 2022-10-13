@@ -231,19 +231,19 @@ class AyantDroitController extends Controller
         if ($request['statut'] == 'Parent' || $request['statut'] == 'Tuteur') {
             if ($request->hasFile('cni') == false) {
                 return response()
-                ->json(['errors' => ["La cni est obligatoire."]]);
+                    ->json(['errors' => ["La cni est obligatoire."]]);
             }
         }
         if ($request['statut'] == 'Enfant') {
-           if ($request->hasFile('acte_naissance') == false) {
-            return response()
-            ->json(['errors' => ["L'acte de naissance est obligatoire."]]);
-           }
+            if ($request->hasFile('acte_naissance') == false) {
+                return response()
+                    ->json(['errors' => ["L'acte de naissance est obligatoire."]]);
+            }
         }
-         if ($request->hasFile('certificat_vie') == false) {
+        if ($request->hasFile('certificat_vie') == false) {
             return response()
-             ->json(['errors' => ["Le certificat de vie est obligatoire."]]);
-         }
+                ->json(['errors' => ["Le certificat de vie est obligatoire."]]);
+        }
         try {
             DB::beginTransaction();
             $ayantsdroits  = new AyantDroit();
@@ -271,7 +271,6 @@ class AyantDroitController extends Controller
 
             $ayantsdroits->save();
             DB::commit();
-
             return response()->json(["success" => "Enregistrement éffectuer !"]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
