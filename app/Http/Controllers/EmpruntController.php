@@ -585,6 +585,10 @@ class EmpruntController extends Controller
 
     public function getViewEnregistrementManuelD1Emprunt()
     {
-        # code...
+        return view('pages.ajout_manuel_emprunt');
+    }
+
+    public function saveEmpruntManuel(Request $request)
+    {
     }
 }

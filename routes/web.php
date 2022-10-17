@@ -58,6 +58,8 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('/liste-des-emprunts-rembourser-par-les-membres-ajax', [EmpruntController::class, 'getListOfEmpruntWhoIsReturnByTheMemberAjax'])->name('emprunt.getListOfEmpruntWhoIsReturnByTheMemberAjax');
     Route::post('/acepter-le-dossier', [EmpruntController::class, 'accepterLeDossier'])->name('emprunt.accepterLeDossier');
     Route::post('/refuser-le-dossier', [EmpruntController::class, 'refuserLeDossier'])->name('emprunt.refuserLeDossier');
+    Route::get('/ajouter-emprunt-manuel', [EmpruntController::class, 'getViewEnregistrementManuelD1Emprunt'])->name('emprunt.getViewEnregistrementManuelD1Emprunt');
+    Route::post('/save-emprunt-manuel', [EmpruntController::class, 'saveEmpruntManuel'])->name('emprunt.saveEmpruntManuel');
 
 
     //Route for Users

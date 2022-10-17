@@ -163,7 +163,7 @@ return [
             [
                 'name'  => 'Enregistrement manuel d\'un emprunt',
                 'role'  => 'admin',
-                'route' => 'emprunt.showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual',
+                'route' => 'emprunt.getViewEnregistrementManuelD1Emprunt',
                 'altRoute' => '',
             ],
             // [
