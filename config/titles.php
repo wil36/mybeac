@@ -51,6 +51,8 @@ return [
         'showFormUploadLettreDeMotivation' => 'Enregistrer la lettre de souscription signée',
         'showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual' => 'Liste des emprunts valider par la mutuelle',
         'showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember' => 'Liste des emprunts rembouser par les membres',
-        'getViewEnregistrementManuelD1Emprunt' => 'Formulaire d\'ajout manuel d\'un emprunt'
+        'getViewEnregistrementManuelD1Emprunt' => 'Formulaire d\'ajout manuel d\'un emprunt',
+        'getViewForListOfEmpruntWhoIsExpire' => 'Liste des emprunts expirés',
+        'historiqueEmprunts' => 'Hitorique des emprunts'
     ]
 ];

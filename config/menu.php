@@ -17,7 +17,7 @@ return [
     ],
     'Catégorie' => [
         'name' => "Gestion des catégories",
-        'route' => 'membre.index',
+        'route' => 'categories.index',
         'routes' => ['categories.create', 'categories.index', 'categories.edit'],
         'icon' => 'icon ni ni-layout-alt-fill',
         'role'   => 'admin',
@@ -38,7 +38,7 @@ return [
     ],
     'Prestation' => [
         'name' => "Gestion des prestations",
-        'route' => 'membre.index',
+        'route' => 'typeprestation.index',
         'routes' => ['typeprestation.index', 'typeprestation.create', 'typeprestation.edit', 'prestation.index', 'prestation.create', 'prestation.deit', 'membre.historiqueprestationannuel', 'membre.historiqueprestationmensuel', 'membre.historiqueprestationmensuelDetailMembre'],
         'icon' => 'icon ni ni-sign-waves-alt',
         'role'   => 'admin',
@@ -77,7 +77,7 @@ return [
     ],
     'Cotisation' => [
         'name' => "Gestion des cotisations",
-        'route' => 'membre.index',
+        'route' => 'membre.cotisation',
         'routes' => ['membre.cotisation', 'membre.historiquecotisationannuel', 'membre.historiquecotisationmensuel', 'membre.historiquecotisationmensuelDetailMembre'],
         'icon' => 'icon ni ni-coins',
         'role'   => 'admin',
@@ -131,7 +131,7 @@ return [
     // ],
     'Emprunt' => [
         'name' => "Gestion des emprunts",
-        'route' => 'membre.index',
+        'route' => 'emprunt.appelASouscription',
         'routes' => ['emprunt.appelASouscription', 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect', 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin', 'emprunt.showFormUploadLettreDeMotivation', 'emprunt.showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual', 'emprunt.showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember'],
         'icon' => 'icon ni ni-invest',
         'role'   => 'agent',
@@ -146,6 +146,12 @@ return [
                 'name'  => 'Liste de mes emprunts',
                 'role'  => 'agent',
                 'route' => 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Historique des emprunts',
+                'role'  => 'admin',
+                'route' => 'emprunt.historiqueEmprunts',
                 'altRoute' => '',
             ],
             [
@@ -166,17 +172,17 @@ return [
                 'route' => 'emprunt.getViewEnregistrementManuelD1Emprunt',
                 'altRoute' => '',
             ],
-            // [
-            //     'name'  => 'Liste des emprunts rembouser',
-            //     'role'  => 'admin',
-            //     'route' => 'emprunt.showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember',
-            //     'altRoute' => '',
-            // ],
+            [
+                'name'  => 'Liste des emprunts expirés',
+                'role'  => 'admin',
+                'route' => 'emprunt.getViewForListOfEmpruntWhoIsExpire',
+                'altRoute' => '',
+            ],
         ],
     ],
     'Dons' => [
         'name' => "Gestion des dons",
-        'route' => 'membre.index',
+        'route' => 'dons.index',
         'routes' => ['dons.create', 'dons.index', 'dons.edit'],
         'icon' => 'icon ni ni-money',
         'role'   => 'admin',

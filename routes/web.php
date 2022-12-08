@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController, DonsController, EmpruntController};
+use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController, DonsController, EmpruntController, NotificationController};
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
     function () {
 
-        //Accieul
-        Route::get('/', [AcceuilController::class, 'index'])->name('dashboard');
+
+        Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
+        // dd(Auth::user());
+        //User
+        Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
+        Route::post('update_profile', [UserController::class, 'updateProfile'])->name('user.update.profile');
+        Route::post('update_password', [UserController::class, 'updatePassword'])->name('user.update.password');
+        Route::get('password', [UserController::class, 'changePassword'])->name('user.password');
 
         //cotisations
         Route::get('/getcotisationListForUser/{id}', [CotisationController::class, 'getcotisationListForUser'])->name('getcotisationListForUser');
@@ -42,9 +50,11 @@ Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
         Route::get('/telecharger-lettre-engagement/{id}', [EmpruntController::class, 'downloadLettreEngagement'])->name('emprunt.download-lettre-engagement');
         Route::get('/telecharger-ordre_paiement/{id}', [EmpruntController::class, 'downloadOrdrePaiement'])->name('emprunt.download-ordre_paiement');
         Route::post('/uploader-lettre-souscription', [EmpruntController::class, 'uploadLettreDeSouscripption'])->name('emprunt.uploader-lettre-souscription');
+
+        //Notification
+        Route::get('/tout-marquer-comme-lu', [NotificationController::class, 'readAll'])->name('notification.read-all');
     }
 );
-// Route::middleware(['auth:sanctum', 'verified'])->get('/', [AcceuilController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration')->group(function () {
 
@@ -60,6 +70,14 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::post('/refuser-le-dossier', [EmpruntController::class, 'refuserLeDossier'])->name('emprunt.refuserLeDossier');
     Route::get('/ajouter-emprunt-manuel', [EmpruntController::class, 'getViewEnregistrementManuelD1Emprunt'])->name('emprunt.getViewEnregistrementManuelD1Emprunt');
     Route::post('/save-emprunt-manuel', [EmpruntController::class, 'saveEmpruntManuel'])->name('emprunt.saveEmpruntManuel');
+    Route::get('/liste-des-emprunts-expirés', [EmpruntController::class, 'getViewForListOfEmpruntWhoIsExpire'])->name('emprunt.getViewForListOfEmpruntWhoIsExpire');
+    Route::get('/liste-des-emprunts-expirés-ajax', [EmpruntController::class, 'getListOfEmpruntWhoIsExpireAjax'])->name('emprunt.getListOfEmpruntWhoIsExpireAjax');
+    Route::get('/historique-emprunt', [EmpruntController::class, 'historiqueEmprunts'])->name('emprunt.historiqueEmprunts');
+    Route::get('/historique-emprunt-BL-ajax', [EmpruntController::class, 'getHistoriqueBLEmprunt'])->name('emprunt.getHistoriqueBLEmpruntAjax');
+    Route::get('/historique-emprunt-BLI-ajax', [EmpruntController::class, 'getHistoriqueBLIEmprunt'])->name('emprunt.getHistoriqueBLIEmpruntAjax');
+    Route::get('/historique-emprunt-BBL-ajax', [EmpruntController::class, 'getHistoriqueBBLEmprunt'])->name('emprunt.getHistoriqueBBLEmpruntAjax');
+    Route::get('/historique-emprunt-ASS-ajax', [EmpruntController::class, 'getHistoriqueASSEmprunt'])->name('emprunt.getHistoriqueASSEmpruntAjax');
+    Route::get('/historique-emprunt-ASG-ajax', [EmpruntController::class, 'getHistoriqueASGEmprunt'])->name('emprunt.getHistoriqueASGEmpruntAjax');
 
 
     //Route for Users
@@ -87,6 +105,10 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     });
     Route::post('users/{id}', [UserController::class, 'update'])->name('membre.update');
     Route::get('membre/information/{id}', [UserController::class, 'infomembre'])->name('membre.info');
+    Route::get('membre/liste-des-membres', [UserController::class, 'impressionListMembre'])->name('membre.impressionListMembre');
+    Route::get('membre/liste-des-membres-decede', [UserController::class, 'impressionListMembreDecede'])->name('membre.impressionListMembreDecede');
+    Route::get('membre/liste-des-membres-exclut', [UserController::class, 'impressionListMembreExclut'])->name('membre.impressionListMembreexclut');
+    Route::get('membre/liste-des-membres-retraite', [UserController::class, 'impressionListMembreRetraite'])->name('membre.impressionListMembreRetraite');
 
     //Route for categories
     Route::post('categories/delete', [CategoryController::class, 'deletecategory'])->name('categories.delete');

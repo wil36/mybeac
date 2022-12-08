@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Caisse;
 use App\Models\Emprunt;
+use App\Models\Notification;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Carbon\Carbon;
 use Exception;
@@ -64,7 +65,7 @@ class EmpruntController extends Controller
     {
         try {
             $validator = FacadesValidator::make($request->all(), [
-                'type_emprunt' => ['required', 'string', 'max:255'],
+                // 'type_emprunt' => ['required', 'string', 'max:255'],
                 'objet' => ['required', 'string'],
                 'montant' => ['required', 'numeric'],
             ]);
@@ -385,6 +386,12 @@ class EmpruntController extends Controller
                 $emprunt['link_lettre_souscription'] = basename($path1);
             }
             $emprunt->save();
+            $notification = new Notification();
+            $notification->type = 'Dossier emprunt en etude';
+            $notification->date = Carbon::now();
+            $notification->etat = "Non lue";
+            $notification->route_name = 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin';
+            $notification->save();
             DB::commit();
             return response()->json(["success" => "Enregistrement éffectuer !"]);
         } catch (Exception $e) {
@@ -509,8 +516,10 @@ class EmpruntController extends Controller
             $emprunt->save();
 
             $caisse = Caisse::first();
-            $caisse->principal = $caisse->principal - $emprunt->montant;
+            $caisse->emprunt = $caisse->emprunt - $emprunt->montant;
             $caisse->save();
+
+            Notification::where('type', '=', 'Dossier emprunt en etude')->where('etat', 'Non lue')->update(['etat' => 'Lue']);
             DB::commit();
             return response()->json(["success" => "Enregistrement éffectuer !", "id" => $emprunt->id, "route" => route('emprunt.showFormUploadLettreDeMotivation', $emprunt->id)]);
         } catch (Exception $e) {
@@ -588,7 +597,366 @@ class EmpruntController extends Controller
         return view('pages.ajout_manuel_emprunt');
     }
 
+    /**
+     * Je veux retourner une réponse json si la condition est vraie, sinon je veux continuer
+     * l'exécution de la fonction
+     * 
+     * @param request L'objet de la requête.
+     */
     public function saveEmpruntManuel(Request $request)
     {
+        try {
+            $attributeNames = array(
+                'type_emprunt' => 'type de l\'emprunt',
+                'montant_commission' => 'montant de la commission',
+                'id' => 'membre',
+            );
+            $validator = FacadesValidator::make($request->all(), [
+                'id' => ['required', 'integer'],
+                'type_emprunt' => ['required', 'string', 'max:255'],
+                'objet' => ['required', 'string'],
+                'montant' => ['required', 'numeric'],
+                'montant_commission' => ['numeric'],
+            ]);
+            $validator->setAttributeNames($attributeNames);
+            if ($validator->fails()) {
+                return response()
+                    ->json(['errors' => $validator->errors()->all()]);
+            }
+            if ($request->type_emprunt == 'BLI') {
+                if ($request->montant < 2000000 || $request->montant > 10000000) {
+                    return response()
+                        ->json(['error' => 'Le montant de prêt du Bridge Loan Immo est situé 2 000 000 et 10 000 000 de FCFA.']);
+                }
+            } else if ($request->type_emprunt == 'BBL') {
+                if ($request->montant < 500000 || $request->montant > 3000000) {
+                    return response()
+                        ->json(['error' => 'Le montant de prêt du Bridge Loan Immo est situé 500 000 et 3 000 000 de FCFA.']);
+                }
+            }
+            DB::beginTransaction();
+            $emprunt  = new Emprunt();
+            $emprunt['type'] = $request['type_emprunt'];
+            $emprunt['date'] = Carbon::now();
+            $emprunt['date_de_fin'] = Carbon::now();
+            $emprunt['code'] = uniqid();
+            $emprunt['montant'] = $request['montant'];
+            $emprunt['montant_commission'] = $request['montant_commission'];
+            $emprunt['objet'] = $request['objet'];
+            $emprunt['etat'] = 'Dossier rembourser';
+            $emprunt['users_id'] = $request['id'];
+            $emprunt->save();
+            DB::commit();
+
+            return response()->json(["success" => "Enregistrement éffectuer !", "id" => $emprunt->id, "route" => route('emprunt.showFormUploadLettreDeMotivation', $emprunt->id)]);
+        } catch (Exception $e) {
+            return response()->json(["error" => $e->getMessage()]);
+            // return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * Il renvoie la vue de la page affichant la liste des emprunts.
+     * 
+     * @return The view 'pages.liste_emprunt_expirés'
+     */
+    public function getViewForListOfEmpruntWhoIsExpire()
+    {
+        return view('pages.liste_emprunt_expirés');
+    }
+
+    /**
+     * Il renvoie grace à une requette Ajax la list des emprunts expirés
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Un objet JSON contenant les données à utiliser par DataTables.
+     */
+    public function getListOfEmpruntWhoIsExpireAjax(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'date_de_fin', 'montant', 'etat', 'updated_at')->where('etat', '=', 'Dossier accepter')->where('date_de_fin', '>', Carbon::now());
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_de_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("status", function ($data) {
+                    return "<span class='badge badge-outline-danger'>Delais dépassé</span>";
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function historiqueEmprunts()
+    {
+        $BLtotal = Emprunt::where('etat', '=', 'Dossier accepter')->where('type', 'BL')->sum('montant');
+        $BLItotal = Emprunt::where('etat', '=', 'Dossier accepter')->where('type', 'BLI')->sum('montant');
+        $BBLtotal = Emprunt::where('etat', '=', 'Dossier accepter')->where('type', 'BBL')->sum('montant');
+        $ASStotal = Emprunt::where('etat', '=', 'Dossier accepter')->where('type', 'ASS')->sum('montant');
+        $ASGtotal = Emprunt::where('etat', '=', 'Dossier accepter')->where('type', 'ASG')->sum('montant');
+        return view('pages.historique_emprunts', compact('BLtotal', 'BLItotal', 'BBLtotal', 'ASStotal', 'ASGtotal'));
+    }
+
+    /**
+     * Il renvoie grace à une requette Ajax la list des emprunts expirés
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Un objet JSON contenant les données à utiliser par DataTables.
+     */
+    public function getHistoriqueBLEmprunt(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'date_de_fin', 'montant', 'etat', 'updated_at')->where('etat', '=', 'Dossier accepter')->where('type', 'BL')->get();
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_de_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * Il renvoie grace à une requette Ajax la list des emprunts expirés
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Un objet JSON contenant les données à utiliser par DataTables.
+     */
+    public function getHistoriqueBLIEmprunt(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'date_de_fin', 'montant', 'etat', 'updated_at')->where('etat', '=', 'Dossier accepter')->where('type', 'BLI')->get();
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_de_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * Il renvoie grace à une requette Ajax la list des emprunts expirés
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Un objet JSON contenant les données à utiliser par DataTables.
+     */
+    public function getHistoriqueBBLEmprunt(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'date_de_fin', 'montant', 'etat', 'updated_at')->where('etat', '=', 'Dossier accepter')->where('type', 'BBL')->get();
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_de_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * Il renvoie grace à une requette Ajax la list des emprunts expirés
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Un objet JSON contenant les données à utiliser par DataTables.
+     */
+    public function getHistoriqueASSEmprunt(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'date_de_fin', 'montant', 'etat', 'updated_at')->where('etat', '=', 'Dossier accepter')->where('type', 'ASS')->get();
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_de_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    /**
+     * Il renvoie grace à une requette Ajax la list des emprunts expirés
+     * 
+     * @param Request request L'objet de la requête.
+     * 
+     * @return Un objet JSON contenant les données à utiliser par DataTables.
+     */
+    public function getHistoriqueASGEmprunt(Request $request)
+    {
+        try {
+
+            $data = Emprunt::select('id', 'type', 'date', 'date_de_fin', 'montant', 'etat', 'updated_at')->where('etat', '=', 'Dossier accepter')->where('type', 'ASG')->get();
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return $data->date;
+                })
+                ->addColumn("date_de_fin", function ($data) {
+                    return $data->date_de_fin;
+                })
+                ->editColumn("type", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : ''))))) . "</span>
+                </div>
+            </div>";
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'type', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
     }
 }

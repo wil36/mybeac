@@ -15,6 +15,7 @@ class Emprunt extends Model
         'link_lettre_souscription',
         'date_de_validation',
         'montant',
+        'montant_commission',
         'date',
         'date_de_fin',
         'etat',

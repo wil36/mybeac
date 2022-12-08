@@ -9,8 +9,8 @@
     lineTension: .3,
     datasets: [{
       label: "Sales",
-      color: "#9d72ff",
-      background: NioApp.hexRGB('#9d72ff', .25),
+      color: "#0fac81",
+      background: NioApp.hexRGB('#0fac81', .25),
       data: [130, 105, 125, 115, 110, 95, 131, 110, 115, 120, 111, 97, 113, 107, 122, 100, 85, 110, 130, 107, 90, 105, 123, 115, 100, 117, 125, 95, 137, 101]
     }]
   };
@@ -20,8 +20,8 @@
     lineTension: .3,
     datasets: [{
       label: "Orders",
-      color: "#7de1f8",
-      background: NioApp.hexRGB('#7de1f8', .25),
+      color: "#3fbd9a",
+      background: NioApp.hexRGB('#3fbd9a', .25),
       data: [85, 125, 105, 115, 130, 106, 141, 110, 95, 120, 111, 105, 113, 107, 122, 100, 95, 110, 120, 107, 100, 105, 123, 115, 110, 117, 125, 75, 95, 101]
     }]
   };
@@ -31,8 +31,8 @@
     lineTension: .3,
     datasets: [{
       label: "Customers",
-      color: "#83bcff",
-      background: NioApp.hexRGB('#83bcff', .25),
+      color: "#008080",
+      background: NioApp.hexRGB('#008080', .25),
       data: [92, 105, 125, 85, 110, 106, 131, 105, 110, 115, 135, 105, 120, 85, 122, 100, 125, 110, 120, 125, 85, 105, 123, 115, 90, 117, 125, 100, 95, 65]
     }]
   };
@@ -150,11 +150,11 @@
   });
   var storeVisitors = {
     labels: ["01 Jan", "02 Jan", "03 Jan", "04 Jan", "05 Jan", "06 Jan", "07 Jan", "08 Jan", "09 Jan", "10 Jan", "11 Jan", "12 Jan", "13 Jan", "14 Jan", "15 Jan", "16 Jan", "17 Jan", "18 Jan", "19 Jan", "20 Jan", "21 Jan", "22 Jan", "23 Jan", "24 Jan", "25 Jan", "26 Jan", "27 Jan", "28 Jan", "29 Jan", "30 Jan"],
-    dataUnit: 'People',
+    dataUnit: 'Customer',
     lineTension: .1,
     datasets: [{
       label: "Current Month",
-      color: "#9d72ff",
+      color: "#0fac81",
       dash: 0,
       background: "transparent",
       data: [4110, 4220, 4810, 5480, 4600, 5670, 6660, 4830, 5590, 5730, 4790, 4950, 5100, 5800, 5950, 5850, 5950, 4450, 4900, 8000, 7200, 7250, 7900, 8950, 6300, 7200, 7250, 7650, 6950, 4750]
@@ -281,7 +281,7 @@
     lineTension: .3,
     datasets: [{
       label: "Orders",
-      color: "#854fff",
+      color: "#0fac81",
       background: "transparent",
       data: [92, 105, 125, 85, 110, 106, 131, 105, 110, 131, 105, 110]
     }]
@@ -292,29 +292,29 @@
     lineTension: .3,
     datasets: [{
       label: "Revenue",
-      color: "#33d895",
+      color: "#816bff",
       background: "transparent",
       data: [92, 105, 125, 85, 110, 106, 131, 105, 110, 131, 105, 110]
     }]
   };
   var todayCustomers = {
     labels: ["12AM - 02AM", "02AM - 04AM", "04AM - 06AM", "06AM - 08AM", "08AM - 10AM", "10AM - 12PM", "12PM - 02PM", "02PM - 04PM", "04PM - 06PM", "06PM - 08PM", "08PM - 10PM", "10PM - 12PM"],
-    dataUnit: 'Orders',
+    dataUnit: 'Customers',
     lineTension: .3,
     datasets: [{
       label: "Customers",
-      color: "#ff63a5",
+      color: "#ffa353",
       background: "transparent",
       data: [92, 105, 125, 85, 110, 106, 131, 105, 110, 131, 105, 110]
     }]
   };
   var todayVisitors = {
     labels: ["12AM - 02AM", "02AM - 04AM", "04AM - 06AM", "06AM - 08AM", "08AM - 10AM", "10AM - 12PM", "12PM - 02PM", "02PM - 04PM", "04PM - 06PM", "06PM - 08PM", "08PM - 10PM", "10PM - 12PM"],
-    dataUnit: 'Orders',
+    dataUnit: 'Users',
     lineTension: .3,
     datasets: [{
       label: "Visitors",
-      color: "#559bfb",
+      color: "#ff63a5",
       background: "transparent",
       data: [92, 105, 125, 85, 110, 106, 131, 105, 110, 131, 105, 110]
     }]
@@ -433,13 +433,13 @@
   });
   var salesStatistics = {
     labels: ["01 Jan", "02 Jan", "03 Jan", "04 Jan", "05 Jan", "06 Jan", "07 Jan", "08 Jan", "09 Jan", "10 Jan", "11 Jan", "12 Jan", "13 Jan", "14 Jan", "15 Jan", "16 Jan", "17 Jan", "18 Jan", "19 Jan", "20 Jan", "21 Jan", "22 Jan", "23 Jan", "24 Jan", "25 Jan", "26 Jan", "27 Jan", "28 Jan", "29 Jan", "30 Jan"],
-    dataUnit: 'People',
+    dataUnit: 'Customer',
     lineTension: .4,
     datasets: [{
       label: "Total orders",
-      color: "#9d72ff",
+      color: "#0fac81",
       dash: 0,
-      background: NioApp.hexRGB('#9d72ff', .15),
+      background: NioApp.hexRGB('#0fac81', .15),
       data: [3710, 4820, 4810, 5480, 5300, 5670, 6660, 4830, 5590, 5730, 4790, 4950, 5100, 5800, 5950, 5850, 5950, 4450, 4900, 8000, 7200, 7250, 7900, 8950, 6300, 7200, 7250, 7650, 6950, 4750]
     }, {
       label: "Canceled orders",
@@ -571,12 +571,12 @@
   });
   var averargeOrder = {
     labels: ["01 Jan", "02 Jan", "03 Jan", "04 Jan", "05 Jan", "06 Jan", "07 Jan", "08 Jan", "09 Jan", "10 Jan", "11 Jan", "12 Jan", "13 Jan", "14 Jan", "15 Jan", "16 Jan", "17 Jan", "18 Jan", "19 Jan", "20 Jan", "21 Jan", "22 Jan", "23 Jan", "24 Jan", "25 Jan", "26 Jan", "27 Jan", "28 Jan", "29 Jan", "30 Jan"],
-    dataUnit: 'People',
+    dataUnit: 'Customer',
     lineTension: .1,
     datasets: [{
       label: "Active Users",
-      color: "#b695ff",
-      background: "#b695ff",
+      color: "#0fac81",
+      background: "#0fac81",
       data: [1110, 1220, 1310, 980, 900, 770, 1060, 830, 690, 730, 790, 950, 1100, 800, 1250, 850, 950, 450, 900, 1000, 1200, 1250, 900, 950, 1300, 1200, 1250, 650, 950, 750]
     }]
   };
@@ -690,22 +690,22 @@
   });
   var trafficSources = {
     labels: ["Organic Search", "Social Media", "Referrals", "Others"],
-    dataUnit: 'People',
+    dataUnit: 'Customer',
     legend: false,
     datasets: [{
       borderColor: "#fff",
-      background: ["#b695ff", "#b8acff", "#ffa9ce", "#f9db7b"],
+      background: ["#0fac81", "#e85347", "#ffa9ce", "#f9db7b"],
       data: [4305, 859, 482, 138]
     }]
   };
   var orderStatistics = {
-    labels: ["Completed", "Processing", "Canclled"],
-    dataUnit: 'People',
+    labels: ["Completed", "Canclled", "Processing"],
+    dataUnit: 'Customer',
     legend: false,
     datasets: [{
       borderColor: "#fff",
-      background: ["#816bff", "#13c9f2", "#ff82b7"],
-      data: [4305, 859, 482]
+      background: ["#0fac81", "#e85347", "#816bff"],
+      data: [4305, 259, 682]
     }]
   };
 

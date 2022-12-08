@@ -279,7 +279,7 @@
     }
 
     ;
-    $(".select-calendar-theme").select2({
+    NioApp.Select2('.select-calendar-theme', {
       templateResult: customCalSelect
     });
     addEventPopup.on('hidden.bs.modal', function (e) {

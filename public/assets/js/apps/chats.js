@@ -20,7 +20,7 @@
       hideau_profile = 'chat-profile-autohide',
       hide_aside = 'hide-aside',
       show_chat = 'show-chat',
-      info_break = $body.hasClass('has-apps-sidebar') ? 1200 : breaks.xxl,
+      info_break = 9999,
       flat_break = breaks.lg;
 
   NioApp.Chats = function () {

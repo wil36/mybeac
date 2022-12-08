@@ -15,15 +15,15 @@
 	<!-- Page Title  -->
 	<title>@lang('Ma Beac')</title>
 	<!-- StyleSheets  -->
-	<link rel="stylesheet" href="{!! asset('assets/css/dashlite.css?ver=2.2.0') !!}">
-	<link id="skin-default" rel="stylesheet" href="{!! asset('assets/css/theme.css?ver=2.2.0') !!}">
+	<link rel="stylesheet" href="{!! asset('assets/css/dashlite.css?ver=2.7.0') !!}">
+	<link id="skin-default" rel="stylesheet" href="{!! asset('assets/css/theme.css?ver=2.7.0') !!}">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 	@yield('css')
 </head>
 
 <body @php
-$userinfo = Auth::user();
-@endphp class="no-touch nk-nio-theme @if ($userinfo->theme == 1) dark-mode @endif">
+$userinfo = Auth::user(); @endphp
+	class="no-touch nk-nio-theme @if ($userinfo->theme == 1) dark-mode @endif">
 	">
 	<div class="nk-app-root">
 		<!-- main @s -->
@@ -132,7 +132,46 @@ $userinfo = Auth::user();
                                                 @lang('Français')</a>
                                         </div>
                                     </li> --}}
+									<li class="dropdown notification-dropdown">
+										<a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
+											<div class="@if ($notifications->count() > 0) icon-status icon-status-info @endif">
 
+												<em class="icon ni ni-bell"></em>
+
+											</div>
+										</a>
+										<div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+											<div class="dropdown-head">
+												<span class="sub-title nk-dropdown-title">Notifications</span>
+												<a href="{{ route('notification.read-all') }}">Tout marquer comme lu</a>
+											</div>
+											<div class="dropdown-body">
+												<div class="nk-notification">
+													@if (isset($notifications))
+														@foreach ($notifications as $notif)
+															<a href="{{ route($notif->route_name) }}" class="nk-notification-item dropdown-inner">
+																@if ($notif->type == 'Dossier emprunt en etude')
+																	<div class="nk-notification-icon">
+																		<em class="icon icon-circle bg-success-dim ni ni-curve-down-right"></em>
+																	</div>
+																	<div class="nk-notification-content">
+																		<div class="nk-notification-text">{{ $notif->total }} dossiers d'emprunt à valider</div>
+																		<div class="nk-notification-time">Il y a 2 heures</div>
+																	</div>
+																@endif
+															</a>
+														@endforeach
+													@else
+														<p>Tout marquer comme lu</p>
+													@endif
+
+												</div><!-- .nk-notification -->
+											</div><!-- .nk-dropdown-body -->
+											{{-- <div class="dropdown-foot center">
+												<a href="#">View All</a>
+											</div> --}}
+										</div>
+									</li>
 									<li class="dropdown user-dropdown">
 										<a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
 											<div class="user-toggle">
@@ -164,12 +203,15 @@ $userinfo = Auth::user();
 											</div>
 											<div class="dropdown-inner">
 												<ul class="link-list">
-													<li><a href="{{ route('profile.show') }}"><em
+													<li><a href="{{ route('user.profile') }}"><em
+																class="icon ni ni-user-fill"></em><span>@lang('Profile')</span></a>
+													</li>
+													<li><a href="{{ route('user.password') }}"><em
 																class="icon ni ni-lock"></em><span>@lang('Sécurité')</span></a>
 													</li>
 													<li id="dark1"><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>
 																@lang('Mode
-																																																																Dark')</span></a>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																Dark')</span></a>
 													</li>
 												</ul>
 											</div>
@@ -177,7 +219,8 @@ $userinfo = Auth::user();
 												<ul class="link-list">
 													<form method="POST" action="{{ route('logout') }}">
 														@csrf
-														<li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+														<li><a href="{{ route('logout') }}"
+																onclick="event.preventDefault();
 																												this.closest('form').submit();"><em
 																	class="icon ni ni-signout"></em><span>@lang('Deconnexion')</span></a>
 														</li>
@@ -220,42 +263,43 @@ $userinfo = Auth::user();
 		</div>
 	</div>
 	{{-- Script js --}}
-	<script src="{!! asset('assets/js/bundle.js?ver=2.2.0') !!}"></script>
-	<script src="{!! asset('assets/js/scripts.js?ver=2.2.0') !!}"></script>
+	<script src="{!! asset('assets/js/bundle.js?ver=2.7.0') !!}"></script>
+	<script src="{!! asset('assets/js/scripts.js?ver=2.7.0') !!}"></script>
+	<script src="{!! asset('assets/js/libs/datatable-btns.js') !!}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-	 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-	{{-- <script src="{!! asset('assets/js/charts/chart-ecommerce.js?ver=2.2.0') !!}"></script> --}}
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	{{-- <script src="{!! asset('assets/js/charts/chart-ecommerce.js?ver=2.7.0') !!}"></script> --}}
 
 
 	@yield('script')
 	<script>
-	 $(document).on('click', '.popup-image', function(e) {
-	  e.preventDefault();
-	  var src = $(this).attr('src');
-	  $('#photo-modal').attr('src', src);
-	  // $('#modalDefault').modal({
-	  //     show: 'false'
-	  // });
-	 });
-	 $(document).ready(function() {
-	  $('.active').removeClass('.active');
-	 });
-	 $("#dark1").click(function() {
-	  $.ajax({
-	   type: 'GET',
-	   url: '{{ route('theme') }}',
-	   success: function(data) {},
-	   error: function() {
-	    console.error(data);
-	   }
-	  });
-	 });
+		$(document).on('click', '.popup-image', function(e) {
+			e.preventDefault();
+			var src = $(this).attr('src');
+			$('#photo-modal').attr('src', src);
+			// $('#modalDefault').modal({
+			//     show: 'false'
+			// });
+		});
+		$(document).ready(function() {
+			$('.active').removeClass('.active');
+		});
+		$("#dark1").click(function() {
+			$.ajax({
+				type: 'GET',
+				url: '{{ route('theme') }}',
+				success: function(data) {},
+				error: function() {
+					console.error(data);
+				}
+			});
+		});
 
 
-	 function nombresAvecEspaces(x) {
-	  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-	 }
+		function nombresAvecEspaces(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+		}
 	</script>
 
 </body>

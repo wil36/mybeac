@@ -47,9 +47,10 @@
 	</style>
 </head>
 
-<body>@php
-$f = new NumberFormatter('fr', NumberFormatter::SPELLOUT);
-@endphp
+<body>
+	@php
+		$f = new NumberFormatter('fr', NumberFormatter::SPELLOUT);
+	@endphp
 	<br><br>
 	<button id="btn" class="btn btn-primary" style="width: 100%; height: 30px; font-size: 20px">Imprimer ou
 		Télécharger</button>

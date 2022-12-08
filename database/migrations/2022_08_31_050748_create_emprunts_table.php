@@ -21,6 +21,7 @@ class CreateEmpruntsTable extends Migration
             $table->text('objet');
             $table->text('link_lettre_souscription')->nullable();
             $table->decimal('montant', 18, 2);
+            $table->decimal('montant_commission', 18, 2)->nullable();
             $table->dateTime('date');
             $table->dateTime('date_de_validation')->nullable();
             $table->dateTime('date_de_fin')->nullable();

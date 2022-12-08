@@ -9,6 +9,7 @@ use App\Models\Prestation;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +18,150 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function profile()
+    {
+        try {
+            $membre = Auth::user();
+            $category = Category::select('code', 'libelle')->where('id', '=', $membre->categories_id)->first();
+            return view('profile.update_profile', ['user' => $membre, 'category' => $category]);
+        } catch (Exception $e) {
+            return response()->json(["error" => $e->getMessage()]);
+        }
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfile(Request $request, User $user)
+    {
+        try {
+            $attributeNames = array(
+                'email' => 'email',
+                'role' => 'role',
+                'tel' => 'numéro de téléphone',
+                'dateNaissance' => 'date de naissance',
+                'dateRecrutement' => 'date de recrutement',
+                'dateHadhésion' => 'date d\'hadésion',
+                'tel' => 'numéro de téléphone',
+                'status_matrimonial' => 'statut matrimonial',
+                'listCategorie' => 'Categorie',
+            );
+            $validator = FacadesValidator::make($request->all(), [
+                'matricule' => ['required', 'max:255', Rule::unique('users', 'matricule')->where(function ($query) use ($request) {
+                    $query->where('id', '!=', $request['id']);
+                })],
+                'nom' => ['required', 'string', 'max:255'],
+                'prenom' => ['required', 'string', 'max:255'],
+                'nationalité' => ['required', 'string', 'max:255'],
+                'sexe' => ['required', 'string', 'max:10'],
+                'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->where(function ($query) use ($request) {
+                    $query->where('id', '!=', $request['id']);
+                })],
+                'tel' => ['required', 'string', 'max:25', Rule::unique('users', 'tel')->where(function ($query) use ($request) {
+                    $query->where('id', '!=', $request['id']);
+                })],
+                'dateNaissance' => ['required', 'date', 'date_format:Y-m-d'],
+                'status_matrimonial' => [
+                    'required',
+                    'string'
+                ],
+            ]);
+            $validator->setAttributeNames($attributeNames);
+            if ($validator->fails()) {
+                return response()
+                    ->json(['errors' => $validator->errors()->all()]);
+            }
+            DB::beginTransaction();
+            $user = User::find($request['id']);
+            $user['matricule'] = $request['matricule'];
+            $user['nom'] = $request['nom'];
+            $user['prenom'] = $request['prenom'];
+            $user['nationalité'] = $request['nationalité'];
+            $user['email'] = $request['email'];
+            $user['sexe'] = $request['sexe'];
+            $user['tel'] = $request['tel'];
+            $user['date_naissance'] = date("Y-m-d", strtotime($request['dateNaissance']));
+            $user['status_matrimonial'] = $request['status_matrimonial'];
+            $expath = $user['profile_photo_path'];
+            if ($request->hasFile('picture') && $request->file('picture')->isValid()) {
+                $path3 = $request->file('picture')->store('public/images/picture_profile');
+                $user['profile_photo_path'] = basename($path3);
+            }
+            $user->save();
+
+            DB::commit();
+            if ($request->hasFile('picture') && $request->file('picture')->isValid()) {
+                if (Storage::exists('public/images/picture_profile/' . $expath)) {
+                    Storage::delete('public/images/picture_profile/' . $expath);
+                }
+            }
+            return response()->json(["success" => "Modification éffectuer !"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+
+    public function changePassword()
+    {
+        try {
+            return view('profile.update_password');
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword(Request $request)
+    {
+        try {
+            $attributeNames = array(
+                'password' => 'Nouveau Mot de passe',
+                'current_password' => 'Mot de passe actuel',
+            );
+            $validator = FacadesValidator::make($request->all(), [
+                'current_password' => ['required', 'string'],
+                'password' => ['required', 'string', 'min:4'],
+            ]);
+            $validator->setAttributeNames($attributeNames);
+            if ($validator->fails()) {
+                return response()
+                    ->json(['errors' => $validator->errors()->all()]);
+            }
+            $user = User::findOrFail(Auth::user()->id);
+            if (!isset($request['current_password']) || !Hash::check($request['current_password'], $user->password)) {
+                return response()->json(["error" => "Le mot de passe actuel est incorect"]);
+            }
+            $user->password = Hash::make($request['password']);
+            $user->save();
+            return response()->json(["success" => "Modification éffectuer !"]);
+        } catch (Exception $e) {
+            return response()->json(
+                ["error" => $e->getMessage()]
+            );
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -816,6 +961,46 @@ class UserController extends Controller
             $user->two_factor_recovery_codes = null;
             $user->save();
             return response()->json(["success" => "Suppression de la double authentification éffectuer avec succès"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListMembre(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
+            return view('pages.impressions.liste_des_mebres', ['membres' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListMembreDecede(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=1 and us.retraite=0 and us.exclut=0'));
+            return view('pages.impressions.liste_des_membres_decedes', ['membres' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListMembreExclut(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=1'));
+            return view('pages.impressions.liste_des_membres_excluts', ['membres' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListMembreRetraite(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=1 and us.exclut=0'));
+            return view('pages.impressions.liste_des_membres_retraites', ['membres' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
