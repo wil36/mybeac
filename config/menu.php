@@ -15,6 +15,39 @@ return [
         'routes' => ['caisse.index'],
         'role'   => 'admin',
     ],
+    'Messagerie' => [
+        'name' => "Messagerie",
+        'route' => 'messagerie.sendMessageToMutual',
+        'routes' => ['messagerie.sendMessageToMutual', 'messagerie.getMessageMember', 'messagerie.sendMessageToMember', 'messagerie.detailMessage', 'messagerie.getMessageMutual'],
+        'icon' => 'icon ni ni-emails-fill',
+        'role'   => 'agent',
+        'childrens' => [
+            [
+                'name'  => 'Envoyer un message à la mutuelle',
+                'role'  => 'agent',
+                'route' => 'messagerie.sendMessageToMutual',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Historique de mes messages',
+                'role'  => 'agent',
+                'route' => 'messagerie.getMessageMember',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Envoyer un message à un membre',
+                'role'  => 'admin',
+                'route' => 'messagerie.sendMessageToMember',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Historique des messages de la mutuelle',
+                'role'  => 'admin',
+                'route' => 'messagerie.getMessageMutual',
+                'altRoute' => '',
+            ],
+        ],
+    ],
     'Catégorie' => [
         'name' => "Gestion des catégories",
         'route' => 'categories.index',
@@ -102,33 +135,7 @@ return [
             ],
         ],
     ],
-    // 'cantine' => [
-    //     'name' => "Gestion de la cantine",
-    //     'route' => 'membre.index',
-    //     'routes' => [],
-    //     'icon' => 'icon ni ni-bag-fill',
-    //     'role'   => 'admin',
-    //     'childrens' => [
-    //         [
-    //             'name'  => 'Liste des membres pour cotisation',
-    //             'role'  => 'admin',
-    //             'route' => 'membre.cotisation',
-    //             'altRoute' => '',
-    //         ],
-    //         [
-    //             'name'  => 'Historique mensuel',
-    //             'role'  => 'admin',
-    //             'route' => 'membre.historiquecotisationmensuel',
-    //             'altRoute' => '',
-    //         ],
-    //         [
-    //             'name'  => 'Historique annuel',
-    //             'role'  => 'admin',
-    //             'route' => 'membre.historiquecotisationannuel',
-    //             'altRoute' => '',
-    //         ],
-    //     ],
-    // ],
+
     'Emprunt' => [
         'name' => "Gestion des emprunts",
         'route' => 'emprunt.appelASouscription',
@@ -155,7 +162,7 @@ return [
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Liste des emprunts en cour d\'étude',
+                'name'  => 'Liste des emprunts en cours d\'étude',
                 'role'  => 'admin',
                 'route' => 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin',
                 'altRoute' => '',

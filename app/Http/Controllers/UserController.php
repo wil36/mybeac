@@ -50,11 +50,8 @@ class UserController extends Controller
             $attributeNames = array(
                 'email' => 'email',
                 'role' => 'role',
-                'tel' => 'numéro de téléphone',
                 'dateNaissance' => 'date de naissance',
-                'dateRecrutement' => 'date de recrutement',
                 'dateHadhésion' => 'date d\'hadésion',
-                'tel' => 'numéro de téléphone',
                 'status_matrimonial' => 'statut matrimonial',
                 'listCategorie' => 'Categorie',
             );
@@ -67,9 +64,6 @@ class UserController extends Controller
                 'nationalité' => ['required', 'string', 'max:255'],
                 'sexe' => ['required', 'string', 'max:10'],
                 'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->where(function ($query) use ($request) {
-                    $query->where('id', '!=', $request['id']);
-                })],
-                'tel' => ['required', 'string', 'max:25', Rule::unique('users', 'tel')->where(function ($query) use ($request) {
                     $query->where('id', '!=', $request['id']);
                 })],
                 'dateNaissance' => ['required', 'date', 'date_format:Y-m-d'],
@@ -91,7 +85,6 @@ class UserController extends Controller
             $user['nationalité'] = $request['nationalité'];
             $user['email'] = $request['email'];
             $user['sexe'] = $request['sexe'];
-            $user['tel'] = $request['tel'];
             $user['date_naissance'] = date("Y-m-d", strtotime($request['dateNaissance']));
             $user['status_matrimonial'] = $request['status_matrimonial'];
             $expath = $user['profile_photo_path'];
@@ -181,7 +174,7 @@ class UserController extends Controller
     public function getUser(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence,  us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -229,24 +222,9 @@ class UserController extends Controller
                 ->addColumn("agence", function ($data) {
                     return $data->agence;
                 })
-                // ->addColumn("email", function ($data) {
-                //     return $data->email;
-                // })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
-                })
                 ->addColumn("category", function ($data) {
                     return $data->libelle;
                 })
-                // ->addColumn("dateNais", function ($data) {
-                //     return $data->role;
-                // })
-                // ->addColumn("dateRecru", function ($data) {
-                //     return $data->role;
-                // })
-                // ->addColumn("dateHade", function ($data) {
-                //     return $data->role;
-                // }) 
                 ->editColumn("status", function ($data) {
                     if ($data->status) {
                         return ' <td class="nk-tb-col tb-col-md">
@@ -342,7 +320,7 @@ class UserController extends Controller
     public function getMembreDecedeAjax(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces = 1'));
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence,  us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces = 1'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -392,9 +370,6 @@ class UserController extends Controller
                 })
                 ->addColumn("agence", function ($data) {
                     return $data->agence;
-                })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
                 })
                 ->addColumn("sexe", function ($data) {
                     return $data->sexe;
@@ -443,7 +418,7 @@ class UserController extends Controller
     public function getMembreRetraiteAjax(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.retraite = 1'));
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence,  us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.retraite = 1'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -493,9 +468,6 @@ class UserController extends Controller
                 })
                 ->addColumn("agence", function ($data) {
                     return $data->agence;
-                })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
                 })
                 ->addColumn("sexe", function ($data) {
                     return $data->sexe;
@@ -544,7 +516,7 @@ class UserController extends Controller
     public function getMembreExclusAjax(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.exclut = 1'));
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.exclut = 1'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -595,9 +567,6 @@ class UserController extends Controller
                 ->addColumn("agence", function ($data) {
                     return $data->agence;
                 })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
-                })
                 ->addColumn("sexe", function ($data) {
                     return $data->sexe;
                 })
@@ -640,7 +609,7 @@ class UserController extends Controller
     {
         try {
             if ($request->id != null) {
-                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement', 'profile_photo_path')->where('id', $request->id)->first();
+                $membre = User::select('id', 'nom', 'prenom', 'matricule',  'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance',  'profile_photo_path')->where('id', $request->id)->first();
                 $totalcotisation = Cotisation::where('users_id', '=', $request->id)->sum('montant');
                 $totalprestation = Prestation::where('users_id', '=', $request->id)->sum('montant');
                 $poidMembre = $totalcotisation - $totalprestation;
@@ -710,11 +679,8 @@ class UserController extends Controller
             $attributeNames = array(
                 'email' => 'email',
                 'role' => 'role',
-                'tel' => 'numéro de téléphone',
                 'dateNaissance' => 'date de naissance',
-                'dateRecrutement' => 'date de recrutement',
                 'dateHadhésion' => 'date d\'hadésion',
-                'tel' => 'numéro de téléphone',
                 'listCategorie' => 'categorie',
                 'type_parent' => 'etat de vie des parents',
                 'status_matrimonial' => 'statut matrimonial'
@@ -727,9 +693,7 @@ class UserController extends Controller
                 'sexe' => ['required', 'string', 'max:10'],
                 'agence' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-                'tel' => ['required', 'string', 'max:25', 'unique:users,tel'],
                 'dateNaissance' => ['required', 'date', 'date_format:Y-m-d'],
-                'dateRecrutement' => ['required', 'date', 'date_format:Y-m-d'],
                 'dateHadhésion' => ['required', 'date', 'date_format:Y-m-d'],
                 'listCategorie' => ['required', 'integer'],
                 'role' => ['required', 'string'],
@@ -749,11 +713,9 @@ class UserController extends Controller
             $user['nationalité'] = $request['nationalité'];
             $user['agence'] = $request['agence'];
             $user['email'] = $request['email'];
-            $user['tel'] = $request['tel'];
             $user['sexe'] = $request['sexe'];
             $user['date_naissance'] = date("Y-m-d", strtotime($request['dateNaissance']));
-            $user['date_hadésion'] = date("Y-m-d", strtotime($request['dateRecrutement']));
-            $user['date_recrutement'] = date("Y-m-d", strtotime($request['dateHadhésion']));
+            $user['date_hadésion'] = date("Y-m-d", strtotime($request['dateHadhésion']));
             $user['role'] = $request['role'];
             $user['categories_id'] = $request['listCategorie'];
             $user['type_parent'] = $request['type_parent'];
@@ -816,11 +778,8 @@ class UserController extends Controller
             $attributeNames = array(
                 'email' => 'email',
                 'role' => 'role',
-                'tel' => 'numéro de téléphone',
                 'dateNaissance' => 'date de naissance',
-                'dateRecrutement' => 'date de recrutement',
                 'dateHadhésion' => 'date d\'hadésion',
-                'tel' => 'numéro de téléphone',
                 'status_matrimonial' => 'statut matrimonial',
                 'listCategorie' => 'Categorie',
             );
@@ -836,11 +795,7 @@ class UserController extends Controller
                 'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->where(function ($query) use ($request) {
                     $query->where('id', '!=', $request['id']);
                 })],
-                'tel' => ['required', 'string', 'max:25', Rule::unique('users', 'tel')->where(function ($query) use ($request) {
-                    $query->where('id', '!=', $request['id']);
-                })],
                 'dateNaissance' => ['required', 'date', 'date_format:Y-m-d'],
-                'dateRecrutement' => ['required', 'date', 'date_format:Y-m-d'],
                 'dateHadhésion' => ['required', 'date', 'date_format:Y-m-d'],
                 'listCategorie' => ['required', 'integer'],
                 'role' => ['required', 'string'],
@@ -865,10 +820,8 @@ class UserController extends Controller
             $user['agence'] = $request['agence'];
             $user['email'] = $request['email'];
             $user['sexe'] = $request['sexe'];
-            $user['tel'] = $request['tel'];
             $user['date_naissance'] = date("Y-m-d", strtotime($request['dateNaissance']));
-            $user['date_hadésion'] = date("Y-m-d", strtotime($request['dateRecrutement']));
-            $user['date_recrutement'] = date("Y-m-d", strtotime($request['dateHadhésion']));
+            $user['date_hadésion'] = date("Y-m-d", strtotime($request['dateHadhésion']));
             $user['role'] = $request['role'];
             $user['type_parent'] = $request['type_parent'];
             $user['status_matrimonial'] = $request['status_matrimonial'];
@@ -969,7 +922,7 @@ class UserController extends Controller
     public function impressionListMembre(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence,  us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
             return view('pages.impressions.liste_des_mebres', ['membres' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -979,7 +932,7 @@ class UserController extends Controller
     public function impressionListMembreDecede(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=1 and us.retraite=0 and us.exclut=0'));
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=1 and us.retraite=0 and us.exclut=0'));
             return view('pages.impressions.liste_des_membres_decedes', ['membres' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -989,7 +942,7 @@ class UserController extends Controller
     public function impressionListMembreExclut(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=1'));
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence,  us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=1'));
             return view('pages.impressions.liste_des_membres_excluts', ['membres' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -999,7 +952,7 @@ class UserController extends Controller
     public function impressionListMembreRetraite(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=1 and us.exclut=0'));
+            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=1 and us.exclut=0'));
             return view('pages.impressions.liste_des_membres_retraites', ['membres' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);

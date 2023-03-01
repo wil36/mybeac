@@ -45,8 +45,9 @@
 									<span class="sr-only">Loading...</span>
 								</div>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-4">
 								<a href="{{ route('dons.create') }}" class="btn btn-primary"><em class="icon ni ni-plus"></em></a>
+								<a class="btn btn-primary" href="{{ route('dons.impressionListDons') }}"><em class="icon ni ni-printer"></em></a>
 							</div>
 							<div class="card">
 								<div class="nk-block nk-block-lg">
@@ -66,8 +67,6 @@
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Sexe')</span>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Email')</span>
-															</th>
-															<th class="nk-tb-col"><span class="sub-text">@lang('Telephone')</span>
 															</th>
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span>
@@ -101,166 +100,161 @@
 	<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 
 	<script>
-	 $(document).on('click', '.delete-data-dons', function(e) {
-	  e.preventDefault();
-	  var id = $(this).attr('data_id');
-	  console.log(id);
-	  Swal.fire({
-	   title: 'Voulez-vous vraiment supprimer ce don ?',
-	   text: "Vous êtes en train de vouloir supprimer un don ! Assurez-vous que c'est bien le bon !",
-	   icon: 'warning',
-	   showCancelButton: true,
-	   confirmButtonText: 'Oui',
-	   cancelButtonText: 'Annuler',
-	  }).then((result) => {
-	   if (result.value) {
-	    $.ajax({
-	     headers: {
-	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	     },
-	     url: "{{ route('dons.delete') }}",
-	     type: "POST",
-	     dataType: 'json',
-	     data: {
-	      id: id,
-	     },
-	     success: function(data) {
-	      if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	       Swal.fire(
-	        'Effectuer !',
-	        data.success,
-	        'success'
-	       )
-	       window.setTimeout('location.reload()', 1500);
-	      } else {
-	       Swal.fire(
-	        'Erreur!',
-	        data.error,
-	        'error'
-	       )
-	      }
-	      $("html, body").animate({
-	       scrollTop: 0
-	      }, "slow");
-	     },
-	     error: function(data) {
-	      Swal.fire('Une erreur s\'est produite.',
-	       'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	       'error');
-	     }
-	    });
-	   }
-	  });
-	 });
+		$(document).on('click', '.delete-data-dons', function(e) {
+			e.preventDefault();
+			var id = $(this).attr('data_id');
+			console.log(id);
+			Swal.fire({
+				title: 'Voulez-vous vraiment supprimer ce don ?',
+				text: "Vous êtes en train de vouloir supprimer un don ! Assurez-vous que c'est bien le bon !",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Oui',
+				cancelButtonText: 'Annuler',
+			}).then((result) => {
+				if (result.value) {
+					$.ajax({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						url: "{{ route('dons.delete') }}",
+						type: "POST",
+						dataType: 'json',
+						data: {
+							id: id,
+						},
+						success: function(data) {
+							if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+								Swal.fire(
+									'Effectuer !',
+									data.success,
+									'success'
+								)
+								window.setTimeout('location.reload()', 1500);
+							} else {
+								Swal.fire(
+									'Erreur!',
+									data.error,
+									'error'
+								)
+							}
+							$("html, body").animate({
+								scrollTop: 0
+							}, "slow");
+						},
+						error: function(data) {
+							Swal.fire('Une erreur s\'est produite.',
+								'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+								'error');
+						}
+					});
+				}
+			});
+		});
 	</script>
 	<script>
-	 $(document).ready(function() {
-	  $('#donsList').DataTable({
-	   processing: true,
-	   serverSide: true,
-	   autoWidth: false,
-	   pageLength: 10,
-	   paginate: true,
-	   info: true,
-	   language: {
-	    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
-	    "sEmptyTable": "Aucune donnée disponible dans le tableau",
-	    "sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
-	    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-	    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-	    "sInfoPostFix": "",
-	    "sInfoThousands": ",",
-	    "sLengthMenu": "Afficher _MENU_ éléments",
-	    "sLoadingRecords": "Chargement...",
-	    "sProcessing": "Traitement...",
-	    "sSearch": "Rechercher :",
-	    "sZeroRecords": "Aucun élément correspondant trouvé",
-	    "oPaginate": {
-	     "sFirst": "Premier",
-	     "sLast": "Dernier",
-	     "sNext": "Suivant",
-	     "sPrevious": "Précédent"
-	    },
-	    "oAria": {
-	     "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-	     "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-	    },
-	    "select": {
-	     "rows": {
-	      "_": "%d lignes sélectionnées",
-	      "0": "Aucune ligne sélectionnée",
-	      "1": "1 ligne sélectionnée"
-	     }
-	    }
-	   },
-	   buttons: [
-	    'copy', 'excel', 'pdf'
-	   ],
-	   ajax: "{{ route('getDons') }}",
-	   order: [
-	    [0, "desc"]
-	   ],
-	   columns: [{
-	     "data": 'updated_at',
-	     "name": 'updated_at',
-	     "visible": false,
-	     "className": 'nk-tb-col nk-tb-col-check'
-	    },
-	    {
-	     "data": 'type',
-	     "name": 'type',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'nom',
-	     "name": 'nom',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'prenom',
-	     "name": 'prenom',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'sexe',
-	     "name": 'sexe',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'email',
-	     "name": 'email',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'tel',
-	     "name": 'tel',
-	     "className": 'nk-tb-col'
-	    },
-	    {
-	     "data": 'date',
-	     "name": 'date',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'montant',
-	     "name": 'montant',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'status',
-	     "name": 'status',
-	     "className": 'nk-tb-col'
-	    },
-	    {
-	     "data": 'Actions',
-	     "name": 'Actions',
-	     "orderable": false,
-	     "serachable": false,
-	     "className": 'nk-tb-col nk-tb-col-tools'
-	    },
-	   ]
-	  });
-	 });
-	 $(".loader").addClass("d-none");
+		$(document).ready(function() {
+			$('#donsList').DataTable({
+				processing: true,
+				serverSide: true,
+				autoWidth: false,
+				pageLength: 10,
+				paginate: true,
+				info: true,
+				language: {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+					"sEmptyTable": "Aucune donnée disponible dans le tableau",
+					"sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
+					"sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+					"sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+					"sInfoPostFix": "",
+					"sInfoThousands": ",",
+					"sLengthMenu": "Afficher _MENU_ éléments",
+					"sLoadingRecords": "Chargement...",
+					"sProcessing": "Traitement...",
+					"sSearch": "Rechercher :",
+					"sZeroRecords": "Aucun élément correspondant trouvé",
+					"oPaginate": {
+						"sFirst": "Premier",
+						"sLast": "Dernier",
+						"sNext": "Suivant",
+						"sPrevious": "Précédent"
+					},
+					"oAria": {
+						"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+						"sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+					},
+					"select": {
+						"rows": {
+							"_": "%d lignes sélectionnées",
+							"0": "Aucune ligne sélectionnée",
+							"1": "1 ligne sélectionnée"
+						}
+					}
+				},
+				buttons: [
+					'copy', 'excel', 'pdf'
+				],
+				ajax: "{{ route('getDons') }}",
+				order: [
+					[0, "desc"]
+				],
+				columns: [{
+						"data": 'updated_at',
+						"name": 'updated_at',
+						"visible": false,
+						"className": 'nk-tb-col nk-tb-col-check'
+					},
+					{
+						"data": 'type',
+						"name": 'type',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'nom',
+						"name": 'nom',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'prenom',
+						"name": 'prenom',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'sexe',
+						"name": 'sexe',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'email',
+						"name": 'email',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'date',
+						"name": 'date',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'montant',
+						"name": 'montant',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'status',
+						"name": 'status',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'Actions',
+						"name": 'Actions',
+						"orderable": false,
+						"serachable": false,
+						"className": 'nk-tb-col nk-tb-col-tools'
+					},
+				]
+			});
+		});
+		$(".loader").addClass("d-none");
 	</script>
 @endsection

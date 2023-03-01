@@ -84,7 +84,7 @@ class CotisationController extends Controller
             $month = Carbon::parse($request->date)->format('m');
             $year = Carbon::parse($request->date)->format('Y');
             // $data = User::with('category')->latest()->get();
-            $data = DB::select(DB::raw('select us.id, us.nom, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=false and us.retraite=false and us.exclut=false and us.id not in (select co.users_id from cotisations co where Month(co.date)=' . $month . ' and Year(co.date)=' . $year . ')'));
+            $data = DB::select(DB::raw('select us.id, us.nom, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=false and us.retraite=false and us.exclut=false and us.id not in (select co.users_id from cotisations co where Month(co.date)=' . $month . ' and Year(co.date)=' . $year . ')'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -123,9 +123,6 @@ class CotisationController extends Controller
                 })
                 ->addColumn("agence", function ($data) {
                     return $data->agence;
-                })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
                 })
                 ->addColumn("category", function ($data) {
                     return $data->libelle;
@@ -172,7 +169,7 @@ class CotisationController extends Controller
     {
         try {
             $tabDate = explode('-', $request->date);
-            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.tel, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca, cotisations co where ca.id=us.categories_id and us.id=co.users_id and Month(co.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(co.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca, cotisations co where ca.id=us.categories_id and us.id=co.users_id and Month(co.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(co.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -222,9 +219,6 @@ class CotisationController extends Controller
                 })
                 ->addColumn("agence", function ($data) {
                     return $data->agence;
-                })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
                 })
                 ->addColumn("sexe", function ($data) {
                     return $data->sexe;
@@ -478,6 +472,27 @@ class CotisationController extends Controller
         try {
             Cotisation::find($request->id)->delete();
             return response()->json(["success" => "Suppression éffectuer avec succès"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListDeHistoriqueCotisationsMenseulle(Request $request)
+    {
+        try {
+            $data =
+                DB::select(DB::raw("SELECT MONTH(co.date) AS mois, Year(co.date) AS annee, SUM(co.montant) AS montant, COUNT(co.users_id) AS nombre_user FROM cotisations co GROUP BY YEAR(co.date), MONTH(co.date) ORDER BY co.date desc"));
+            return view('pages.impressions.liste_des_historiques_cotisations_mensuelles', ['datas' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListDeHistoriqueCotisationsAnnuelle(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('SELECT Year(co.date) AS annee, SUM(co.montant) AS montant FROM cotisations co GROUP BY YEAR(co.date) ORDER BY YEAR(co.date) desc'));
+            return view('pages.impressions.liste_des_historiques_cotisations_annuelles', ['datas' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

@@ -92,11 +92,6 @@
 							</th>
 							<th class="nk-tb-col"><span class="sub-text">@lang('Agence')</span>
 							</th>
-							{{-- <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Email')</span>
-                                                            </th> --}}
-							<th class="nk-tb-col"><span class="sub-text">@lang('Telephone')</span>
-							</th>
 							<th class="nk-tb-col"><span class="sub-text">@lang('Categorie')</span>
 							</th>
 						</tr>
@@ -111,7 +106,6 @@
 								<td>{{ $membre->status_matrimonial }}</td>
 								<td>{{ $membre->nationalité }}</td>
 								<td>{{ $membre->agence }}</td>
-								<td>{{ $membre->tel }}</td>
 								<td>{{ $membre->libelle }}</td>
 							</tr>
 						@endforeach

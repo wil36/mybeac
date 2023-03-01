@@ -22,7 +22,7 @@ class AcceuilController extends Controller
     public function index()
     {
         $id = Auth::user()->id;
-        $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement', 'profile_photo_path')->where('id', $id)->first();
+        $membre = User::select('id', 'nom', 'prenom', 'matricule', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'profile_photo_path')->where('id', $id)->first();
         $totalcotisation = Cotisation::where('users_id', '=', $id)->sum('montant');
         $totalprestation = Prestation::where('users_id', '=', $id)->sum('montant');
         $totalcotisationglobal = Cotisation::sum('montant');
@@ -62,7 +62,7 @@ class AcceuilController extends Controller
     {
         try {
             if ($request->id != null) {
-                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'date_recrutement', 'profile_photo_path')->where('id', $request->id)->first();
+                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'categories_id', 'date_naissance', 'profile_photo_path')->where('id', $request->id)->first();
                 $totalcotisation = Cotisation::where('users_id', '=', $request->id)->sum('montant');
                 $totalprestation = Prestation::where('users_id', '=', $request->id)->sum('montant');
                 $poidMembre = $totalcotisation - $totalprestation;

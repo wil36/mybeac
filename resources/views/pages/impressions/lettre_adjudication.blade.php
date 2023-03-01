@@ -100,7 +100,9 @@
 				{{ Carbon\Carbon::parse($emprunt->date_de_fin)->format('d/m/Y') }}. <br><br>
 				<span style="margin-left: 50px;">Par</span> ailleurs, nous vous informons qu'il vous sera servi des comissions
 				nettes
-				précomptées d'un montant de ...................... <b>FCFA</b>, déduction faite du fonds solidarité MABEAC.
+				précomptées d'un montant de <b>{{ number_format($emprunt->montant_commission, 0, '.', ' ') }} FCFA</b>,
+				déduction
+				faite du fonds solidarité MABEAC.
 				<br><br>
 				<span style="margin-left: 50px;">Veuillez</span> agréer Monsieur (ou Madame) nos salutations cordiales.
 				<br><br><br><br>

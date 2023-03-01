@@ -101,12 +101,6 @@
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
-																<x-input name='tel' :value="isset($don) && $don->type == 'externe' ? $don->tel : ''" input='tel' :required="true" title="Numéro de Téléphone *">
-																</x-input>
-															</div>
-														</div>
-														<div class="col-md-6">
-															<div class="form-group">
 																<x-input name='sexe' :value="isset($don) && $don->type == 'externe'
 																    ? ($don->sexe == 'Masculin'
 																        ? 'Masculin'
@@ -151,161 +145,158 @@
 
 @section('script')
 	<script>
-	 $(document).ready(function() {
-	  @if (Route::currentRouteName() === 'dons.edit' && isset($don) && $don->type == 'externe')
-	   $("#membre_externe").prop("checked", true);
-	   $('#interne').attr('hidden', true);
-	   $('#externe').attr('hidden', false);
-	  @endif
-	 });
-	 $('#membre_interne').change(function() {
-	  $('#interne').attr('hidden', false);
-	  $('#externe').attr('hidden', true);
-	  clearFormUser();
-	 });
-	 $('#membre_externe').change(function() {
-	  $('#interne').attr('hidden', true);
-	  $('#externe').attr('hidden', false);
-	  clearFormUser();
-	 });
+		$(document).ready(function() {
+			@if (Route::currentRouteName() === 'dons.edit' && isset($don) && $don->type == 'externe')
+				$("#membre_externe").prop("checked", true);
+				$('#interne').attr('hidden', true);
+				$('#externe').attr('hidden', false);
+			@endif
+		});
+		$('#membre_interne').change(function() {
+			$('#interne').attr('hidden', false);
+			$('#externe').attr('hidden', true);
+			clearFormUser();
+		});
+		$('#membre_externe').change(function() {
+			$('#interne').attr('hidden', true);
+			$('#externe').attr('hidden', false);
+			clearFormUser();
+		});
 
 
-	 $('.btn-submit-user').click(function(e) {
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  $('.btn-submit-user').attr('disabled', true);
-	  e.preventDefault();
-	  let choix = $('#membre_interne').is(':checked') ? $("#membre_interne").val() : $("#membre_externe")
-	   .val();
-	  let nom = $("#nom").val();
-	  let prenom = $("#prenom").val();
-	  let email = $("#email").val();
-	  let tel = $("#tel").val();
-	  let montant1 = $("#montant1").val();
-	  let montant2 = $("#montant2").val();
-	  let id_membre = $("#listMembre").val();
-	  let sexe = $("#sexe").val();
+		$('.btn-submit-user').click(function(e) {
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			$('.btn-submit-user').attr('disabled', true);
+			e.preventDefault();
+			let choix = $('#membre_interne').is(':checked') ? $("#membre_interne").val() : $("#membre_externe")
+				.val();
+			let nom = $("#nom").val();
+			let prenom = $("#prenom").val();
+			let email = $("#email").val();
+			let montant1 = $("#montant1").val();
+			let montant2 = $("#montant2").val();
+			let id_membre = $("#listMembre").val();
+			let sexe = $("#sexe").val();
 
-	  var formData = new FormData();
-	  formData.append('choix', choix);
-	  formData.append('nom', nom);
-	  formData.append(
-	   'prenom', prenom);
-	  formData.append('email', email);
-	  formData.append('tel', tel);
-	  formData.append('montant1',
-	   montant1);
-	  formData.append('montant2', montant2);
-	  formData.append('id_membre', id_membre);
-	  formData.append('sexe',
-	   sexe);
-	  $.ajax({
-	   headers: {
-	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-	   },
-	   url: "" + $('#formUser').attr('action'),
-	   type: "" + $('#formUser').attr('method'),
-	   dataType: 'json',
-	   data: formData,
-	   contentType: false,
-	   processData: false,
-	   success: function(data) {
-	    if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	     console.log(data);
-	     //success
-	     Swal.fire(data.success,
-	      'Votre requête s\'est terminer avec succèss', 'success', );
-	     clearFormUser();
-	    } else {
-	     $('.btn-submit-user').attr('disabled', false);
-	     if (!$.isEmptyObject(data.error)) {
-	      $('#alert-javascript').removeClass('d-none');
-	      $('#alert-javascript').text(data.error);
-	     } else {
-	      if (!$.isEmptyObject(data.errors)) {
-	       var error = "";
-	       data.errors.forEach(element => {
-	        error = error + element + "<br>";
-	       });
-	       $('#alert-javascript').removeClass('d-none');
-	       $('#alert-javascript').append(error);
-	      }
-	     }
-	    }
-	    $("html, body").animate({
-	     scrollTop: 0
-	    }, "slow");
-	   },
-	   error: function(data) {
-	    Swal.fire('Une erreur s\'est produite.',
-	     'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	     'error');
+			var formData = new FormData();
+			formData.append('choix', choix);
+			formData.append('nom', nom);
+			formData.append(
+				'prenom', prenom);
+			formData.append('email', email);
+			formData.append('montant1',
+				montant1);
+			formData.append('montant2', montant2);
+			formData.append('id_membre', id_membre);
+			formData.append('sexe',
+				sexe);
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+				},
+				url: "" + $('#formUser').attr('action'),
+				type: "" + $('#formUser').attr('method'),
+				dataType: 'json',
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function(data) {
+					if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+						console.log(data);
+						//success
+						Swal.fire(data.success,
+							'Votre requête s\'est terminer avec succèss', 'success', );
+						clearFormUser();
+					} else {
+						$('.btn-submit-user').attr('disabled', false);
+						if (!$.isEmptyObject(data.error)) {
+							$('#alert-javascript').removeClass('d-none');
+							$('#alert-javascript').text(data.error);
+						} else {
+							if (!$.isEmptyObject(data.errors)) {
+								var error = "";
+								data.errors.forEach(element => {
+									error = error + element + "<br>";
+								});
+								$('#alert-javascript').removeClass('d-none');
+								$('#alert-javascript').append(error);
+							}
+						}
+					}
+					$("html, body").animate({
+						scrollTop: 0
+					}, "slow");
+				},
+				error: function(data) {
+					Swal.fire('Une erreur s\'est produite.',
+						'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+						'error');
 
-	   }
-	  });
+				}
+			});
 
-	 });
-	 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-	 $(document).ready(function() {
-	  loadMembre();
-	 });
+		});
+		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+		$(document).ready(function() {
+			loadMembre();
+		});
 
-	 function loadMembre() {
+		function loadMembre() {
 
-	  $("#listMembre").select2({
-	   language: "fr",
-	   ajax: {
-	    url: "{{ route('getuserAjaxCombobox') }}",
-	    type: 'post',
-	    dataType: 'json',
-	    delay: 250,
-	    data: function(params) {
-	     return {
-	      _token: CSRF_TOKEN,
-	      search: params.term // search term
-	     };
-	    },
-	    processResults: function(data) {
-	     return {
-	      results: data
-	     };
-	    },
-	    cache: true,
-	   }
-	  });
-	 }
+			$("#listMembre").select2({
+				language: "fr",
+				ajax: {
+					url: "{{ route('getuserAjaxCombobox') }}",
+					type: 'post',
+					dataType: 'json',
+					delay: 250,
+					data: function(params) {
+						return {
+							_token: CSRF_TOKEN,
+							search: params.term // search term
+						};
+					},
+					processResults: function(data) {
+						return {
+							results: data
+						};
+					},
+					cache: true,
+				}
+			});
+		}
 
-	 $(function() {
-	  $('#pictureupload').change(function(event) {
-	   var x = URL.createObjectURL(event.target.files[0]);
-	   $('#show_img').attr('src', x);
-	   $('#show_img').attr('height', 150);
-	   $('#show_img').attr('width', 150);
-	  });
-	 });
+		$(function() {
+			$('#pictureupload').change(function(event) {
+				var x = URL.createObjectURL(event.target.files[0]);
+				$('#show_img').attr('src', x);
+				$('#show_img').attr('height', 150);
+				$('#show_img').attr('width', 150);
+			});
+		});
 
-	 function clearFormUser() {
-	  @if (Route::currentRouteName() === 'dons.edit')
-	   history.pushState({}, null, "{{ route('dons.index') }}");
-	   window.setTimeout('location.reload()', 1600);
-	  @endif
-	  $('#formUser').attr('action', "{{ route('dons.store') }}");
-	  $('#formUser').attr('method', "POST");
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  $("#montant1").val('');
-	  $("#montant2").val('');
-	  $("#nom").val('');
-	  $("#prenom").val('');
-	  $("#email").val('');
-	  $("#tel").val('');
-	  $("#sexe").text('');
-	  $("#sexe").append(
-	   '<option value=""></option><option value="Masculin">Masculin</option><option value="Feminin">Feminin</option>'
-	  );
-	  $("#listMembre").empty();
-	  loadMembre();
-	  $('.btn-submit-user').attr('disabled', false);
-	 }
+		function clearFormUser() {
+			@if (Route::currentRouteName() === 'dons.edit')
+				history.pushState({}, null, "{{ route('dons.index') }}");
+				window.setTimeout('location.reload()', 1600);
+			@endif
+			$('#formUser').attr('action', "{{ route('dons.store') }}");
+			$('#formUser').attr('method', "POST");
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			$("#montant1").val('');
+			$("#montant2").val('');
+			$("#nom").val('');
+			$("#prenom").val('');
+			$("#email").val('');
+			$("#sexe").text('');
+			$("#sexe").append(
+				'<option value=""></option><option value="Masculin">Masculin</option><option value="Feminin">Feminin</option>'
+			);
+			$("#listMembre").empty();
+			loadMembre();
+			$('.btn-submit-user').attr('disabled', false);
+		}
 	</script>
 @endsection

@@ -222,4 +222,14 @@ class TypePrestationController extends Controller
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
+
+    public function impressionListTypePrestation(Request $request)
+    {
+        try {
+            $data = TypePrestation::latest()->get();
+            return view('pages.impressions.liste_type_prestations', ['datas' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
 }

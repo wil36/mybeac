@@ -93,13 +93,6 @@
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
-														<x-input name='tel' :disabled=true :value="isset($user) ? $user->tel : ''" input='tel' :required="true"
-															title="Numéro de Téléphone *">
-														</x-input>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
 														<x-input name='dateNaissance' :value="isset($user) ? date('Y-m-d', strtotime($user->date_naissance)) : ''" input='date' :required="true"
 															title="Date de Naissance *">
 														</x-input>
@@ -116,7 +109,7 @@
 														</x-input>
 													</div>
 												</div>
-												<div class="col-md-12">
+												<div class="col-md-6">
 													<div class="form-group">
 														<x-input name='status_matrimonial' :value="isset($user) ? $user->status_matrimonial : ''" input='select' :options="[
 														    ['name' => '', 'value' => ''],
@@ -165,9 +158,7 @@
 			let nationalité = $("#nationalité").val();
 			let agence = $("#agence").val();
 			let email = $("#email").val();
-			let tel = $("#tel").val();
 			let dateNaissance = $("#dateNaissance").val();
-			let dateRecrutement = $("#dateRecrutement").val();
 			let dateHadhésion = $("#dateHadhésion").val();
 			let categorie = $("#categorie").val();
 			let listCategorie = $("#listCategorie").val();
@@ -183,7 +174,6 @@
 			formData.append('prenom', prenom);
 			formData.append('nationalité', nationalité);
 			formData.append('email', email);
-			formData.append('tel', tel);
 			formData.append('dateNaissance', dateNaissance);
 			formData.append('sexe', sexe);
 			formData.append('picture', picture);
@@ -195,23 +185,6 @@
 				url: "" + $('#formUser').attr('action'),
 				type: "" + $('#formUser').attr('method'),
 				dataType: 'json',
-				// data: {
-				//     matricule: matricule,
-				//     nom: nom,
-				//     prenom: prenom,
-				//     nationalité: nationalité,
-				//     agence: agence,
-				//     email: email,
-				//     tel: tel,
-				//     dateNaissance: dateNaissance,
-				//     dateRecrutement: dateRecrutement,
-				//     dateHadhésion: dateHadhésion,
-				//     categorie: categorie,
-				//     role: role,
-				//     sexe: sexe,
-				//     listCategorie: listCategorie,
-				//     picture: picture == null ? null : picture,
-				// },
 				data: formData,
 				contentType: false,
 				processData: false,

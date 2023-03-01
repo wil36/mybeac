@@ -19,6 +19,7 @@ class CreateNotificationsTable extends Migration
             $table->string('route_name');
             $table->dateTime('date')->nullable();
             $table->string('etat');
+            $table->bigInteger('destinataire')->nullable()->comment('null pour les messages adressés à la mutuelle et l id du membre pour les messages à destination des membres');
             $table->timestamps();
         });
     }

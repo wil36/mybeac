@@ -66,10 +66,7 @@
 												<div class="col-md-12">
 													<h5>Sexe : {{ $membre->sexe }}</h5>
 												</div>
-												<div style="margin-bottom: 40px"></div>
-												<div class="col-md-12">
-													<h5>Téléphone : <a href="tel:{{ $membre->tel }}">{{ $membre->tel }}</a></h5>
-												</div>
+
 												<div style="margin-bottom: 40px"></div>
 												<div class="col-md-12">
 													<h5>Email : <a href="mailto:{{ $membre->email }}">{{ $membre->email }}</a>
@@ -164,152 +161,152 @@
 
 @section('script')
 	<script>
-	 $('.btn-submit-prestation').click(function(e) {
-	  e.preventDefault();
-	  $('.btn-submit-prestation').attr('disabled', true);
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  var typePrestation = $("#typePrestation").val();
-	  var montant = $("#montant").val();
-	  var id = $("#id").val();
-	  var date = $("#date").val();
-	  var listAyantDroit = $("#listAyantDroit").val();
+		$('.btn-submit-prestation').click(function(e) {
+			e.preventDefault();
+			$('.btn-submit-prestation').attr('disabled', true);
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			var typePrestation = $("#typePrestation").val();
+			var montant = $("#montant").val();
+			var id = $("#id").val();
+			var date = $("#date").val();
+			var listAyantDroit = $("#listAyantDroit").val();
 
-	  // history.pushState({}, null, "{{ route('membre.index') }}");
-	  // window.setTimeout('location.reload()', 1000);
-	  $.ajax({
-	   headers: {
-	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	   },
-	   url: "" + $('#formPrestation').attr('action'),
-	   type: "" + $('#formPrestation').attr('method'),
-	   dataType: 'json',
-	   data: {
-	    typePrestation: typePrestation,
-	    montant: montant,
-	    date: date,
-	    listAyantDroit: listAyantDroit,
-	    id: id,
-	   },
-	   success: function(data) {
-	    if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	     //success
-	     Swal.fire(data.success,
-	      'Votre requête s\'est terminer avec succèss', 'success', );
-	     clearformPrestation();
-	     window.setTimeout(' history.back();', 1500);
-	     // history.pushState({}, null, "{{ route('membre.index') }}");
-	     // window.setTimeout('location.reload()', 1500);
-	    } else {
-	     if (!$.isEmptyObject(data.error)) {
-	      $('#alert-javascript').removeClass('d-none');
-	      $('#alert-javascript').text(data.error);
-	     } else {
-	      if (!$.isEmptyObject(data.errors)) {
-	       var error = "";
-	       data.errors.forEach(element => {
-	        error = error + element + "<br>";
-	       });
-	       $('#alert-javascript').removeClass('d-none');
-	       $('#alert-javascript').append(error);
-	      }
-	     }
-	     $('.btn-submit-prestation').attr('disabled', false);
+			// history.pushState({}, null, "{{ route('membre.index') }}");
+			// window.setTimeout('location.reload()', 1000);
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url: "" + $('#formPrestation').attr('action'),
+				type: "" + $('#formPrestation').attr('method'),
+				dataType: 'json',
+				data: {
+					typePrestation: typePrestation,
+					montant: montant,
+					date: date,
+					listAyantDroit: listAyantDroit,
+					id: id,
+				},
+				success: function(data) {
+					if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+						//success
+						Swal.fire(data.success,
+							'Votre requête s\'est terminer avec succèss', 'success', );
+						clearformPrestation();
+						window.setTimeout(' history.back();', 1500);
+						// history.pushState({}, null, "{{ route('membre.index') }}");
+						// window.setTimeout('location.reload()', 1500);
+					} else {
+						if (!$.isEmptyObject(data.error)) {
+							$('#alert-javascript').removeClass('d-none');
+							$('#alert-javascript').text(data.error);
+						} else {
+							if (!$.isEmptyObject(data.errors)) {
+								var error = "";
+								data.errors.forEach(element => {
+									error = error + element + "<br>";
+								});
+								$('#alert-javascript').removeClass('d-none');
+								$('#alert-javascript').append(error);
+							}
+						}
+						$('.btn-submit-prestation').attr('disabled', false);
 
-	    }
-	    $("html, body").animate({
-	     scrollTop: 0
-	    }, "slow");
-	   },
-	   error: function(data) {
-	    Swal.fire('Une erreur s\'est produite.',
-	     'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	     'error');
+					}
+					$("html, body").animate({
+						scrollTop: 0
+					}, "slow");
+				},
+				error: function(data) {
+					Swal.fire('Une erreur s\'est produite.',
+						'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+						'error');
 
-	   }
-	  });
+				}
+			});
 
-	 });
+		});
 
-	 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-	 $(document).ready(function() {
-	  loadprestation();
-	  loadAyantDroit();
-	 });
-	 $("#typePrestation").on("select2:select", function(e) {
-	  var select_val = $(e.currentTarget).val();
-	  var montant = select_val.split('|');
-	  $('#montant').val(montant[1]);
-	 });
+		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+		$(document).ready(function() {
+			loadprestation();
+			loadAyantDroit();
+		});
+		$("#typePrestation").on("select2:select", function(e) {
+			var select_val = $(e.currentTarget).val();
+			var montant = select_val.split('|');
+			$('#montant').val(montant[1]);
+		});
 
-	 function loadprestation() {
+		function loadprestation() {
 
-	  $("#typePrestation").select2({
-	   language: "fr",
-	   ajax: {
-	    url: "{{ route('getTypePrestations') }}",
-	    type: 'post',
-	    dataType: 'json',
-	    delay: 250,
-	    data: function(params) {
-	     return {
-	      _token: CSRF_TOKEN,
-	      search: params.term // search term
-	     };
-	    },
-	    processResults: function(data) {
-	     return {
-	      results: data
-	     };
-	    },
-	    cache: true,
-	   }
-	  });
-	 }
+			$("#typePrestation").select2({
+				language: "fr",
+				ajax: {
+					url: "{{ route('getTypePrestations') }}",
+					type: 'post',
+					dataType: 'json',
+					delay: 250,
+					data: function(params) {
+						return {
+							_token: CSRF_TOKEN,
+							search: params.term // search term
+						};
+					},
+					processResults: function(data) {
+						return {
+							results: data
+						};
+					},
+					cache: true,
+				}
+			});
+		}
 
-	 function loadAyantDroit() {
+		function loadAyantDroit() {
 
-	  $("#listAyantDroit").select2({
-	   language: "fr",
-	   ajax: {
-	    url: "{{ route('getAyantsDroit', $membre->id) }}",
-	    type: 'post',
-	    dataType: 'json',
-	    delay: 250,
-	    data: function(params) {
-	     return {
-	      _token: CSRF_TOKEN,
-	      search: params.term // search term
-	     };
-	    },
-	    processResults: function(data) {
-	     return {
-	      results: data
-	     };
-	    },
-	    cache: true,
-	   }
-	  });
-	 }
+			$("#listAyantDroit").select2({
+				language: "fr",
+				ajax: {
+					url: "{{ route('getAyantsDroit', $membre->id) }}",
+					type: 'post',
+					dataType: 'json',
+					delay: 250,
+					data: function(params) {
+						return {
+							_token: CSRF_TOKEN,
+							search: params.term // search term
+						};
+					},
+					processResults: function(data) {
+						return {
+							results: data
+						};
+					},
+					cache: true,
+				}
+			});
+		}
 
-	 function clearformPrestation() {
-	  // $('#formPrestation').attr('action', "{{ route('prestation.store') }}");
-	  $('#formPrestation').attr('method', "POST");
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  $("#date").val("{{ Carbon\Carbon::now()->format('Y-m-d') }}");
-	  $("#typePrestation").focus();
-	  $("#montant").val('');
-	  $("#typePrestation").empty();
-	  $("#listAyantDroit").empty();
-	  loadprestation();
-	  loadAyantDroit();
-	@if (Route::currentRouteName() === 'prestation.edit')
-		// history.pushState({}, null, "{{ route('membre.index') }}");
-		window.setTimeout('window.history.back()', 1500);
-	@endif
-	  $('.btn-submit-prestation').attr('disabled', false);
+		function clearformPrestation() {
+			// $('#formPrestation').attr('action', "{{ route('prestation.store') }}");
+			$('#formPrestation').attr('method', "POST");
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			$("#date").val("{{ Carbon\Carbon::now()->format('Y-m-d') }}");
+			$("#typePrestation").focus();
+			$("#montant").val('');
+			$("#typePrestation").empty();
+			$("#listAyantDroit").empty();
+			loadprestation();
+			loadAyantDroit();
+			@if (Route::currentRouteName() === 'prestation.edit')
+				// history.pushState({}, null, "{{ route('membre.index') }}");
+				window.setTimeout('window.history.back()', 1500);
+			@endif
+			$('.btn-submit-prestation').attr('disabled', false);
 
-	 }
+		}
 	</script>
 @endsection

@@ -86,12 +86,12 @@ class PrestationController extends Controller
                     <span>PRE</span>
                 </div>
                 <div class='user-info'>
-                    <span class='tb-lead'>" . $data->dates . "</span>
+                    <span class='tb-lead'>" . Carbon::parse($data->dates)->format('d M Y') . "</span>
                 </div>
             </div>";
                 })
                 ->addColumn("montant", function ($data) {
-                    return $data->montant . ' FCFA';
+                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
                 })
                 ->addColumn("membre", function ($data) {
                     return $data->nom . ' ' . $data->prenom;
@@ -399,7 +399,7 @@ class PrestationController extends Controller
     {
         try {
             if ($request->id != null) {
-                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'profile_photo_path')->where('id', $request->id)->first();
+                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe', 'profile_photo_path')->where('id', $request->id)->first();
                 if ($membre == null) {
                     abort(404);
                 }
@@ -498,7 +498,7 @@ class PrestationController extends Controller
                 $prestation = Prestation::find($id);
                 $type_prestation = TypePrestation::find($prestation->type_prestation_id);
                 $ayant_droits = AyantDroit::find($prestation->ayant_droits_id);
-                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'tel', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $prestation->users_id)->first();
+                $membre = User::select('id', 'nom', 'prenom', 'matricule', 'email', 'date_hadésion', 'nationalité', 'agence', 'sexe')->where('id', $prestation->users_id)->first();
                 // dd($membre);
                 if ($membre == null) {
                     abort(404);
@@ -575,6 +575,36 @@ class PrestationController extends Controller
             $prestation->delete();
             DB::commit();
             return response()->json(["success" => "Suppression éffectuer avec succès"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListPrestation(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, us.nom, us.prenom, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id'));
+            return view('pages.impressions.liste_prestations', ['datas' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListHistoriqueMensuelPrestation(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.users_id) AS nombre_user FROM Prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
+            return view('pages.impressions.liste_des_historiques_prestation_mensuelles', ['datas' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListHistoriqueAnnuelPrestation(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('SELECT Year(po.date) AS annee, SUM(po.montant) AS montant FROM Prestations po GROUP BY YEAR(po.date) ORDER BY YEAR(po.date) desc'));
+            return view('pages.impressions.liste_des_historiques_prestations_annuelles', ['datas' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

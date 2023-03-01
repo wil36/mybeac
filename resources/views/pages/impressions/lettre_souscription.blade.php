@@ -55,31 +55,49 @@
 	<button id="btn" class="btn btn-primary" style="width: 100%; height: 30px; font-size: 20px">Imprimer ou
 		Télécharger</button>
 	<div id="content">
-		<div class="expe">
-			<img src="{{ asset('images/logo.png') }}" alt="" />
-			<img src="{{ asset('images/logo.png') }}" alt="" style="float: right" />
+		<div class="expe"><br><br>
+			<div>
+				<span>{{ Str::upper($emprunt->membre->nom) . ' ' . $emprunt->membre->prenom }}
+					<div style="float: right">
+						{{ $emprunt->membre->agence }} le {{ Carbon\Carbon::now()->format('d-m-Y') }}
+					</div>
+				</span><br><br>
+				<span>{{ $emprunt->membre->email }}</span><br><br>
+
+			</div>
 		</div>
+		<br><br>
 		<div class="obj">
-			<h1 style="text-align: center;"><b>Lettre de souscription</b></h1>
-			<br />
-			<p style="float: right; margin-right: 7%">
-				<b>Destinataire</b> <br /><br />
-				Monsieur le président de MABEAC
+			<p style="float: right; margin-right: 7%; text-align: center">
+				A <br><br> Monsieur le président de MABEAC-CAMEROUN
 			</p>
 		</div>
-		<br /><br /><br /><br /><br /><br />
-		<div class="title-1" style="font-size: 20px">
+		<br /><br /><br /><br /><br /><br /><br><br><br><br>
+		<div class="title-1">
 			<p>
-				<b>Objet</b> : Avis d'Apppel à souscription n°
-				{{ str_pad($emprunt->id, 2, '0', STR_PAD_LEFT) . '/' . Carbon\Carbon::parse($emprunt->date)->format('Y') }}
-				du {{ Carbon\Carbon::parse($emprunt->date)->format('d/m/y') }}
+				<b>Objet</b> : Demande de prêt
 			</p>
 		</div>
 		<br />
 
 		<div class="title-2" style=" text-align: justify;">
 			<p>
-				Je soussigné, {{ Str::upper($emprunt->membre->nom) . ' ' . $emprunt->membre->prenom }}
+				Monsieur, <br><br><br>
+				Afin de pouvoir réaliser un projet qui me tient à cœur, je me permets de solliciter les
+				services <b>MABEAC-CAMEROUN</b> pour un prêt d’un montant
+				de <b> {{ number_format($emprunt->montant, 0, '.', ' ') }} [{{ $f->format((int) $emprunt->montant) }}] FCFA</b>.
+				Je souhaiterais en effet (préciser le projet : <b>{{ $emprunt->objet }}</b>), et mes
+				ressources actuelles ne me permettent pas de le réaliser sans un appui financier
+				complémentaire. <br><br>
+				Vous trouverez ci-joint les pièces justificatives nécessaires à mon dossier : (Préciser les
+				pièces : <b>avis d’imposition, bulletins de salaire, devis de travaux, proposition de
+					vente, contrat de travail, etc.</b>) <br><br>
+				Je me tiens à votre disposition pour fixer un rendez-vous à l’horaire qui vous conviendra. <br><br>
+				En vous remerciant par avance de l’attention que vous porterez à ma demande, je vous
+				prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées. <br><br><br><br>
+
+
+				{{-- <br><br><br> Je soussigné, {{ Str::upper($emprunt->membre->nom) . ' ' . $emprunt->membre->prenom }}
 				<br /><br>
 				Après avoir pris connaissance des information contenues dans l'avis
 				d'appel à souscription y compris les addictifs <br /><br>
@@ -90,11 +108,9 @@
 					CFA</b> <br><br>
 				<span>-</span> M'engage à déposer ces fonds dans un delai de <b>6 mois</b>, après
 				la publication des adjudications ; <br><br>
-				La présente souscription acceptée par moi vaut engagement entre nous. <br><br><br><br><br>
+				La présente souscription acceptée par moi vaut engagement entre nous. <br><br><br><br><br> --}}
 
-				<i>Fait à Bafoussamn le</i> {{ Carbon\Carbon::now()->format('d-m-Y') }} <br><br><br>
-				[ <i>Nom et Signature du souscripteur</i> ]
-				........................................................................................................
+				<i style="float: right; margin-right: 10%; text-align: left">Signature</i>
 			</p>
 		</div>
 </body>

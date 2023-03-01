@@ -213,4 +213,14 @@ class CategoryController extends Controller
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
+
+    public function impressionListCategorie(Request $request)
+    {
+        try {
+            $data = Category::latest()->get();
+            return view('pages.impressions.liste_categorie', ['datas' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
 }

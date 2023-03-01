@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController, DonsController, EmpruntController, NotificationController};
+use App\Http\Controllers\{AcceuilController, AyantDroitController, CategoryController, CotisationController, PrestationController, TypePrestationController, UserController, CaisseController, DonsController, EmpruntController, MessagerieController, NotificationController};
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,14 +49,29 @@ Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
         Route::get('/telecharger-lettre-engagement/{id}', [EmpruntController::class, 'downloadLettreEngagement'])->name('emprunt.download-lettre-engagement');
         Route::get('/telecharger-ordre_paiement/{id}', [EmpruntController::class, 'downloadOrdrePaiement'])->name('emprunt.download-ordre_paiement');
         Route::post('/uploader-lettre-souscription', [EmpruntController::class, 'uploadLettreDeSouscripption'])->name('emprunt.uploader-lettre-souscription');
+        Route::get('emprunts/impression-liste-de-mes-emprunts', [EmpruntController::class, 'impressionListDeMesEmprunts'])->name('emprunt.impressionListDeMesEmprunts');
 
         //Notification
         Route::get('/tout-marquer-comme-lu', [NotificationController::class, 'readAll'])->name('notification.read-all');
+
+        //messagerie du membre
+        Route::get('messagerie/detail-message/{id}', [MessagerieController::class, 'detailMessageMembre'])->name('messagerie.detailMessage');
+        Route::get('messagerie/detail-message/download-file/{name}', [MessagerieController::class, 'downloadFile'])->name('messagerie.downloadFile');
+        Route::get('messagerie/envoyer-un-message-a-la-mutuelle', [MessagerieController::class, 'sendMessageToMutual'])->name('messagerie.sendMessageToMutual');
+        Route::post('messagerie/envoie-message-a-la-mutuelle-post', [MessagerieController::class, 'SendMessageToMutualPost'])->name('messagerie.SendMessageToMutualPost');
+        Route::get('messagerie/liste-des-messgaes-du-membre', [MessagerieController::class, 'getMessageMember'])->name('messagerie.getMessageMember');
+        Route::get('messagerie/liste-des-messgaes-du-membre-ajax', [MessagerieController::class, 'getMessageMemberAjax'])->name('messagerie.getMessageMemberAjax');
     }
 );
 
 Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration')->group(function () {
 
+    //messagerie du membre
+    Route::get('messagerie/envoyer-un-message-au-membre', [MessagerieController::class, 'sendMessageToMember'])->name('messagerie.sendMessageToMember');
+    Route::post('messagerie/envoie-message-au-membre-post', [MessagerieController::class, 'SendMessageToMemberPost'])->name('messagerie.SendMessageToMemberPost');
+    Route::get('messagerie/liste-des-messgaes-de-la-mutuelle', [MessagerieController::class, 'getMessageMutual'])->name('messagerie.getMessageMutual');
+    Route::get('messagerie/liste-des-messgaes-de-la-mutuelle-ajax', [MessagerieController::class, 'getMessageMutualAjax'])->name('messagerie.getMessageMutualAjax');
+    Route::get('messagerie/detail-message/{id}', [MessagerieController::class, 'detailMessageMutual'])->name('messagerie.detailMessageMutual');
 
     //Route for emprunt
     Route::get('/liste-des-emprunts-a-valider', [EmpruntController::class, 'getViewListEmpruntWhoWatingTheValidationByAdmin'])->name('emprunt.viewListEmpruntWhoWatingTheValidationByAdmin');
@@ -78,6 +92,15 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('/historique-emprunt-BBL-ajax', [EmpruntController::class, 'getHistoriqueBBLEmprunt'])->name('emprunt.getHistoriqueBBLEmpruntAjax');
     Route::get('/historique-emprunt-ASS-ajax', [EmpruntController::class, 'getHistoriqueASSEmprunt'])->name('emprunt.getHistoriqueASSEmpruntAjax');
     Route::get('/historique-emprunt-ASG-ajax', [EmpruntController::class, 'getHistoriqueASGEmprunt'])->name('emprunt.getHistoriqueASGEmpruntAjax');
+    Route::get('emprunts/impression-liste-des-emprunts-en-cour-etude', [EmpruntController::class, 'impressionListDesEmpruntsEnCourEtude'])->name('emprunt.impressionListDesEmpruntsEnCourEtude');
+    Route::get('emprunts/impression-liste-des-emprunts-valider_par_la_mutuelle', [EmpruntController::class, 'impressionListDesEmpruntsValiderParLaMutuelle'])->name('emprunt.impressionListDesEmpruntsValiderParLaMutuelle');
+    Route::get('emprunts/impression-liste-des-emprunts-expires', [EmpruntController::class, 'impressionListDesEmpruntsExpires'])->name('emprunt.impressionListDesEmpruntsExpires');
+    Route::get('emprunts/impression-liste-des-emprunts-bl', [EmpruntController::class, 'impressionListDesEmpruntsBL'])->name('emprunt.impressionListDesEmpruntsBL');
+    Route::get('emprunts/impression-liste-des-emprunts-bli', [EmpruntController::class, 'impressionListDesEmpruntsBLI'])->name('emprunt.impressionListDesEmpruntsBLI');
+    Route::get('emprunts/impression-liste-des-emprunts-bbl', [EmpruntController::class, 'impressionListDesEmpruntsBBL'])->name('emprunt.impressionListDesEmpruntsBBL');
+    Route::get('emprunts/impression-liste-des-emprunts-ass', [EmpruntController::class, 'impressionListDesEmpruntsASS'])->name('emprunt.impressionListDesEmpruntsASS');
+    Route::get('emprunts/impression-liste-des-emprunts-asg', [EmpruntController::class, 'impressionListDesEmpruntsASG'])->name('emprunt.impressionListDesEmpruntsASG');
+    Route::get('emprunts/telechargement-multi-file/{id}', [EmpruntController::class, 'donwloadMultipleFileEmprunt'])->name('emprunt.donwloadMultipleFileEmprunt');
 
 
     //Route for Users
@@ -119,6 +142,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('categories/edit', function () {
         abort(404);
     });
+    Route::get('categories/impression-liste', [CategoryController::class, 'impressionListCategorie'])->name('categorie.impressionListCategorie');
 
     //Route for ayants droits
     Route::resource('ayantsdroits', AyantDroitController::class)->except(['show', 'update', 'delete', 'create']);
@@ -147,6 +171,8 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('typeprestation/edit', function () {
         abort(404);
     });
+    Route::get('type-prestations/impression-liste', [TypePrestationController::class, 'impressionListTypePrestation'])->name('TypePrestation.impressionListTypePrestation');
+
 
     //Route for  prestation
     Route::resource('prestation', PrestationController::class)->except(['show', 'delete', 'update', 'create']);
@@ -168,6 +194,9 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('prestations/historique-annuel', [PrestationController::class, 'historiqueAnnuelPrestation'])->name('membre.historiqueprestationannuel');
     Route::get('prestations/historique-mensuel', [PrestationController::class, 'historiqueMensuelPrestation'])->name('membre.historiqueprestationmensuel');
     Route::get('prestations/historique-mensuel/detail-des-membres/{date}', [PrestationController::class, 'historiqueMensuelPrestationDetailMembre'])->name('membre.historiqueprestationmensuelDetailMembre');
+    Route::get('prestations/impression-liste', [PrestationController::class, 'impressionListPrestation'])->name('prestation.impressionListPrestation');
+    Route::get('prestations/impression-historique_mensuelle', [PrestationController::class, 'impressionListHistoriqueMensuelPrestation'])->name('prestation.impressionListHistoriqueMensuelPrestation');
+    Route::get('prestations/impression-historique_annuelle', [PrestationController::class, 'impressionListHistoriqueAnnuelPrestation'])->name('prestation.impressionListHistoriqueAnnuelPrestation');
 
     //requette ajax pour data table historique des prestations
     Route::get('historique-annuel-prestations', [PrestationController::class, 'getHistoriqueAnnuelPrestation'])->name('prestation.historique.annuel');
@@ -182,6 +211,9 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('cotisations/historique-annuel', [CotisationController::class, 'historiqueAnnuelCotisation'])->name('membre.historiquecotisationannuel');
     Route::get('cotisations/historique-mensuel', [CotisationController::class, 'historiqueMensuelCotisation'])->name('membre.historiquecotisationmensuel');
     Route::get('cotisations/historique-mensuel/detail-des-membres/{date}', [CotisationController::class, 'historiqueMensuelCotisationDetailMembre'])->name('membre.historiquecotisationmensuelDetailMembre');
+    Route::get('cotisations/impression-historique_mensuelle', [CotisationController::class, 'impressionListDeHistoriqueCotisationsMenseulle'])->name('cotisation.impressionListDeHistoriqueCotisationsMenseulle');
+    Route::get('cotisations/impression-historique_annuelle', [CotisationController::class, 'impressionListDeHistoriqueCotisationsAnnuelle'])->name('cotisation.impressionListDeHistoriqueCotisationsAnnuelle');
+
 
     //requette ajax pour data table historique des cotisations
     Route::get('historique-annuel-cotisations', [CotisationController::class, 'getHistoriqueAnnuelCotisation'])->name('cotisation.historique.annuel');
@@ -196,6 +228,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::post('dons/{id}', [DonsController::class, 'update'])->name(
         'dons.update'
     );
+    Route::get('dons/liste-des-dons', [DonsController::class, 'impressionListDons'])->name('dons.impressionListDons');
     Route::get('/getdons', [DonsController::class, 'getDons'])->name('getDons');
     Route::post('deleteDonc', [DonsController::class, 'destroy'])->name('dons.delete');
 });

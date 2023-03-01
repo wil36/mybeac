@@ -52,6 +52,8 @@
 									<span class="sr-only">Loading...</span>
 								</div>
 							</div>
+							<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsValiderParLaMutuelle') }}"><em
+									class="icon ni ni-printer"></em></a>
 							<div class="card">
 								<div class="nk-block nk-block-lg">
 									{{-- <button class="btn btn-primary right" style="position: relative">Test</button> --}}
@@ -62,6 +64,7 @@
 													<thead>
 														<tr class="nk-tb-item nk-tb-head">
 															<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Membre')</span>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Type d\'emprunt')</span>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
@@ -251,6 +254,11 @@
 						"name": 'updated_at',
 						"visible": false,
 						"className": 'nk-tb-col nk-tb-col-check'
+					},
+					{
+						"data": 'membre',
+						"name": 'membre',
+						"className": 'nk-tb-col'
 					},
 					{
 						"data": 'type',

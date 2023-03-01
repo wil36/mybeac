@@ -22,11 +22,11 @@ class CreateUsersTable extends Migration
             $table->string('agence');
             $table->string('matricule');
             $table->string('email');
-            $table->string('tel');
+            $table->string('tel')->nullable();
             $table->string('sexe')->default('Masculin');
             $table->dateTime('date_naissance')->default(Carbon::now());
             $table->dateTime('date_hadésion')->default(Carbon::now());
-            $table->dateTime('date_recrutement')->default(Carbon::now());
+            $table->dateTime('date_recrutement')->default(Carbon::now())->nullable();
             $table->string('role')->default('agent');
             $table->boolean('theme')->default(0);
             $table->boolean('status')->default(1);

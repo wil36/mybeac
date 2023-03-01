@@ -111,21 +111,8 @@
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
-														<x-input name='tel' :value="isset($user) ? $user->tel : ''" input='tel' :required="true" title="Numéro de Téléphone *">
-														</x-input>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
 														<x-input name='dateNaissance' :value="isset($user) ? date('Y-m-d', strtotime($user->date_naissance)) : ''" input='date' :required="true"
 															title="Date de Naissance *">
-														</x-input>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<x-input name='dateRecrutement' :value="isset($user) ? date('Y-m-d', strtotime($user->date_recrutement)) : ''" input='date' :required="true"
-															title="Date de Recrutement *">
 														</x-input>
 													</div>
 												</div>
@@ -170,8 +157,8 @@
 														    ['name' => 'Célibataire', 'value' => 'Célibataire'],
 														    ['name' => 'Divorcé', 'value' => 'Divorcé'],
 														    ['name' => 'Veuf(ve)', 'value' => 'Veuf(ve)'],
-														]"
-															:required="true" title="Statut matrimonial du membre*">
+														]" :required="true"
+															title="Statut matrimonial du membre*">
 														</x-input>
 													</div>
 												</div>
@@ -186,7 +173,7 @@
 														</x-input>
 													</div>
 												</div>
-												<div class="col-md-12">
+												<div class="col-md-6">
 													<div class="form-group">
 														<x-input name='type_parent' :value="isset($user) ? ($user->type_parent == '0' ? 'Vivant' : 'Non vivant') : ''" input='select' :options="[
 														    ['name' => '', 'value' => ''],
@@ -232,9 +219,7 @@
 			let nationalité = $("#nationalité").val();
 			let agence = $("#agence").val();
 			let email = $("#email").val();
-			let tel = $("#tel").val();
 			let dateNaissance = $("#dateNaissance").val();
-			let dateRecrutement = $("#dateRecrutement").val();
 			let dateHadhésion = $("#dateHadhésion").val();
 			let categorie = $("#categorie").val();
 			let listCategorie = $("#listCategorie").val();
@@ -250,9 +235,7 @@
 			formData.append('nationalité', nationalité);
 			formData.append('agence', agence);
 			formData.append('email', email);
-			formData.append('tel', tel);
 			formData.append('dateNaissance', dateNaissance);
-			formData.append('dateRecrutement', dateRecrutement);
 			formData.append('dateHadhésion', dateHadhésion);
 			formData.append('categorie', categorie);
 			formData.append('role', role);
@@ -268,23 +251,6 @@
 				url: "" + $('#formUser').attr('action'),
 				type: "" + $('#formUser').attr('method'),
 				dataType: 'json',
-				// data: {
-				//     matricule: matricule,
-				//     nom: nom,
-				//     prenom: prenom,
-				//     nationalité: nationalité,
-				//     agence: agence,
-				//     email: email,
-				//     tel: tel,
-				//     dateNaissance: dateNaissance,
-				//     dateRecrutement: dateRecrutement,
-				//     dateHadhésion: dateHadhésion,
-				//     categorie: categorie,
-				//     role: role,
-				//     sexe: sexe,
-				//     listCategorie: listCategorie,
-				//     picture: picture == null ? null : picture,
-				// },
 				data: formData,
 				contentType: false,
 				processData: false,
@@ -378,9 +344,7 @@
 			$("#nationalité").text('');
 			$("#agence").text('');
 			$("#email").val('');
-			$("#tel").val('');
 			$("#dateNaissance").val('');
-			$("#dateRecrutement").val('');
 			$("#dateHadhésion").val('');
 			$("#role").text('');
 			$("#sexe").text('');

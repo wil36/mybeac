@@ -20,6 +20,12 @@ class CreateEmpruntsTable extends Migration
             $table->string('type');
             $table->text('objet');
             $table->text('link_lettre_souscription')->nullable();
+            $table->text('link_avis_imposition')->nullable();
+            $table->text('link_bulletin_salaire')->nullable();
+            $table->text('link_devis_travaux')->nullable();
+            $table->text('link_proposition_vente')->nullable();
+            $table->text('link_contrat_travail')->nullable();
+            $table->text('link_autres')->nullable();
             $table->decimal('montant', 18, 2);
             $table->decimal('montant_commission', 18, 2)->nullable();
             $table->dateTime('date');

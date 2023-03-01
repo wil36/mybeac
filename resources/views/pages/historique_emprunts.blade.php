@@ -57,6 +57,8 @@
 												</ul>
 												<div class="tab-content">
 													<div class="tab-pane active" id="tabItem1">
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsBL') }}"><em
+																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Bridge Loan</h3>
 														<div class="table-responsive">
 															<table class="nk-tb-list nk-tb-ulist" id="historiqueEmpruntBL" data-auto-responsive="true">
@@ -76,6 +78,8 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem2">
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsBLI') }}"><em
+																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Bridge Loan Immo</h3>
 														<div class="table-responsive">
 															<table class="nk-tb-list nk-tb-ulist" id="historiqueEmpruntBLI" data-auto-responsive="true">
@@ -94,6 +98,8 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem3">
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsBBL') }}"><em
+																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Back to Back Loan</h3>
 														<div class="table-responsive">
 															<table class="nk-tb-list nk-tb-ulist" id="historiqueEmpruntBBL" data-auto-responsive="true">
@@ -112,6 +118,8 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem4">
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsASS') }}"><em
+																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Avance sur Salaire</h3>
 														<div class="table-responsive">
 															<table class="nk-tb-list nk-tb-ulist" id="historiqueEmpruntASS" data-auto-responsive="true">
@@ -130,6 +138,8 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem5">
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsASG') }}"><em
+																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Avance sur Gratification</h3>
 														<div class="table-responsive">
 															<table class="nk-tb-list nk-tb-ulist" id="historiqueEmpruntASG" data-auto-responsive="true">

@@ -45,6 +45,8 @@
 									<span class="sr-only">Loading...</span>
 								</div>
 							</div>
+							<a class="btn btn-primary" href="{{ route('cotisation.impressionListDeHistoriqueCotisationsMenseulle') }}"><em
+									class="icon ni ni-printer"></em></a>
 							<div class="card">
 								<div class="nk-block nk-block-lg">
 									<div class="card card-preview">
@@ -87,83 +89,83 @@
 	<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 
 	<script>
-	 $(document).ready(function() {
-	  $('#cotisationListHistoriqueMensuel').DataTable({
-	   processing: true,
-	   serverSide: true,
-	   autoWidth: false,
-	   pageLength: 10,
-	   paginate: true,
-	   info: true,
-	   language: {
-	    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
-	    "sEmptyTable": "Aucune donnée disponible dans le tableau",
-	    "sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
-	    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-	    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-	    "sInfoPostFix": "",
-	    "sInfoThousands": ",",
-	    "sLengthMenu": "Afficher _MENU_ éléments",
-	    "sLoadingRecords": "Chargement...",
-	    "sProcessing": "Traitement...",
-	    "sSearch": "Rechercher :",
-	    "sZeroRecords": "Aucun élément correspondant trouvé",
-	    "oPaginate": {
-	     "sFirst": "Premier",
-	     "sLast": "Dernier",
-	     "sNext": "Suivant",
-	     "sPrevious": "Précédent"
-	    },
-	    "oAria": {
-	     "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-	     "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-	    },
-	    "select": {
-	     "rows": {
-	      "_": "%d lignes sélectionnées",
-	      "0": "Aucune ligne sélectionnée",
-	      "1": "1 ligne sélectionnée"
-	     }
-	    }
-	   },
-	   buttons: [
-	    'copy', 'excel', 'pdf'
-	   ],
-	   ajax: "{{ route('cotisation.historique.mensuel') }}",
-	   order: [
-	    [0, "desc"]
-	   ],
-	   columns: [{
-	     "data": 'annee',
-	     "name": 'annee',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'mois',
-	     "name": 'mois',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'montant',
-	     "name": 'montant',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'nb_user',
-	     "name": 'nb_user',
-	     "className": 'nk-tb-col '
-	    },
-	    {
-	     "data": 'Actions',
-	     "name": 'Actions',
-	     "visible": true,
-	     "orderable": false,
-	     "serachable": false,
-	     "className": 'nk-tb-col '
-	    },
-	   ]
-	  });
-	 });
-	 $(".loader").addClass("d-none");
+		$(document).ready(function() {
+			$('#cotisationListHistoriqueMensuel').DataTable({
+				processing: true,
+				serverSide: true,
+				autoWidth: false,
+				pageLength: 10,
+				paginate: true,
+				info: true,
+				language: {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+					"sEmptyTable": "Aucune donnée disponible dans le tableau",
+					"sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
+					"sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+					"sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+					"sInfoPostFix": "",
+					"sInfoThousands": ",",
+					"sLengthMenu": "Afficher _MENU_ éléments",
+					"sLoadingRecords": "Chargement...",
+					"sProcessing": "Traitement...",
+					"sSearch": "Rechercher :",
+					"sZeroRecords": "Aucun élément correspondant trouvé",
+					"oPaginate": {
+						"sFirst": "Premier",
+						"sLast": "Dernier",
+						"sNext": "Suivant",
+						"sPrevious": "Précédent"
+					},
+					"oAria": {
+						"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+						"sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+					},
+					"select": {
+						"rows": {
+							"_": "%d lignes sélectionnées",
+							"0": "Aucune ligne sélectionnée",
+							"1": "1 ligne sélectionnée"
+						}
+					}
+				},
+				buttons: [
+					'copy', 'excel', 'pdf'
+				],
+				ajax: "{{ route('cotisation.historique.mensuel') }}",
+				order: [
+					[0, "desc"]
+				],
+				columns: [{
+						"data": 'annee',
+						"name": 'annee',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'mois',
+						"name": 'mois',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'montant',
+						"name": 'montant',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'nb_user',
+						"name": 'nb_user',
+						"className": 'nk-tb-col '
+					},
+					{
+						"data": 'Actions',
+						"name": 'Actions',
+						"visible": true,
+						"orderable": false,
+						"serachable": false,
+						"className": 'nk-tb-col '
+					},
+				]
+			});
+		});
+		$(".loader").addClass("d-none");
 	</script>
 @endsection

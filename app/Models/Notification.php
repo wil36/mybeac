@@ -14,5 +14,6 @@ class Notification extends Model
         'route_name',
         'date',
         'etat',
+        'destinataire',
     ];
 }

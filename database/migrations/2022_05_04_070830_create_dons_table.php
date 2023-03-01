@@ -21,7 +21,7 @@ class CreateDonsTable extends Migration
             $table->decimal('montant', 18, 2)->default(0);
             $table->dateTime('date')->default(Carbon::now());
             $table->string('email')->nullable();
-            $table->string('tel');
+            $table->string('tel')->nullable();
             $table->string('type')->default('interne');
             $table->string('sexe')->default('Masculin');
             $table->foreignId('users_id')

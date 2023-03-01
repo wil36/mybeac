@@ -32,7 +32,7 @@ class DonsController extends Controller
     public function getDons(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select do.id, do.sexe, do.nom, do.prenom, do.created_at, do.date, do.montant, do.tel, do.email, do.type, do.montant from Dons do'));
+            $data = DB::select(DB::raw('select do.id, do.sexe, do.nom, do.prenom, do.created_at, do.date, do.montant, do.email, do.type, do.montant from Dons do'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -62,9 +62,6 @@ class DonsController extends Controller
                 })
                 ->addColumn("email", function ($data) {
                     return !isset($data->email) || $data->email == null ? 'Aucun' : $data->email;
-                })
-                ->addColumn("tel", function ($data) {
-                    return $data->tel;
                 })
                 ->addColumn("date", function ($data) {
                     return Carbon::parse($data->date)->format('d M Y');
@@ -130,7 +127,6 @@ class DonsController extends Controller
     {
         try {
             $attributeNames = array(
-                'tel' => 'numéro de téléphone',
                 'montant1' => 'montant',
                 'montant2' => 'montant',
                 'id_membre' => 'membre',
@@ -154,7 +150,6 @@ class DonsController extends Controller
                     'nom' => ['required', 'string', 'max:255'],
                     'prenom' => ['required', 'string', 'max:255'],
                     'email' => ['email', 'max:255'],
-                    'tel' => ['required', 'string', 'max:25'],
                     'sexe' => ['required', 'string', 'max:10'],
                     'montant2' => ['required', 'numeric'],
                 ]);
@@ -171,7 +166,6 @@ class DonsController extends Controller
                 $don->nom = $user->nom;
                 $don->prenom = $user->prenom;
                 $don->email = $user->email;
-                $don->tel = $user->tel;
                 $don->montant = $request->montant1;
                 $don->sexe = $user->sexe;
                 $don->users_id = $user->id;
@@ -188,7 +182,6 @@ class DonsController extends Controller
                 $don->nom = $request->nom;
                 $don->prenom = $request->prenom;
                 $don->email = $request->email;
-                $don->tel = $request->tel;
                 $don->montant = $request->montant2;
                 $don->sexe = $request->sexe;
                 $don->date = Carbon::now();
@@ -242,7 +235,6 @@ class DonsController extends Controller
     {
         try {
             $attributeNames = array(
-                'tel' => 'numéro de téléphone',
                 'montant1' => 'montant',
                 'montant2' => 'montant',
                 'id_membre' => 'membre',
@@ -266,7 +258,6 @@ class DonsController extends Controller
                     'nom' => ['required', 'string', 'max:255'],
                     'prenom' => ['required', 'string', 'max:255'],
                     'email' => ['email', 'max:255'],
-                    'tel' => ['required', 'string', 'max:25'],
                     'sexe' => ['required', 'string', 'max:10'],
                     'montant2' => ['required', 'numeric'],
                 ]);
@@ -284,7 +275,6 @@ class DonsController extends Controller
                 $don->nom = $user->nom;
                 $don->prenom = $user->prenom;
                 $don->email = $user->email;
-                $don->tel = $user->tel;
                 $don->montant = $request->montant1;
                 $don->sexe = $user->sexe;
                 $don->users_id = $user->id;
@@ -301,7 +291,6 @@ class DonsController extends Controller
                 $don->nom = $request->nom;
                 $don->prenom = $request->prenom;
                 $don->email = $request->email;
-                $don->tel = $request->tel;
                 $don->montant = $request->montant2;
                 $don->sexe = $request->sexe;
                 $don->date = Carbon::now();
@@ -339,6 +328,16 @@ class DonsController extends Controller
             $don->delete();
             DB::commit();
             return response()->json(["success" => "Suppression éffectuer avec succès"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListDons(Request $request)
+    {
+        try {
+            $data = DB::select(DB::raw('select do.id, do.sexe, do.nom, do.prenom, do.created_at, do.date, do.montant,  do.email, do.type, do.montant from Dons do'));
+            return view('pages.impressions.liste_des_dons', ['dons' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

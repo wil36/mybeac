@@ -95,12 +95,6 @@
 																</x-input>
 															</div>
 														</div>
-														<div class="col-md-12" id="amount_enter_div" hidden>
-															<div class="form-group">
-																<x-input name='montant_enter' :value="isset($don) && $don->type == 'interne' ? abs($don->montant) : ''" input='number' title="Montant de l'emprunt (FCFA) *">
-																</x-input>
-															</div>
-														</div>
 														<div class="col-md-12" id="amount_select_div">
 															<div class="form-group">
 																<label style="font-weight: bold;" for="montant">@lang('Montant de l\'emprunt')</label>
@@ -109,20 +103,20 @@
 																	<div class="col-md-1 d-flex justify-content-center"><button class="btn btn-primary" type="button"
 																			id="btnmoin">-</button></div>
 																	<div class="col-md-10 d-flex justify-content-center">
-																		<input type="range" class="form-control" id="montant" name="montant" min="200000"
-																			max="50000000" value="200000" step="200000">
+																		<input type="range" class="form-control" id="montant" name="montant" min="50000" max="50000000"
+																			value="50000" step="50000">
 																	</div>
 																	<div class="col-md-1 d-flex justify-content-center" id="btnplus"><button class="btn btn-primary"
 																			type="button">+</button></div>
 																</div>
-																<label for="" id="labelmontant">Montant : 200 000FCFA</label>
+																<label for="" id="labelmontant">Montant : 50 000FCFA</label>
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="col-md-12">
 													<div class="form-group">
-														<button type="submit" class="btn btn-lg btn-primary btn-submit">@lang('Enregistrer')</button>
+														<button type="submit" class="btn btn-lg btn-primary btn-submit">@lang('Continuer')</button>
 														<button type="button" onclick="clearformEmprunt()"
 															class="btn btn-lg btn-clear">@lang('Annuler')</button>
 													</div>
@@ -152,72 +146,27 @@
 			console.log(12);
 			if ($('#montant').val() > 50000) {
 				var montant = $('#montant').val();
-				$('#montant').val(parseInt(montant) - 200000);
+				$('#montant').val(parseInt(montant) - 50000);
 				$('#labelmontant').text('Montant : ' + Intl.NumberFormat().format($('#montant').val()) +
 					'FCFA');
 			}
 		});
 
-		// $('#btnmoin').click(function(e) {
-		// 	if ($('#montant').val() > 50000) {
-		// 		var montant = $('#montant').val();
-		// 		console.log(parseInt(montant) - 50000);
-		// 		$('#montant').val(50000);
-		// 		$('#montant').val(parseInt(montant) - 50000);
-		// 		$('#labelmontant').text('Montant : ' + Intl.NumberFormat().format($('#montant').val()) +
-		// 			'FCFA');
-		// 	}
-
-		// });
-
 		$('#btnplus').click(function(e) {
 			var montant = parseInt($('#montant').val());
-			$('#montant').val(montant + 200000);
+			$('#montant').val(montant + 50000);
 			$('#labelmontant').text('Montant : ' + Intl.NumberFormat().format($('#montant').val()) + 'FCFA');
 			// if ($('#montant').val() > 50000) {}
 
 		});
 
-		$('input:radio[name="type-emprunt"]').click(function(e) {
-			if ($("input[name='type-emprunt']:checked").val() == 'BLI') {
-				$("#amount_select_div").attr("hidden", false);
-				$("#amount_enter_div").attr("hidden", true);
-				// $("#amount_select_div").show();
-				// $("#amount_enter_div").hide();
-
-			} else {
-				if ($("input[name='type-emprunt']:checked").val() == 'BBL') {
-					$("#amount_select_div").attr("hidden", false);
-					$("#amount_enter_div").attr("hidden", true);
-					// $("#amount_select_div").show();
-					// $("#amount_enter_div").hide();
-				} else {
-					if ($("input[name='type-emprunt']:checked").val() == 'BL') {
-						$("#amount_select_div").attr("hidden", false);
-						$("#amount_enter_div").attr("hidden", true);
-						// $("#amount_select_div").show();
-						// $("#amount_enter_div").hide();
-					} else {
-						$("#amount_select_div").attr("hidden", true);
-						$("#amount_enter_div").attr("hidden", false);
-						// $("#amount_select_div").hide();
-						// $("#amount_enter_div").show();
-						$("#montant_enter").text('');
-					}
-
-				}
-			}
-		});
 		$('.btn-submit').click(function(e) {
 			$('#alert-javascript').addClass('d-none');
 			$('#alert-javascript').text('');
 			$('.btn-submit').attr('disabled', true);
 			e.preventDefault();
 			let type = $(".type-emprunt:checked").val();
-			let montant = $("input[name='type-emprunt']:checked").val() == 'ASS' || $(
-					"input[name='type-emprunt']:checked").val() == 'ASG' ? $("#montant_enter").val() : $(
-					"#montant")
-				.val();
+			let montant = $("#montant").val();
 			let objet = $("#objet").val();
 			var formData = new FormData();
 			if (!$("input[name='type-emprunt']:checked").val()) {
@@ -313,8 +262,8 @@
 			$('#alert-javascript').addClass('d-none');
 			$('#alert-javascript').text('');
 			$('#objet').val('');
-			$("#montant").val(200000);
-			$("#labelmontant").text('Montant : 200 000FCFA');
+			$("#montant").val(50000);
+			$("#labelmontant").text('Montant : 50 000FCFA');
 			$(".type-emprunt:checked").prop('checked', false);
 			$('.btn-submit').attr('disabled', false);
 		}

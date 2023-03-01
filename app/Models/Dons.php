@@ -13,7 +13,6 @@ class Dons extends Model
         'nom',
         'prenom',
         'email',
-        'tel',
         'date',
         'montant',
         'sexe',

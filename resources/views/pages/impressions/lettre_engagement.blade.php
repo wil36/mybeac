@@ -74,9 +74,11 @@
 						{{ Str::upper($emprunt->membre->nom) . ' ' . $emprunt->membre->prenom }}</i></b>,
 				reconnait avoir bénéficié auprès de la Mutuele <b>MABEAC-CAMEROUN</b> du montant de
 				<b>{{ number_format($emprunt->montant, 0, '.', ' ') }} [{{ $f->format((int) $emprunt->montant) }}]</b> en vue
-				d'éffectuer le remboursement anticipé de mes prêts en cours (prêt Automobile et Petit
-				Equipement) et m'engage à rembourser cette somme moyennant un intérêt de
-				<b>.........</b> après déblocage du nouveau prêt consenti ; soit de <i><b>...........
+				d'éffectuer le remboursement anticipé de mes prêts en cours ({{ $emprunt->objet }}) et m'engage à rembourser cette
+				somme moyennant un intérêt de
+				<b>{{ number_format($emprunt->montant_commission, 0, '.', ' ') }} FCFA</b> après déblocage du nouveau prêt consenti
+				;
+				soit de <i><b>...........
 						(.......).</b></i><br><br><br>
 				<span style="margin-left: 50px;">Il</span> est à noter que cette comission établit sur un mois, pourrait augmenter
 				si

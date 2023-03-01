@@ -70,23 +70,10 @@
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Agence')</span>
 															</th>
-															{{-- <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Email')</span>
-                                                            </th> --}}
-															<th class="nk-tb-col"><span class="sub-text">@lang('Telephone')</span>
-															</th>
+
 															<th class="nk-tb-col"><span class="sub-text">@lang('Categorie')</span>
 															</th>
-															{{-- <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Date de naissance')</span>
-                                                            </th> --}}
-															{{-- <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Date de
-                                                                    recrutement')</span>
-                                                            </th>
-                                                            <th class="nk-tb-col"><span
-                                                                    class="sub-text">@lang('Date d\'hadésion')</span>
-                                                            </th> --}}
+
 															<th class="nk-tb-col"><span class="sub-text">@lang('Status')</span>
 															</th>
 															{{-- <th class="nk-tb-col"><span class="sub-text">Status</span>
@@ -206,31 +193,13 @@
 						//     "name": 'email',
 						//     "className": 'nk-tb-col '
 						// },
-						{
-							"data": 'tel',
-							"name": 'tel',
-							"className": 'nk-tb-col'
-						},
+
 						{
 							"data": 'category',
 							"name": 'category',
 							"className": 'nk-tb-col'
 						},
-						// {
-						//     "data": 'dateNais',
-						//     "name": 'dateNais',
-						//     "className": 'nk-tb-col'
-						// },
-						// {
-						//     "data": 'dateRecru',
-						//     "name": 'dateRecru',
-						//     "className": 'nk-tb-col'
-						// },
-						// {
-						//     "data": 'dateHade',
-						//     "name": 'dateHade',
-						//     "className": 'nk-tb-col'
-						// },
+
 						{
 							"data": 'status',
 							"name": 'status',
@@ -307,36 +276,13 @@
 							"name": 'agence',
 							"className": 'nk-tb-col '
 						},
-						// {
-						//     "data": 'email',
-						//     "name": 'email',
-						//     "className": 'nk-tb-col '
-						// },
-						{
-							"data": 'tel',
-							"name": 'tel',
-							"className": 'nk-tb-col'
-						},
+
 						{
 							"data": 'category',
 							"name": 'category',
 							"className": 'nk-tb-col'
 						},
-						// {
-						//     "data": 'dateNais',
-						//     "name": 'dateNais',
-						//     "className": 'nk-tb-col'
-						// },
-						// {
-						//     "data": 'dateRecru',
-						//     "name": 'dateRecru',
-						//     "className": 'nk-tb-col'
-						// },
-						// {
-						//     "data": 'dateHade',
-						//     "name": 'dateHade',
-						//     "className": 'nk-tb-col'
-						// },
+
 						{
 							"data": 'status',
 							"name": 'status',

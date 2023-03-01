@@ -663,11 +663,7 @@
 													<div class="col-md-12">
 														<h5>Sexe : {{ $membre->sexe }}</h5>
 													</div>
-													<div style="margin-bottom: 40px"></div>
-													<div class="col-md-12">
-														<h5>Téléphone : <a href="tel:{{ $membre->tel }}">{{ $membre->tel }}</a>
-														</h5>
-													</div>
+													
 													<div style="margin-bottom: 40px"></div>
 													<div class="col-md-12">
 														<h5>Email : <a href="mailto:{{ $membre->email }}">{{ $membre->email }}</a>
@@ -682,12 +678,6 @@
 													<div class="col-md-12">
 														<h5>Date de naissance :
 															{{ date('d M Y', strtotime($membre->date_naissance)) }}
-														</h5>
-													</div>
-													<div style="margin-bottom: 40px"></div>
-													<div class="col-md-12">
-														<h5>Date de recrutement :
-															{{ date('d M Y', strtotime($membre->date_recrutement)) }}
 														</h5>
 													</div>
 													<div style="margin-bottom: 40px"></div>
