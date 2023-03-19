@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Caisse;
 use App\Models\Emprunt;
 use App\Models\Notification;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Carbon\Carbon;
 use Exception;
@@ -112,6 +113,16 @@ class EmpruntController extends Controller
      */
     public function viewForListOfEmpruntOfUUserWhoIsConnect(Request $request)
     {
+        Notification::where(function ($query) {
+            $query->where('etat', 'Non lue');
+            $query->where('type', "Emprunt accepter");
+            $query->where('destinataire', '=', Auth::user()->id);
+        })->update(['etat' => 'Lue']);
+        Notification::where(function ($query) {
+            $query->where('etat', 'Non lue');
+            $query->where('type', "Emprunt réfuser");
+            $query->where('destinataire', '=', Auth::user()->id);
+        })->update(['etat' => 'Lue']);
         return view('pages.liste_emprunt');
     }
 
@@ -148,6 +159,9 @@ class EmpruntController extends Controller
                     <span class='tb-lead'>" . $data->membre->nom . ' ' . $data->membre->prenom . "</span>
                 </div>
             </div>";
+                })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
                 })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
@@ -268,6 +282,9 @@ class EmpruntController extends Controller
                 </div>
             </div>";
                 })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
+                })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
                 })
@@ -356,6 +373,9 @@ class EmpruntController extends Controller
                 </div>
             </div>";
                 })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
+                })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
                 })
@@ -443,6 +463,11 @@ class EmpruntController extends Controller
 
     public function getViewListEmpruntWhoWatingTheValidationByAdmin()
     {
+        Notification::where(function ($query) {
+            $query->where('etat', 'Non lue');
+            $query->where('type', "Dossier emprunt en etude");
+            $query->where('destinataire', '=', null);
+        })->update(['etat' => 'Lue']);
         return view('pages.liste_emprunt_a_valider');
     }
 
@@ -483,6 +508,9 @@ class EmpruntController extends Controller
                 </div>
             </div>";
                 })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
+                })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
                 })
@@ -496,7 +524,7 @@ class EmpruntController extends Controller
                     return $data->etat == 'Dossier en etude' ? '<ul class="nk-tb-actions gx-1">
                     
                  <li class="nk-tb-action-hidden">
-                    <a href="' . asset('upload/' . $data->link_lettre_souscription) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Télécharger la lettre de souscription">
+                    <a href="' . route('emprunt.donwloadMultipleFileEmprunt', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Télécharger le dossier d\'emprunt">
                         <em class="icon ni ni-download"></em>
                     </a>
                 </li>
@@ -516,7 +544,7 @@ class EmpruntController extends Controller
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
                             
-                                <li><a href="' . asset('upload/' . $data->link_lettre_souscription) . '" > <em class="icon ni ni-download"></em><span>Télécharger la lettre de souscription</span></a></li>
+                                <li><a href="' . route('emprunt.donwloadMultipleFileEmprunt', $data->id) . '" > <em class="icon ni ni-download"></em><span>Télécharger le dossier d\'emprunt</span></a></li>
                                 
                                 <li><a class="valide-data-emprunt" data_id="' . $data->id . '"><em class="icon ni ni-check"></em><span>Valider le dossier</span></a></li>
                                 
@@ -538,18 +566,19 @@ class EmpruntController extends Controller
     {
         $zip = new ZipArchive;
         $data = Emprunt::where('id', $request->id)->first();
-        if ($zip->open('dossier.zip', ZipArchive::CREATE)) {
-            $zip->addFromString(asset('upload/' . $data->link_lettre_souscription), $data->link_lettre_souscription);
-            //     $zip->addFile(asset('upload/' . $data->link_avis_imposition), $data->link_avis_imposition);
-            //     $zip->addFile(asset('upload/' . $data->link_bulletin_salaire), $data->link_bulletin_salaire);
-            //     $zip->addFile(asset('upload/' . $data->link_devis_travaux), $data->link_devis_travaux);
-            //     $zip->addFile(asset('upload/' . $data->link_proposition_vente), $data->link_proposition_vente);
-            //     $zip->addFile(asset('upload/' . $data->link_contrat_travail), $data->link_contrat_travail);
-            //     $zip->addFile(asset('upload/' . $data->link_autres), $data->link_autres);
+        $user = User::select('nom', 'prenom', 'matricule')->where('id', $data->users_id)->first();
+        $zipFile = 'Dossier_client/' . $data->code . '_' . $user->nom . '_' . $user->prenom . '_' . $user->matricule . '.zip';
+        if ($zip->open($zipFile, ZipArchive::CREATE) === TRUE) {
+            $zip->addFile(public_path('upload/' . $data->link_lettre_souscription), 'lettre de souscription.' . pathinfo(storage_path('upload/' . $data->link_lettre_souscription), PATHINFO_EXTENSION));
+            $zip->addFile(public_path('upload/' . $data->link_avis_imposition), 'avis imposition.' . pathinfo(storage_path('upload/' . $data->link_avis_imposition), PATHINFO_EXTENSION));
+            $zip->addFile(public_path('upload/' . $data->link_bulletin_salaire), 'bulletin salaire.' . pathinfo(storage_path('upload/' . $data->link_bulletin_salaire), PATHINFO_EXTENSION));
+            $zip->addFile(public_path('upload/' . $data->link_devis_travaux), 'devis travaux.' . pathinfo(storage_path('upload/' . $data->link_devis_travaux), PATHINFO_EXTENSION));
+            $zip->addFile(public_path('upload/' . $data->link_proposition_vente), 'proposition vente.' . pathinfo(storage_path('upload/' . $data->link_proposition_vente), PATHINFO_EXTENSION));
+            $zip->addFile(public_path('upload/' . $data->link_contrat_travail), 'contrat travail.' . pathinfo(storage_path('upload/' . $data->link_contrat_travail), PATHINFO_EXTENSION));
+            $zip->addFile(public_path('upload/' . $data->link_autres), 'autres.' . pathinfo(storage_path('upload/' . $data->link_autres), PATHINFO_EXTENSION));
         }
         $zip->close();
-        return response()->download(asset('upload/' . $data->link_lettre_souscription));
-        return response()->download([asset('upload/' . $data->link_lettre_souscription), asset('upload/' . $data->link_avis_imposition), asset('upload/' . $data->link_bulletin_salaire), asset('upload/' . $data->link_devis_travaux), asset('upload/' . $data->link_proposition_vente), asset('upload/' . $data->link_contrat_travail), asset('upload/' . $data->link_autres),]);
+        return response()->download(public_path($zipFile));
     }
 
     /**
@@ -584,7 +613,13 @@ class EmpruntController extends Controller
             $caisse->emprunt = $caisse->emprunt - $emprunt->montant;
             $caisse->save();
 
-            Notification::where('type', '=', 'Dossier emprunt en etude')->where('etat', 'Non lue')->update(['etat' => 'Lue']);
+            $notification = new Notification();
+            $notification->type = "Emprunt accepter";
+            $notification->date = Carbon::now();
+            $notification->etat = "Non lue";
+            $notification->route_name = 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect';
+            $notification->destinataire = $emprunt->users_id;
+            $notification->save();
             DB::commit();
             return response()->json(["success" => "Enregistrement éffectuer !", "id" => $emprunt->id, "route" => route('emprunt.showFormUploadLettreDeMotivation', $emprunt->id)]);
         } catch (Exception $e) {
@@ -611,6 +646,15 @@ class EmpruntController extends Controller
             $emprunt  = Emprunt::find($request->id);
             $emprunt['etat'] = "Dossier refuser";
             $emprunt->save();
+
+
+            $notification = new Notification();
+            $notification->type = "Emprunt réfuser";
+            $notification->date = Carbon::now();
+            $notification->etat = "Non lue";
+            $notification->route_name = 'emprunt.viewForListOfEmpruntOfUUserWhoIsConnect';
+            $notification->destinataire = $emprunt->users_id;
+            $notification->save();
             DB::commit();
             return response()->json(["success" => "Enregistrement éffectuer !", "id" => $emprunt->id, "route" => route('emprunt.showFormUploadLettreDeMotivation', $emprunt->id)]);
         } catch (Exception $e) {
@@ -767,6 +811,9 @@ class EmpruntController extends Controller
                 </div>
             </div>";
                 })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
+                })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
                 })
@@ -830,6 +877,9 @@ class EmpruntController extends Controller
                 </div>
             </div>";
                 })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
+                })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
                 })
@@ -879,6 +929,9 @@ class EmpruntController extends Controller
                     <span class='tb-lead'>" . $data->membre->nom . ' ' . $data->membre->prenom . "</span>
                 </div>
             </div>";
+                })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
                 })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
@@ -930,6 +983,9 @@ class EmpruntController extends Controller
                 </div>
             </div>";
                 })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
+                })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
                 })
@@ -980,6 +1036,9 @@ class EmpruntController extends Controller
                 </div>
             </div>";
                 })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
+                })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
                 })
@@ -1029,6 +1088,9 @@ class EmpruntController extends Controller
                     <span class='tb-lead'>" . $data->membre->nom . ' ' . $data->membre->prenom . "</span>
                 </div>
             </div>";
+                })
+                ->addColumn("matricule", function ($data) {
+                    return $data->membre->matricule;
                 })
                 ->editColumn("type", function ($data) {
                     return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));

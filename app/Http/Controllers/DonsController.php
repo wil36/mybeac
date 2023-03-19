@@ -32,7 +32,7 @@ class DonsController extends Controller
     public function getDons(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select do.id, do.sexe, do.nom, do.prenom, do.created_at, do.date, do.montant, do.email, do.type, do.montant from Dons do'));
+            $data = DB::select(DB::raw('select do.id, do.sexe, do.nom, do.prenom, do.created_at, do.date, do.montant, do.email, do.type, do.montant from dons do'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -336,7 +336,7 @@ class DonsController extends Controller
     public function impressionListDons(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select do.id, do.sexe, do.nom, do.prenom, do.created_at, do.date, do.montant,  do.email, do.type, do.montant from Dons do'));
+            $data = DB::select(DB::raw('select do.id, do.sexe, do.nom, do.prenom, do.created_at, do.date, do.montant,  do.email, do.type, do.montant from dons do'));
             return view('pages.impressions.liste_des_dons', ['dons' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);

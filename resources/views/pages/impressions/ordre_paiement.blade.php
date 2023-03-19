@@ -4,7 +4,7 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>Lettre de souscription</title>
+	<title>Ordre de paiment</title>
 	<style>
 		body {
 			max-width: 800px;

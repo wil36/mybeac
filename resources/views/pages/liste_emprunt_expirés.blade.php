@@ -56,6 +56,7 @@
 														<tr class="nk-tb-item nk-tb-head">
 															<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Membre')</span>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Matricule')</span>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Type d\'emprunt')</span>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
@@ -194,6 +195,11 @@
 					{
 						"data": 'membre',
 						"name": 'membre',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'matricule',
+						"name": 'matricule',
 						"className": 'nk-tb-col'
 					},
 					{

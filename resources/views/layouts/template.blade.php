@@ -59,8 +59,9 @@ $userinfo = Auth::user(); @endphp
 									$affiche = false;
 								@endphp
 								@foreach (config('menu') as $name => $elements)
-									@if ($elements['role'] === auth()->user()->role ||
-									    auth()->user()->isAdmin())
+									@if (
+										$elements['role'] === auth()->user()->role ||
+											auth()->user()->isAdmin())
 										@if ($elements['role'] == 'admin' && $affiche == false)
 											<li class="nk-menu-heading">
 												{{-- <h6 class="overline-title text-primary-alt">@lang('Administration')
@@ -155,8 +156,53 @@ $userinfo = Auth::user(); @endphp
 																		<em class="icon icon-circle bg-success-dim ni ni-curve-down-right"></em>
 																	</div>
 																	<div class="nk-notification-content">
-																		<div class="nk-notification-text">{{ $notif->total }} dossiers d'emprunt à valider</div>
-																		<div class="nk-notification-time">Il y a 2 heures</div>
+																		<div class="nk-notification-text">{{ $notif->total }} nouveau(x) dossiers d'emprunt à valider</div>
+																		<div class="nk-notification-time">Il y a {{ Carbon\Carbon::parse($notif->date)->diffInDays() }}
+																			jour(s)
+																		</div>
+																	</div>
+																@elseif ($notif->type == 'Message(s) des membres' && Auth::user()->role == 'admin')
+																	<div class="nk-notification-icon">
+																		<em class="icon icon-circle bg-success-dim ni ni-curve-down-right"></em>
+																	</div>
+																	<div class="nk-notification-content">
+																		<div class="nk-notification-text">{{ $notif->total }} nouveau(x) message(s) des membres</div>
+																		<div class="nk-notification-time">Il y a {{ Carbon\Carbon::parse($notif->date)->diffInDays() }}
+																			jour(s)
+																		</div>
+																	</div>
+																@elseif ($notif->type == "Message(s) de l'administration")
+																	<div class="nk-notification-icon">
+																		<em class="icon icon-circle bg-success-dim ni ni-curve-down-right"></em>
+																	</div>
+																	<div class="nk-notification-content">
+																		<div class="nk-notification-text">{{ $notif->total }} nouveau(x) message(s) de l'administration
+																		</div>
+																		<div class="nk-notification-time">Il y a {{ Carbon\Carbon::parse($notif->date)->diffInDays() }}
+																			jour(s)
+																		</div>
+																	</div>
+																@elseif ($notif->type == 'Emprunt accepter')
+																	<div class="nk-notification-icon">
+																		<em class="icon icon-circle bg-success-dim ni ni-curve-down-right"></em>
+																	</div>
+																	<div class="nk-notification-content">
+																		<div class="nk-notification-text">{{ $notif->total }} nouveau(x) d'emprunt accepter
+																		</div>
+																		<div class="nk-notification-time">Il y a {{ Carbon\Carbon::parse($notif->date)->diffInDays() }}
+																			jour(s)
+																		</div>
+																	</div>
+																@elseif ($notif->type == 'Emprunt réfuser')
+																	<div class="nk-notification-icon">
+																		<em class="icon icon-circle bg-success-dim ni ni-curve-down-right"></em>
+																	</div>
+																	<div class="nk-notification-content">
+																		<div class="nk-notification-text">{{ $notif->total }} nouveau(x) d'emprunt réfuser
+																		</div>
+																		<div class="nk-notification-time">Il y a {{ Carbon\Carbon::parse($notif->date)->diffInDays() }}
+																			jour(s)
+																		</div>
 																	</div>
 																@endif
 															</a>
@@ -211,7 +257,7 @@ $userinfo = Auth::user(); @endphp
 													</li>
 													<li id="dark1"><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>
 																@lang('Mode
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																Dark')</span></a>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																Dark')</span></a>
 													</li>
 												</ul>
 											</div>

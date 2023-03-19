@@ -44,10 +44,10 @@ class MessagerieController extends Controller
             $message->save();
 
             $notification = new Notification();
-            $notification->type = 'Dossier emprunt en etude';
+            $notification->type = "Message(s) des membres";
             $notification->date = Carbon::now();
             $notification->etat = "Non lue";
-            $notification->route_name = 'messagerie.getMessageMember';
+            $notification->route_name = 'messagerie.getMessageMutual';
             $notification->destinataire = null;
             $notification->save();
             DB::commit();
@@ -97,11 +97,11 @@ class MessagerieController extends Controller
             $message->save();
 
             $notification = new Notification();
-            $notification->type = 'Dossier emprunt en etude';
+            $notification->type = "Message(s) de l'administration";
             $notification->date = Carbon::now();
             $notification->etat = "Non lue";
-            $notification->route_name = 'emprunt.viewListEmpruntWhoWatingTheValidationByAdmin';
-            $notification->destinataire = null;
+            $notification->route_name = 'messagerie.getMessageMember';
+            $notification->destinataire = $request->id_membre;
             $notification->save();
             DB::commit();
             return response()->json(["success" => "Enregistrement éffectuer !"]);
@@ -113,6 +113,11 @@ class MessagerieController extends Controller
 
     public function getMessageMember()
     {
+        Notification::where(function ($query) {
+            $query->where('etat', 'Non lue');
+            $query->where('type', "Message(s) de l'administration");
+            $query->where('destinataire', '=', Auth::user()->id);
+        })->update(['etat' => 'Lue']);
         return view('pages.message_membre');
     }
 
@@ -120,7 +125,7 @@ class MessagerieController extends Controller
     {
         try {
 
-            $data = Messagerie::with('membre')->where('expediteur', '=', 'Mutuelle')->where('users_id', '=', Auth::user()->id);
+            $data = Messagerie::with('membre')->where('users_id', '=', Auth::user()->id)->orderBy('date', 'DESC');
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -129,14 +134,14 @@ class MessagerieController extends Controller
                 ->addColumn("updated_at", function ($data) {
                     return $data->created_at;
                 })
-                ->addColumn("membre", function ($data) {
+                ->addColumn("expediteur", function ($data) {
                     return
                         "<div class='user-card'>
                 <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
                     <span>MEM</span>
                 </div>
                 <div class='user-info'>
-                    <span class='tb-lead'>Mutuelle</span>
+                    <span class='tb-lead'>" . ($data->expediteur == 'Membre' ? 'Moi' : $data->expediteur) . "</span>
                 </div>
             </div>";
                 })
@@ -165,7 +170,7 @@ class MessagerieController extends Controller
                 ->addColumn("status", function ($data) {
                     return $data->etat == false ? "<span class='badge badge-outline-warning'>Non Lu</span>" : "<span class='badge badge-outline-success'>Lu</span>";
                 })->setRowClass("nk-tb-item")
-                ->rawColumns(['Actions', 'membre', 'status'])
+                ->rawColumns(['Actions', 'expediteur', 'status'])
                 ->make(true);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -174,6 +179,11 @@ class MessagerieController extends Controller
 
     public function getMessageMutual()
     {
+        Notification::where(function ($query) {
+            $query->where('etat', 'Non lue');
+            $query->where('type', "Message(s) des membres");
+            $query->where('destinataire', '=', null);
+        })->update(['etat' => 'Lue']);
         return view('pages.message_mutuelle');
     }
 
@@ -181,7 +191,7 @@ class MessagerieController extends Controller
     {
         try {
 
-            $data = Messagerie::with('membre')->where('expediteur', '=', 'Membre');
+            $data = Messagerie::with('membre')->where('expediteur', '=', 'Membre')->orWhere('expediteur', '=', 'Mutuelle')->orderBy('date', 'DESC');
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -190,14 +200,14 @@ class MessagerieController extends Controller
                 ->addColumn("updated_at", function ($data) {
                     return $data->created_at;
                 })
-                ->addColumn("membre", function ($data) {
+                ->addColumn("expediteur", function ($data) {
                     return
                         "<div class='user-card'>
                 <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
                     <span>MEM</span>
                 </div>
                 <div class='user-info'>
-                    <span class='tb-lead'>" . $data->membre->nom . " " . $data->membre->prenom . "</span>
+                    <span class='tb-lead'>" . ($data->expediteur == 'Membre' ? $data->membre->nom . " " . $data->membre->prenom : 'Mutuelle') . "</span>
                 </div>
             </div>";
                 })
@@ -226,7 +236,7 @@ class MessagerieController extends Controller
                 ->addColumn("status", function ($data) {
                     return $data->etat == false ? "<span class='badge badge-outline-warning'>Non Lu</span>" : "<span class='badge badge-outline-success'>Lu</span>";
                 })->setRowClass("nk-tb-item")
-                ->rawColumns(['Actions', 'membre', 'status'])
+                ->rawColumns(['Actions', 'expediteur', 'status'])
                 ->make(true);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -235,17 +245,21 @@ class MessagerieController extends Controller
 
     public function detailMessageMembre(Request $request)
     {
-        $data = Messagerie::with('membre')->where('expediteur', '=', 'Mutuelle')->where('users_id', '=', Auth::user()->id)->where('id', '=', $request->id)->first();
-        $data->etat = true;
-        $data->save();
+        $data = Messagerie::with('membre')->where('users_id', '=', Auth::user()->id)->where('id', '=', $request->id)->first();
+        if ($data->expediteur == 'Mutuelle') {
+            $data->etat = true;
+            $data->save();
+        }
         return view('pages.detail_message', ['data' => $data]);
     }
 
     public function detailMessageMutual(Request $request)
     {
-        $data = Messagerie::with('membre')->where('expediteur', '=', 'Membre')->where('id', '=', $request->id)->first();
-        $data->etat = true;
-        $data->save();
+        $data = Messagerie::with('membre')->where('id', '=', $request->id)->first();
+        if ($data->expediteur == 'Membre') {
+            $data->etat = true;
+            $data->save();
+        }
         return view('pages.detail_message', ['data' => $data]);
     }
 

@@ -18,7 +18,7 @@ return [
     'Messagerie' => [
         'name' => "Messagerie",
         'route' => 'messagerie.sendMessageToMutual',
-        'routes' => ['messagerie.sendMessageToMutual', 'messagerie.getMessageMember', 'messagerie.sendMessageToMember', 'messagerie.detailMessage', 'messagerie.getMessageMutual'],
+        'routes' => ['messagerie.sendMessageToMutual', 'messagerie.getMessageMember', 'messagerie.sendMessageToMember', 'messagerie.detailMessage', 'messagerie.getMessageMutual', 'messagerie.detailMessageMutual'],
         'icon' => 'icon ni ni-emails-fill',
         'role'   => 'agent',
         'childrens' => [
@@ -29,7 +29,7 @@ return [
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Historique de mes messages',
+                'name'  => 'Boite de reception du membre',
                 'role'  => 'agent',
                 'route' => 'messagerie.getMessageMember',
                 'altRoute' => '',
@@ -41,7 +41,7 @@ return [
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Historique des messages de la mutuelle',
+                'name'  => 'Boite de reception de la mutuelle',
                 'role'  => 'admin',
                 'route' => 'messagerie.getMessageMutual',
                 'altRoute' => '',

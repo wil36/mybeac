@@ -48,14 +48,21 @@
 							<div class="card">
 								<div class="nk-block nk-block-">
 									{{-- <button class="btn btn-primary right" style="position: relative">Test</button> --}}
+
 									<div class="card card-preview">
 										<div class="card-inner">
 											<div class="row">
 												<div class="col-md-3" style="margin-bottom: 10px">
-													<div class="form-group">
-														<x-input name='date1' :value="Carbon\Carbon::now()->format('Y-m-d')" input='text' :required="true" title="Date"
-															:disabled="true">
+													{{-- <div class="form-group">
+														<x-input name='date1' :value="Carbon\Carbon::now()->format('Y-m-d')" input='date' :required="true" title="Date">
 														</x-input>
+													</div> --}}
+													<div class="form-group">
+														<label class="" for="date1" style="font-weight: bold;">Date</label>
+														<div class="form-control-wrap">
+															<input type="text" readonly data-date-format="yyyy-mm-dd" onchange="changeDate1();"
+																value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" id="date1" class="form-control date-picker">
+														</div>
 													</div>
 												</div>
 												<div class="col-md-3" style="margin-bottom: 10px">
@@ -84,6 +91,13 @@
 									</div>
 								</div>
 							</div>
+							<br>
+							<div class="col-md-12">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="doublerLesCotisations">
+									<label class="custom-control-label" for="doublerLesCotisations"><b>@lang('Doubler les cotisations de ce mois')</b></label>
+								</div>
+							</div><br>
 							<div class="card">
 								<div class="nk-block nk-block-lg">
 									<div class="card card-preview">
@@ -140,10 +154,16 @@
 													</div>
 												</div>
 												<div class="col-md-3" style="margin-bottom: 10px">
-													<div class="form-group">
-														<x-input name='date2' :value="Carbon\Carbon::now()->format('Y-m-d')" input='text' :required="true" title="Date"
-															:disabled="true">
+													{{-- <div class="form-group">
+														<x-input name='date2' :value="Carbon\Carbon::now()->format('Y-m-d')" input='date' :required="true" title="Date">
 														</x-input>
+													</div> --}}
+													<div class="form-group">
+														<label class="" for="date2" style="font-weight: bold;">Date</label>
+														<div class="form-control-wrap">
+															<input type="text" readonly data-date-format="yyyy-mm-dd" onchange="changeDate2();"
+																value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" id="date2" class="form-control date-picker">
+														</div>
 													</div>
 												</div>
 												<div class="col-md-3" style="margin-bottom: 10px">
@@ -194,6 +214,7 @@
 					liste.push(value);
 				}
 			});
+			var doubleAmount = $("#doublerLesCotisations").prop("checked") ? true : false;
 			$.ajax({
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -205,6 +226,7 @@
 					liste: liste,
 					date: date,
 					num_seance: num_seance,
+					double_amount: doubleAmount,
 				},
 				success: function(data) {
 					if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
@@ -250,10 +272,36 @@
 			$("#customCheckAll").prop("checked", false);
 		});
 
+		$('#doublerLesCotisations').change(function() {
+			if ($(this).is(':checked')) {
+				clearform();
+				$("#doublerLesCotisations").prop("checked", true);
+			} else {
+				clearform();
+			}
+		});
+
+		function changeDate1() {
+			$('#date2').val($('#date1').val());
+			var table = $('#cotisationList').DataTable();
+			var url = "{{ route('getUserCotisation', ':date') }}";
+			url = url.replace(':date', $('#date2').val());
+			table.ajax.url(url).load();
+		};
+
+		function changeDate2() {
+			$('#date1').val($('#date2').val());
+			var table = $('#cotisationList').DataTable();
+			var url = "{{ route('getUserCotisation', ':date') }}";
+			url = url.replace(':date', $('#date2').val());
+			table.ajax.url(url).load();
+		};
+
 		function clearform() {
 			var table = $('#cotisationList').DataTable();
 			table.ajax.reload();
 			$("#customCheckAll").prop("checked", false);
+			$("#doublerLesCotisations").prop("checked", false);
 			$('#montant_seance').val('0');
 			$('#montant_seance2').val('0');
 
@@ -267,8 +315,7 @@
 				var montant_en_cour = 0;
 				data.each(function(value, index) {
 					$("#customCheck" + value.id).prop("checked", true);
-					if ({{ Carbon\Carbon::now()->format('m') }} == '03' ||
-						{{ Carbon\Carbon::now()->format('m') }} == '12') {
+					if ($("#doublerLesCotisations").prop("checked")) {
 						montant_en_cour += Number(value.montant.replace(' ', '')) * 2;
 					} else {
 						montant_en_cour += Number(value.montant.replace(' ', ''));
@@ -295,8 +342,7 @@
 					$("#customCheckAll").prop("checked", false);
 					test = true;
 				} else {
-					if ({{ Carbon\Carbon::now()->format('m') }} == '03' ||
-						{{ Carbon\Carbon::now()->format('m') }} == '12') {
+					if ($("#doublerLesCotisations").prop("checked")) {
 						montant_en_cour += Number(value.montant.replace(' ', '')) * 2;
 					} else {
 						montant_en_cour += Number(value.montant.replace(' ', ''));
@@ -319,6 +365,8 @@
 				pageLength: 10,
 				paginate: false,
 				info: true,
+				stateSave: true,
+				"bDestroy": true,
 				language: {
 					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
 					"sEmptyTable": "Aucune donnée disponible dans le tableau",

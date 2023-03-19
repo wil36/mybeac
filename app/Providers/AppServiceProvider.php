@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Models\Notification;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\{Blade, View, Route};
+use Illuminate\Support\Facades\{Auth, Blade, View, Route};
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,7 +30,17 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));
         view()->composer('layouts.template', function ($view) {
-            $notifications = Notification::where('etat', 'Non lue')->groupBy('type')->selectRaw('count(*) as total, type, max(date) as date, route_name')->get();
+            if (Auth::user()->role == 'admin') {
+                $notifications = Notification::where(function ($query) {
+                    $query->where('etat', 'Non lue');
+                    $query->where('destinataire', '=', null);
+                })->orWhere(function ($query) {
+                    $query->where('etat', 'Non lue');
+                    $query->Where('destinataire', '=', Auth::user()->id);
+                })->groupBy('type')->selectRaw('count(*) as total, type, max(date) as date, route_name')->get();
+            } else {
+                $notifications = Notification::where('etat', 'Non lue')->where('destinataire', '=', Auth::user()->id)->groupBy('type')->selectRaw('count(*) as total, type, max(date) as date, route_name')->get();
+            }
             // dd($notifications);
             $title = config('titles.' . Route::currentRouteName());
             $view->with(compact('title', 'notifications'));

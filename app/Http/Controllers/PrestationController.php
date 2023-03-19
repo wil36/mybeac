@@ -307,7 +307,7 @@ class PrestationController extends Controller
     public function getHistoriqueAnnuelPrestation(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('SELECT Year(po.date) AS annee, SUM(po.montant) AS montant FROM Prestations po GROUP BY YEAR(po.date) ORDER BY YEAR(po.date) desc'));
+            $data = DB::select(DB::raw('SELECT Year(po.date) AS annee, SUM(po.montant) AS montant FROM prestations po GROUP BY YEAR(po.date) ORDER BY YEAR(po.date) desc'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->editColumn("annee", function ($data) {
@@ -347,7 +347,7 @@ class PrestationController extends Controller
     public function getHistoriqueMensuelPrestation(Request $request)
     {
         try {
-            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.users_id) AS nombre_user FROM Prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
+            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.users_id) AS nombre_user FROM prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
 
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
@@ -593,7 +593,7 @@ class PrestationController extends Controller
     public function impressionListHistoriqueMensuelPrestation(Request $request)
     {
         try {
-            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.users_id) AS nombre_user FROM Prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
+            $data = DB::select(DB::raw("SELECT MONTH(po.date) AS mois, Year(po.date) AS annee, SUM(po.montant) AS montant, COUNT(po.users_id) AS nombre_user FROM prestations po GROUP BY YEAR(po.date), MONTH(po.date) ORDER BY po.date desc"));
             return view('pages.impressions.liste_des_historiques_prestation_mensuelles', ['datas' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
@@ -603,7 +603,7 @@ class PrestationController extends Controller
     public function impressionListHistoriqueAnnuelPrestation(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('SELECT Year(po.date) AS annee, SUM(po.montant) AS montant FROM Prestations po GROUP BY YEAR(po.date) ORDER BY YEAR(po.date) desc'));
+            $data = DB::select(DB::raw('SELECT Year(po.date) AS annee, SUM(po.montant) AS montant FROM prestations po GROUP BY YEAR(po.date) ORDER BY YEAR(po.date) desc'));
             return view('pages.impressions.liste_des_historiques_prestations_annuelles', ['datas' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);

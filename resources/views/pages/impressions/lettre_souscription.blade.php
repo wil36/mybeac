@@ -86,7 +86,7 @@
 				Afin de pouvoir réaliser un projet qui me tient à cœur, je me permets de solliciter les
 				services <b>MABEAC-CAMEROUN</b> pour un prêt d’un montant
 				de <b> {{ number_format($emprunt->montant, 0, '.', ' ') }} [{{ $f->format((int) $emprunt->montant) }}] FCFA</b>.
-				Je souhaiterais en effet (préciser le projet : <b>{{ $emprunt->objet }}</b>), et mes
+				Je souhaiterais en effet (<b>{{ $emprunt->objet }}</b>), et mes
 				ressources actuelles ne me permettent pas de le réaliser sans un appui financier
 				complémentaire. <br><br>
 				Vous trouverez ci-joint les pièces justificatives nécessaires à mon dossier : (Préciser les
@@ -94,7 +94,7 @@
 					vente, contrat de travail, etc.</b>) <br><br>
 				Je me tiens à votre disposition pour fixer un rendez-vous à l’horaire qui vous conviendra. <br><br>
 				En vous remerciant par avance de l’attention que vous porterez à ma demande, je vous
-				prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées. <br><br><br><br>
+				prie d’agréer, Monsieur, l’expression de mes salutations distinguées. <br><br><br><br>
 
 
 				{{-- <br><br><br> Je soussigné, {{ Str::upper($emprunt->membre->nom) . ' ' . $emprunt->membre->prenom }}

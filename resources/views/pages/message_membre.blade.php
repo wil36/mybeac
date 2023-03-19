@@ -58,7 +58,7 @@
 													<thead>
 														<tr class="nk-tb-item nk-tb-head">
 															<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
-															<th class="nk-tb-col"><span class="sub-text">@lang('Membre')</span>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Expéditeur')</span>
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span>
 															</th>
@@ -143,8 +143,8 @@
 						"className": 'nk-tb-col nk-tb-col-check'
 					},
 					{
-						"data": 'membre',
-						"name": 'membre',
+						"data": 'expediteur',
+						"name": 'expediteur',
 						"className": 'nk-tb-col '
 					},
 					{

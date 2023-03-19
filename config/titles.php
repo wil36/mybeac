@@ -58,7 +58,9 @@ return [
     'messagerie' => [
         'sendMessageToMutual' => 'Envoyer un message à la mutuelle',
         'sendMessageToMember' => 'Envoyer un message à un membre',
-        'getMessageMember' => 'Liste des messages d\'un membre',
-        'detailMessage' => 'Detail des messages',
+        'getMessageMember' => 'Boite de reception du membre',
+        'getMessageMutual' => 'Boite de reception de la mutuelle',
+        'detailMessage' => 'Detail du message',
+        'detailMessageMutual' => 'Detail du message',
     ],
 ];

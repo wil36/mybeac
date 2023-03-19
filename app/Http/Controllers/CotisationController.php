@@ -439,12 +439,14 @@ class CotisationController extends Controller
             foreach ($request->liste as $item) {
                 $cotisation = new Cotisation();
                 $cotisation->date = $request->date;
-                if (date('m', strtotime($request->date)) == 03 || date('m', strtotime($request->date)) == 12) {
-                    $cotisation->montant = $item['montant'] * 2;
-                    $montantCotisationEnCour += $item['montant'] * 2;
+                $montant =
+                    floatval($item['montant']);
+                if ($request->double_amount == "true") {
+                    $cotisation->montant = $montant * 2;
+                    $montantCotisationEnCour += $montant * 2;
                 } else {
-                    $cotisation->montant = $item['montant'];
-                    $montantCotisationEnCour += $item['montant'];
+                    $cotisation->montant = $montant;
+                    $montantCotisationEnCour += $montant;
                 }
                 $cotisation->numero_seance = $request->num_seance;
                 $cotisation->users_id = $item['id'];
