@@ -95,7 +95,7 @@
 							<div class="col-md-12">
 								<div class="custom-control custom-checkbox">
 									<input type="checkbox" class="custom-control-input" id="doublerLesCotisations">
-									<label class="custom-control-label" for="doublerLesCotisations"><b>@lang('Doubler les cotisations de ce mois')</b></label>
+									<label class="custom-control-label" for="doublerLesCotisations"><b>@lang('Gratification')</b></label>
 								</div>
 							</div><br>
 							<div class="card">
@@ -362,8 +362,9 @@
 				processing: true,
 				serverSide: true,
 				autoWidth: false,
-				pageLength: 10,
-				paginate: false,
+				"pageLength": 50,
+				"lengthMenu": [10, 25, 50],
+				paginate: true,
 				info: true,
 				stateSave: true,
 				"bDestroy": true,

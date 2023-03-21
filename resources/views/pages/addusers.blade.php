@@ -93,6 +93,7 @@
 														    ['name' => 'Bertoua', 'value' => 'Bertoua'],
 														    ['name' => 'Maroua', 'value' => 'Maroua'],
 														    ['name' => 'Douala', 'value' => 'Douala'],
+														    ['name' => 'Nkongssamba', 'value' => 'Nkongssamba'],
 														    ['name' => 'Garoua', 'value' => 'Garoua'],
 														    ['name' => 'Ngaoundéré', 'value' => 'Ngaoundéré'],
 														    ['name' => 'Bamenda', 'value' => 'Bamenda'],

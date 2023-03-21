@@ -430,13 +430,13 @@ class CotisationController extends Controller
                 return response()
                     ->json(['errors' => $validator->errors()->all()]);
             }
-            if (!isset($request['liste'])) {
+            if (!isset($request['liste']) || count($request['liste']) == 0) {
                 return response()
                     ->json(["errors" => ["Veuillez sélectionner un membre."]]);
             }
             DB::beginTransaction();
             $montantCotisationEnCour = 0;
-            foreach ($request->liste as $item) {
+            foreach ($request['liste'] as $item) {
                 $cotisation = new Cotisation();
                 $cotisation->date = $request->date;
                 $montant =
