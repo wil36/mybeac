@@ -73,7 +73,7 @@
 																</div>
 																<div class="col-md-6">
 																	<div class="form-group">
-																		<x-input name='father_email' :value="isset($father) ? $father->email : ''" input='text' :required="true" title="Prénom *"
+																		<x-input name='father_email' :value="isset($father) ? $father->email : ''" input='text' :required="true" title="Email *"
 																			:disabled="true">
 																		</x-input>
 																	</div>
