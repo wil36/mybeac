@@ -44,6 +44,7 @@ Route::middleware(['auth:sanctum', 'verified', 'agent'])->group(
         Route::post('/save-emprunt', [EmpruntController::class, 'createEmprunt'])->name('emprunt.saveEmprunt');
         Route::get('/liste-de-mes-emprunt', [EmpruntController::class, 'viewForListOfEmpruntOfUUserWhoIsConnect'])->name('emprunt.viewForListOfEmpruntOfUUserWhoIsConnect');
         Route::get('/liste-de-mes-emprunt-ajax', [EmpruntController::class, 'getListOfEmpruntOfUUserWhoIsConnectAjax'])->name('emprunt.getListOfEmpruntOfUUserWhoIsConnectAjax');
+        Route::get('/liste-emprunt-by-id-ajax/{id}', [EmpruntController::class, 'getListOfEmpruntById'])->name('emprunt.getListOfEmpruntById');
         Route::get('/telecharger-lettre-souscription/{id}', [EmpruntController::class, 'downloadLettreSouscription'])->name('emprunt.download-lettre-souuscription');
         Route::get('/telecharger-lettre-adjudication/{id}', [EmpruntController::class, 'downloadLettreAjudication'])->name('emprunt.download-lettre-adjudication');
         Route::get('/telecharger-lettre-engagement/{id}', [EmpruntController::class, 'downloadLettreEngagement'])->name('emprunt.download-lettre-engagement');
@@ -105,6 +106,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
 
     //Route for Users
     Route::post('membre/exclure', [UserController::class, 'excluremembre'])->name('user.exclure');
+    Route::post('membre/inclure', [UserController::class, 'incluremembre'])->name('user.inclure');
     Route::post('membre/deces', [UserController::class, 'decesmembre'])->name('user.deces');
     Route::post('membre/retraite', [UserController::class, 'retraitemembre'])->name('user.retraite');
     Route::post('membre/doubleauthdelete', [UserController::class, 'doubleauthdelete'])->name('user.doubleauthdelete');
@@ -212,6 +214,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('cotisations/historique-mensuel', [CotisationController::class, 'historiqueMensuelCotisation'])->name('membre.historiquecotisationmensuel');
     Route::get('cotisations/historique-mensuel/detail-des-membres/{date}', [CotisationController::class, 'historiqueMensuelCotisationDetailMembre'])->name('membre.historiquecotisationmensuelDetailMembre');
     Route::get('cotisations/impression-historique_mensuelle', [CotisationController::class, 'impressionListDeHistoriqueCotisationsMenseulle'])->name('cotisation.impressionListDeHistoriqueCotisationsMenseulle');
+    Route::get('cotisations/impression-liste-des-membres_historique-mensuelle/{date}', [CotisationController::class, 'impressionListMembreHistoriqueMensuel'])->name('cotisation.impressionListMembreHistoriqueMensuel');
     Route::get('cotisations/impression-historique_annuelle', [CotisationController::class, 'impressionListDeHistoriqueCotisationsAnnuelle'])->name('cotisation.impressionListDeHistoriqueCotisationsAnnuelle');
 
 

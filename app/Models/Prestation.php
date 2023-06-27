@@ -19,15 +19,15 @@ class Prestation extends Model
 
     public function membre()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id', 'id');
     }
 
     function type_prestation()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(TypePrestation::class, 'type_prestation_id', 'id');
     }
     function ayant_droit()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(AyantDroit::class, 'ayant_droits_id', 'id');
     }
 }

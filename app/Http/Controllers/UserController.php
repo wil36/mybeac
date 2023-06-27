@@ -246,7 +246,7 @@ class UserController extends Controller
                 </li>
                 <li class="nk-tb-action-hidden">
                     <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon exclure-data-user" data-toggle="tooltip" data-placement="top" title="Exclure le membre">
-                      <em class="icon ni ni-ripple"></em>
+                      <em class="icon ni ni-user-cross-fill"></em>
                     </a>
                 </li>
                  <li class="nk-tb-action-hidden">
@@ -286,7 +286,7 @@ class UserController extends Controller
                         <div class="dropdown-menu dropdown-menu-left">
                             <ul class="link-list-opt no-bdr">
                                 <li><a href="' . route('membre.edit', $data->id) . '" > <em class="icon ni ni-edit"></em><span>Modifier</span></a></li>
-                                <li><a href="" class="exclure-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-ripple"></em><span>Exclure le membre</span></a></li>
+                                <li><a href="" class="exclure-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-user-cross-fill"></em><span>Exclure le membre</span></a></li>
                                 <li><a href="" class="deces-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-check-thick" style="color:red;"></em><span>Activer le decès</span></a></li>
                                 <li><a href="" class="retraite-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-check-thick" style="color:orange;"></em><span>Activer la retraite</span></a></li>
                                 <li><a href="" class="dbauth-delete" data_id="' . $data->id . '" ><em class="icon ni ni-reload-alt"></em><span>Supprimer la double authentification</span></a></li>
@@ -385,13 +385,18 @@ class UserController extends Controller
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">
-               
-              
+                  <li class="nk-tb-action-hidden">
+                    <a href="' . route('membre.info', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Detail du membre">
+                      <em class="icon ni ni-expand"></em>
+                    </a>
+                </li>
                 <li>
                     <div class="drodown">
-                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                           
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <div class="dropdown-menu dropdown-menu-left">
+                            <ul class="link-list-opt no-bdr">
+                                <li><a href="' . route('membre.info', $data->id) . '" > <em class="icon ni ni-expand"></em><span>Detail du membre</span></a></li>
+                            </ul>
                         </div>
                     </div>
                 </li>
@@ -478,18 +483,23 @@ class UserController extends Controller
                 ->editColumn("status", function ($data) {
 
                     return ' <td class="nk-tb-col tb-col-md">
-                <span class="badge badge-outline-success">Décédé</span>
+                <span class="badge badge-outline-success">Retraité</span>
             </td>';
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">
-               
-              
+                  <li class="nk-tb-action-hidden">
+                    <a href="' . route('membre.info', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Detail du membre">
+                      <em class="icon ni ni-expand"></em>
+                    </a>
+                </li>
                 <li>
                     <div class="drodown">
-                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                           
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <div class="dropdown-menu dropdown-menu-left">
+                            <ul class="link-list-opt no-bdr">
+                                <li><a href="' . route('membre.info', $data->id) . '" > <em class="icon ni ni-expand"></em><span>Detail du membre</span></a></li>
+                            </ul>
                         </div>
                     </div>
                 </li>
@@ -576,18 +586,30 @@ class UserController extends Controller
                 ->editColumn("status", function ($data) {
 
                     return ' <td class="nk-tb-col tb-col-md">
-                <span class="badge badge-outline-success">Décédé</span>
+                <span class="badge badge-outline-success">Exclus</span>
             </td>';
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">
                
-              
+                <li class="nk-tb-action-hidden">
+                    <a href=""  data_id="' . $data->id . '" class="btn btn-trigger btn-icon inclure-data-user" data-toggle="tooltip" data-placement="top" title="inclure le membre">
+                     <em class="icon ni ni-user-check-fill"></em>
+                    </a>
+                </li>
+                  <li class="nk-tb-action-hidden">
+                    <a href="' . route('membre.info', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Detail du membre">
+                      <em class="icon ni ni-expand"></em>
+                    </a>
+                </li>
                 <li>
                     <div class="drodown">
-                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"></a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                           
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <div class="dropdown-menu dropdown-menu-left">
+                            <ul class="link-list-opt no-bdr">
+                                <li><a href="" class="inclure-data-user" data_id="' . $data->id . '" ><em class="icon ni ni-user-check-fill"></em><span>Inclure le membre</span></a></li>
+                                <li><a href="' . route('membre.info', $data->id) . '" > <em class="icon ni ni-expand"></em><span>Detail du membre</span></a></li>
+                            </ul>
                         </div>
                     </div>
                 </li>
@@ -882,6 +904,18 @@ class UserController extends Controller
         }
     }
 
+    public function incluremembre(Request $request)
+    {
+        try {
+            $user = User::findOrFail($request->id);
+            $user->exclut = 0;
+            $user->save();
+            return response()->json(["success" => "Effectuer avec succès"]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
     public function decesmembre(Request $request)
     {
         try {
@@ -906,56 +940,146 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Deletes the two-factor authentication information for a user.
+     *
+     * @param Request $request The HTTP request object.
+     * @return JsonResponse A JSON response indicating success or failure.
+     */
     public function doubleauthdelete(Request $request)
     {
         try {
-            $user = User::find($request->id)->first();
+            // Find the user by ID.
+            $user = User::findOrFail($request->id);
+
+            // Clear the two-factor authentication information.
             $user->two_factor_secret = null;
             $user->two_factor_recovery_codes = null;
             $user->save();
-            return response()->json(["success" => "Suppression de la double authentification éffectuer avec succès"]);
+
+            // Return a success response.
+            return response()->json([
+                "success" => "Suppression de la double authentification effectuée avec succès"
+            ]);
         } catch (Exception $e) {
-            return response()->json(["error" => "Une erreur s'est produite."]);
+            // Return an error response.
+            return response()->json([
+                "error" => "Une erreur s'est produite."
+            ]);
         }
     }
 
+    /**
+     * Returns a view with a list of members and their information.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function impressionListMembre(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence,  us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=0'));
+            $data = DB::table('users')
+                ->join('categories', 'categories.id', '=', 'users.categories_id')
+                ->select('users.id', 'users.sexe', 'users.nom', 'users.prenom', 'users.status_matrimonial', 'users.created_at', 'users.profile_photo_path', 'users.matricule', 'users.agence', 'users.nationalité', 'users.status', 'categories.montant', 'categories.libelle')
+                ->where('users.deces', '=', 0)
+                ->where('users.retraite', '=', 0)
+                ->where('users.exclut', '=', 0)
+                ->get();
+
             return view('pages.impressions.liste_des_mebres', ['membres' => $data]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
 
+    /**
+     * Retrieves a list of deceased members.
+     *
+     * @param Request $request the HTTP request data.
+     * @throws Exception if an error occurs.
+     * @return \Illuminate\Contracts\View\View the list of deceased members.
+     */
     public function impressionListMembreDecede(Request $request)
     {
-        try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=1 and us.retraite=0 and us.exclut=0'));
-            return view('pages.impressions.liste_des_membres_decedes', ['membres' => $data]);
-        } catch (Exception $e) {
-            return response()->json(["error" => "Une erreur s'est produite."]);
-        }
+        $data = DB::table('users')
+            ->join('categories', 'categories.id', '=', 'users.categories_id')
+            ->select('users.id', 'users.sexe', 'users.nom', 'users.prenom', 'users.status_matrimonial', 'users.created_at', 'users.profile_photo_path', 'users.matricule', 'users.agence', 'users.nationalité', 'users.status', 'categories.montant', 'categories.libelle')
+            ->where('users.deces', '=', 1)
+            ->where('users.retraite', '=', 0)
+            ->where('users.exclut', '=', 0)
+            ->get();
+
+        return view('pages.impressions.liste_des_membres_decedes', ['membres' => $data]);
     }
 
+    /**
+     * Returns a list of excluded members' information for display
+     *
+     * @param Request $request The request object
+     *
+     * @return View|Response The view containing the list of excluded members or a JSON response with an error message
+     */
     public function impressionListMembreExclut(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence,  us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=0 and us.exclut=1'));
+            $data = DB::table('users')
+                ->select(
+                    'users.id',
+                    'users.sexe',
+                    'users.nom',
+                    'users.prenom',
+                    'users.status_matrimonial',
+                    'users.created_at',
+                    'users.profile_photo_path',
+                    'users.matricule',
+                    'users.agence',
+                    'users.nationalité',
+                    'users.status',
+                    'categories.montant',
+                    'categories.libelle'
+                )
+                ->join('categories', 'categories.id', '=', 'users.categories_id')
+                ->where('users.deces', '=', 0)
+                ->where('users.retraite', '=', 0)
+                ->where('users.exclut', '=', 1)
+                ->get();
             return view('pages.impressions.liste_des_membres_excluts', ['membres' => $data]);
         } catch (Exception $e) {
-            return response()->json(["error" => "Une erreur s'est produite."]);
+            return response()->json(["error" => "An error occurred."]);
         }
     }
 
+
+    /**
+     * Retrieves a list of retired members for display on the 'liste_des_membres_retraites' page.
+     *
+     * @param Request $request The HTTP request object.
+     * @throws Some_Exception_Class description of exception
+     * @return Illuminate\View\View Returns a view populated with data from the database query.
+     */
     public function impressionListMembreRetraite(Request $request)
     {
-        try {
-            $data = DB::select(DB::raw('select us.id,us.sexe, us.nom, us.prenom, us.status_matrimonial, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca where ca.id=us.categories_id and us.deces=0 and us.retraite=1 and us.exclut=0'));
-            return view('pages.impressions.liste_des_membres_retraites', ['membres' => $data]);
-        } catch (Exception $e) {
-            return response()->json(["error" => "Une erreur s'est produite."]);
-        }
+        $data = DB::table('users')
+            ->join('categories', 'categories.id', '=', 'users.categories_id')
+            ->select(
+                'users.id',
+                'users.sexe',
+                'users.nom',
+                'users.prenom',
+                'users.status_matrimonial',
+                'users.created_at',
+                'users.profile_photo_path',
+                'users.matricule',
+                'users.agence',
+                'users.nationalité',
+                'users.status',
+                'categories.montant',
+                'categories.libelle'
+            )
+            ->where('users.deces', '=', 0)
+            ->where('users.retraite', '=', 1)
+            ->where('users.exclut', '=', 0)
+            ->get();
+        return view('pages.impressions.liste_des_membres_retraites', ['membres' => $data]);
     }
 }

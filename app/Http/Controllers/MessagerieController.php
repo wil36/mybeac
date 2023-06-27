@@ -157,10 +157,10 @@ class MessagerieController extends Controller
                 </li>
                 <li>
                     <div class="drodown">
-                        <a href="' . route('messagerie.detailMessage', $data->id) . '" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
-                                <li><a href="#" ><em class="icon ni ni-forward-ios"></em><span>Lire le message</span></a></li>
+                                <li><a href="' . route('messagerie.detailMessage', $data->id) . '" ><em class="icon ni ni-forward-ios"></em><span>Lire le message</span></a></li>
                             </ul>
                         </div>
                     </div>

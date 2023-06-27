@@ -70,7 +70,12 @@ class PrestationController extends Controller
     public function getprestationList(Request $request)
     {
         try {
-            $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, us.nom, us.prenom, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id'));
+            $data = Prestation::with(['membre' => function ($query) {
+                $query->select('id', 'nom', 'prenom');
+            }])
+                ->with('type_prestation')
+                ->with('ayant_droit')
+                ->get();
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -86,7 +91,7 @@ class PrestationController extends Controller
                     <span>PRE</span>
                 </div>
                 <div class='user-info'>
-                    <span class='tb-lead'>" . Carbon::parse($data->dates)->format('d M Y') . "</span>
+                    <span class='tb-lead'>" . Carbon::parse($data->date)->format('d M Y') . "</span>
                 </div>
             </div>";
                 })
@@ -94,13 +99,14 @@ class PrestationController extends Controller
                     return number_format($data->montant, 0, ',', ' ') . ' FCFA';
                 })
                 ->addColumn("membre", function ($data) {
-                    return $data->nom . ' ' . $data->prenom;
+                    return $data->membre->nom . ' ' . $data->membre->prenom;
                 })
                 ->addColumn("typePrestation", function ($data) {
-                    return $data->libelle;
+                    return $data->type_prestation->libelle;
                 })
                 ->addColumn("ayantDroit", function ($data) {
-                    return $data->adnom . ' ' . $data->adprenom;
+                    return
+                        isset($data->ayant_droit) ? $data->ayant_droit->nom . ' ' . $data->ayant_droit->prenom : "Aucun ayant droit";
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">
@@ -145,8 +151,13 @@ class PrestationController extends Controller
     public function getprestationListForUser(Request $request)
     {
         try {
-
-            $data = DB::select(DB::raw('select pr.id, pr.created_at, pr.montant, DATE(pr.date) as dates, tp.libelle, ad.nom as adnom, ad.prenom as adprenom from type_prestations tp, prestations pr, ayant_droits ad, users us where tp.id=pr.type_prestation_id and us.id=pr.users_id and ad.id=pr.ayant_droits_id and pr.users_id=' . $request->id));
+            $data = Prestation::where('users_id', $request->id)
+                // ->with(['membre' => function ($query) {
+                //     $query->select('id', 'nom', 'prenom');
+                // }])
+                ->with('type_prestation')
+                ->with('ayant_droit')
+                ->get();
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -162,7 +173,8 @@ class PrestationController extends Controller
                     <span>PRE</span>
                 </div>
                 <div class='user-info'>
-                    <span class='tb-lead'>" . $data->dates . "</span>
+                    <span class='tb-lead'>"
+                        . Carbon::parse($data->date)->format('d M Y') . "</span>
                 </div>
             </div>";
                 })
@@ -170,10 +182,10 @@ class PrestationController extends Controller
                     return number_format($data->montant, 0, ',', ' ');
                 })
                 ->addColumn("typePrestation", function ($data) {
-                    return $data->libelle;
+                    return $data->type_prestation->libelle;
                 })
                 ->addColumn("ayantDroit", function ($data) {
-                    return $data->adnom . ' ' . $data->adprenom;
+                    return isset($data->ayant_droit) ? $data->ayant_droit->nom . ' ' . $data->ayant_droit->prenom : "Aucun ayant droit";
                 })
                 ->addColumn('Actions', function ($data) {
                     return '<ul class="nk-tb-actions gx-1">
@@ -220,7 +232,7 @@ class PrestationController extends Controller
     {
         try {
             $tabDate = explode('-', $request->date);
-            $data = DB::select(DB::raw('select us.id, us.nom, us.prenom, us.profile_photo_path, us.created_at, us.matricule, SUM(po.users_id) AS nb_prest, SUM(po.montant) as montant from users us, prestations po where us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ' group by po.users_id'));
+            $data = DB::select(DB::raw('select us.id, us.nom, us.prenom, us.profile_photo_path, us.created_at, us.matricule, COUNT(po.users_id) AS nb_prest, SUM(po.montant) as montant from users us, prestations po where us.id=po.users_id and Month(po.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(po.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ' group by po.users_id'));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -430,7 +442,7 @@ class PrestationController extends Controller
                 'typePrestation' => ['required', 'string'],
                 'montant' => ['required', 'numeric'],
                 'date' => ['required', 'date', 'date_format:Y-m-d'],
-                'listAyantDroit' => ['required', 'integer'],
+                'listAyantDroit' => [],
             ]);
             $validator->setAttributeNames($attributeNames);
             if ($validator->fails()) {
@@ -451,17 +463,17 @@ class PrestationController extends Controller
             $prestation['montant'] = $request['montant'];
             $prestation['users_id'] = $request['id'];
             $prestation['type_prestation_id'] = explode('|', $request['typePrestation'])[0];
-            $prestation['ayant_droits_id'] = $request['listAyantDroit'];
+            $prestation['ayant_droits_id'] = isset($request['listAyantDroit']) ? $request['listAyantDroit'] : null;
 
             $prestation->save();
 
             $caisse = Caisse::first();
             $caisse->principal = $caisse->principal - $request['montant'];
             $caisse->save();
-            $type_prestation = TypePrestation::findOrFail($prestation['type_prestation_id']);
-            if (isset($type_prestation)) {
+            $type_prestation = TypePrestation::find($prestation['type_prestation_id']);
+            if (isset($type_prestation) && isset($request['listAyantDroit'])) {
                 if ($type_prestation->delete_ayant_droit == '1') {
-                    $ayant_droit = AyantDroit::findOrFail($prestation['ayant_droits_id']);
+                    $ayant_droit = AyantDroit::find($request['listAyantDroit']);
                     $ayant_droit->deces = 1;
                     $ayant_droit->save();
                 }
@@ -470,6 +482,7 @@ class PrestationController extends Controller
 
             return response()->json(["success" => "Enregistrement éffectuer !"]);
         } catch (Exception $e) {
+            return response()->json(["error" => $e->getMessage()]);
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }

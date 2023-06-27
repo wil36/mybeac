@@ -37,7 +37,7 @@
 								<div class="card">
 									<div class="card-inner">
 										<form method="POST" id="formTypeprestation"
-											action="{{ Route::currentRouteName() === 'typeprestation.edit'? route('typeprestation.update', $typeprestation->id): route('typeprestation.store') }}">
+											action="{{ Route::currentRouteName() === 'typeprestation.edit' ? route('typeprestation.update', $typeprestation->id) : route('typeprestation.store') }}">
 											@csrf
 											<div class="row g-gs">
 												<div class="col-md-12">
@@ -58,7 +58,7 @@
 														<input type="checkbox" class="custom-control-input" id="supp"
 															{{ isset($typeprestation) ? ($typeprestation->delete_ayant_droit == 1 ? 'checked' : '') : '' }}>
 														<label class="custom-control-label" for="supp" style="font-weight: bold;">@lang('Entraîne la désactivation
-															du membre ?')</label>
+																																																																																					du membre ?')</label>
 													</div>
 												</div>
 												<div class="col-md-12">
@@ -85,81 +85,80 @@
 
 @section('script')
 	<script>
-	 $('.btn-submit-Typeprestation').click(function(e) {
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  $('.btn-submit-Typeprestation').attr('disabled', true);
-	  e.preventDefault();
-	  var libelle = $("#libelle").val();
-	  var montant = $("#montant").val();
-	  var supp = false;
-	  if ($('#supp').prop("checked") == true) {
-	   var supp = true;
-	  }
-	  $.ajax({
-	   headers: {
-	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	   },
-	   url: "" + $('#formTypeprestation').attr('action'),
-	   type: "" + $('#formTypeprestation').attr('method'),
-	   dataType: 'json',
-	   data: {
-	    libelle: libelle,
-	    montant: montant,
-	    supp: supp,
-	   },
-	   success: function(data) {
-	    if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
-	     //success
-	     Swal.fire(data.success,
-	      'Votre requête s\'est terminer avec succèss', 'success', );
-	     clearformTypeprestation();
-	    } else {
-	     if (!$.isEmptyObject(data.error)) {
-	      $('#alert-javascript').removeClass('d-none');
-	      $('#alert-javascript').text(data.error);
-	     } else {
-	      if (!$.isEmptyObject(data.errors)) {
-	       var error = "";
-	       data.errors.forEach(element => {
-	        error = error + element + "<br>";
-	       });
-	       $('#alert-javascript').removeClass('d-none');
-	       $('#alert-javascript').append(error);
-	      }
-	     }
-	     $('.btn-submit-Typeprestation').attr('disabled', false);
-	    }
-	    $("html, body").animate({
-	     scrollTop: 0
-	    }, "slow");
-	   },
-	   error: function(data) {
-	    Swal.fire('Une erreur s\'est produite.',
-	     'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
-	     'error');
+		$('.btn-submit-Typeprestation').click(function(e) {
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			$('.btn-submit-Typeprestation').attr('disabled', true);
+			e.preventDefault();
+			var libelle = $("#libelle").val();
+			var montant = $("#montant").val();
+			var supp = false;
+			if ($('#supp').prop("checked") == true) {
+				var supp = true;
+			}
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url: "" + $('#formTypeprestation').attr('action'),
+				type: "" + $('#formTypeprestation').attr('method'),
+				dataType: 'json',
+				data: {
+					libelle: libelle,
+					montant: montant,
+					supp: supp,
+				},
+				success: function(data) {
+					if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+						//success
+						Swal.fire(data.success,
+							'Votre requête s\'est terminer avec succèss', 'success', );
+						clearformTypeprestation();
+					} else {
+						if (!$.isEmptyObject(data.error)) {
+							$('#alert-javascript').removeClass('d-none');
+							$('#alert-javascript').text(data.error);
+						} else {
+							if (!$.isEmptyObject(data.errors)) {
+								var error = "";
+								data.errors.forEach(element => {
+									error = error + element + "<br>";
+								});
+								$('#alert-javascript').removeClass('d-none');
+								$('#alert-javascript').append(error);
+							}
+						}
+						$('.btn-submit-Typeprestation').attr('disabled', false);
+					}
+					$("html, body").animate({
+						scrollTop: 0
+					}, "slow");
+				},
+				error: function(data) {
+					Swal.fire('Une erreur s\'est produite.',
+						'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+						'error');
 
-	   }
-	  });
+				}
+			});
 
-	 });
+		});
 
-	 function clearformTypeprestation() {
-	  history.pushState({}, null, "{{ route('typeprestation.create') }}");
-	  $('#formTypeprestation').attr('action', "{{ route('typeprestation.store') }}");
-	  $('#formTypeprestation').attr('method', "POST");
-	  $('#alert-javascript').addClass('d-none');
-	  $('#alert-javascript').text('');
-	  $("#libelle").val('');
-	  $("#libelle").focus();
-	  $("#montant").val('');
-	  $('#supp').prop("checked", false);
-	@if (Route::currentRouteName() === 'typeprestation.edit')
-		// history.pushState({}, null, "{{ route('typeprestation.index') }}");
-		// window.setTimeout('location.reload()', 1500);
-		window.setTimeout(' history.back();', 1500);
-	@endif
-	  $('.btn-submit-Typeprestation').attr('disabled', false);
-	 }
+		function clearformTypeprestation() {
+			$('#formTypeprestation').attr('action', "{{ route('typeprestation.store') }}");
+			$('#formTypeprestation').attr('method', "POST");
+			$('#alert-javascript').addClass('d-none');
+			$('#alert-javascript').text('');
+			$("#libelle").val('');
+			$("#libelle").focus();
+			$("#montant").val('');
+			$('#supp').prop("checked", false);
+			@if (Route::currentRouteName() === 'typeprestation.edit')
+				history.pushState({}, null, "{{ route('typeprestation.index') }}");
+				window.setTimeout('location.reload()', 1500);
+				// window.setTimeout(' history.back();', 1500);
+			@endif
+			$('.btn-submit-Typeprestation').attr('disabled', false);
+		}
 	</script>
 @endsection

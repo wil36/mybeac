@@ -54,7 +54,7 @@
 									<div class="card card-preview">
 										<div class="card-inner">
 											<div class="table-responsive">
-												<table class="nk-tb-list nk-tb-ulist" id="userListDecede" data-auto-responsive="false">
+												<table class="nk-tb-list nk-tb-ulist" id="userListExclut" data-auto-responsive="false">
 													<thead>
 														<tr class="nk-tb-item nk-tb-head">
 															<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
@@ -70,14 +70,11 @@
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Agence')</span>
 															</th>
-
 															<th class="nk-tb-col"><span class="sub-text">@lang('Categorie')</span>
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Status')</span>
 															</th>
-															{{-- <th class="nk-tb-col"><span class="sub-text">Status</span>
-                                                        </th> --}}
-															<th class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">Action</span></th>
+															<th class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">@lang('Action')</span></th>
 														</tr>
 													</thead>
 													<tbody></tbody>
@@ -105,8 +102,61 @@
 
 	@if (config('app.locale') == 'fr')
 		<script>
+			$(document).on('click', '.inclure-data-user', function(e) {
+				e.preventDefault();
+				var id = $(this).attr('data_id');
+				console.log(id);
+				Swal.fire({
+					title: 'Voulez-vous vraiment inclure ce membre ?',
+					text: "Vous êtes en train de vouloir inclure un membre exclut ! Assurez-vous que c'est bien le bon !",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Oui',
+					cancelButtonText: 'Annuler',
+				}).then((result) => {
+					if (result.value) {
+						$.ajax({
+							headers: {
+								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+							},
+							url: "{{ route('user.inclure') }}",
+							type: "POST",
+							dataType: 'json',
+							data: {
+								id: id,
+							},
+							success: function(data) {
+								if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+									Swal.fire(
+										'Effectuer !',
+										data.success,
+										'success'
+									)
+									window.setTimeout('location.reload()', 1500);
+								} else {
+									Swal.fire(
+										'Erreur!',
+										data.error,
+										'error'
+									)
+								}
+								$("html, body").animate({
+									scrollTop: 0
+								}, "slow");
+							},
+							error: function(data) {
+								Swal.fire('Une erreur s\'est produite.',
+									'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+									'error');
+
+							}
+						});
+					}
+				});
+			});
+
 			$(document).ready(function() {
-				$('#userListDecede').DataTable({
+				$('#userListExclut').DataTable({
 					processing: true,
 					serverSide: true,
 					autoWidth: false,
@@ -202,7 +252,7 @@
 						{
 							"data": 'Actions',
 							"name": 'Actions',
-							"visible": false,
+							"visible": true,
 							"orderable": false,
 							"serachable": false,
 							"className": 'nk-tb-col nk-tb-col-tools'
@@ -215,7 +265,7 @@
 	@else
 		<script>
 			$(document).ready(function() {
-				$('#userListDecede').DataTable({
+				$('#userListExclut').DataTable({
 					processing: true,
 					serverSide: true,
 					autoWidth: false,
@@ -285,7 +335,7 @@
 						{
 							"data": 'Actions',
 							"name": 'Actions',
-							"visible": false,
+							"visible": true,
 							"orderable": false,
 							"serachable": false,
 							"className": 'nk-tb-col nk-tb-col-tools'

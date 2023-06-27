@@ -66,7 +66,10 @@ class CotisationController extends Controller
     public function historiqueMensuelCotisationDetailMembre(Request $request)
     {
         try {
-            return view('pages.listedesmembresdecotisationmensuel', ['dateDeRecherche' => $request->date]);
+            $tabDate = explode('-', $request->date);
+            $montant =
+                DB::select(DB::raw('select SUM(co.montant) as montantGlobal from users us, categories ca, cotisations co where ca.id=us.categories_id and us.id=co.users_id and Month(co.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(co.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            return view('pages.listedesmembresdecotisationmensuel', ['dateDeRecherche' => $request->date, 'montant_global' => $montant[0]->montantGlobal]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
@@ -169,7 +172,7 @@ class CotisationController extends Controller
     {
         try {
             $tabDate = explode('-', $request->date);
-            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, ca.montant, ca.libelle from users us, categories ca, cotisations co where ca.id=us.categories_id and us.id=co.users_id and Month(co.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(co.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, co.montant, ca.libelle from users us, categories ca, cotisations co where ca.id=us.categories_id and us.id=co.users_id and Month(co.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(co.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
             return \Yajra\DataTables\DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn("id", function ($data) {
@@ -225,6 +228,9 @@ class CotisationController extends Controller
                 })
                 ->addColumn("category", function ($data) {
                     return $data->libelle;
+                })
+                ->addColumn("montant_cotisation", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ') . ' FCFA';
                 })
                 ->editColumn("status", function ($data) {
                     if ($data->status) {
@@ -495,6 +501,19 @@ class CotisationController extends Controller
         try {
             $data = DB::select(DB::raw('SELECT Year(co.date) AS annee, SUM(co.montant) AS montant FROM cotisations co GROUP BY YEAR(co.date) ORDER BY YEAR(co.date) desc'));
             return view('pages.impressions.liste_des_historiques_cotisations_annuelles', ['datas' => $data]);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function impressionListMembreHistoriqueMensuel(Request $request)
+    {
+        try {
+            $tabDate = explode('-', $request->date);
+            $data = DB::select(DB::raw('select us.id, us.nom,us.sexe, us.prenom, us.created_at, us.profile_photo_path, us.matricule, us.agence, us.nationalité, us.status, co.montant, ca.libelle from users us, categories ca, cotisations co where ca.id=us.categories_id and us.id=co.users_id and Month(co.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(co.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            $montant =
+                DB::select(DB::raw('select SUM(co.montant) as montantGlobal from users us, categories ca, cotisations co where ca.id=us.categories_id and us.id=co.users_id and Month(co.date)=' . (isset($tabDate[1]) ? $tabDate[1] : 0) . ' and Year(co.date)=' . (isset($tabDate[0]) ? $tabDate[0] : 0) . ''));
+            return view('pages.impressions.liste_des_mebres_historique_cotisation_mensuel', ['membres' => $data, 'dateDeRecherche' => $request->date, 'montant_global' => $montant[0]->montantGlobal]);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
         }

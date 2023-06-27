@@ -51,6 +51,15 @@
 							<h2 style="text-align: center;">
 								{{ isset($tabDate[1]) && isset($tabDate[0]) ? DateTime::createFromFormat('Y-m', $dateDeRecherche)->format('M Y') : 'La date est le mauvais format' }}
 							</h2>
+							<h2 style="text-align: center;">
+								Montant Global : {{ number_format($montant_global, 0, ',', ' ') . ' FCFA' }}
+							</h2>
+
+							<div class="col-md-4">
+								<a class="btn btn-primary"
+									href="{{ route('cotisation.impressionListMembreHistoriqueMensuel', $dateDeRecherche) }}"><em
+										class="icon ni ni-printer"></em></a>
+							</div>
 							<div class="card">
 								<div class="nk-block nk-block-lg">
 									<div class="card card-preview">
@@ -74,7 +83,8 @@
 															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Categorie')</span>
 															</th>
-
+															<th class="nk-tb-col"><span class="sub-text">@lang('Montant')</span>
+															</th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Status')</span>
 															</th>
 															{{-- <th class="nk-tb-col"><span class="sub-text">Status</span>
@@ -194,6 +204,11 @@
 							"className": 'nk-tb-col'
 						},
 						{
+							"data": 'montant_cotisation',
+							"name": 'montant_cotisation',
+							"className": 'nk-tb-col'
+						},
+						{
 							"data": 'status',
 							"name": 'status',
 							"className": 'nk-tb-col'
@@ -272,6 +287,11 @@
 						{
 							"data": 'category',
 							"name": 'category',
+							"className": 'nk-tb-col'
+						},
+						{
+							"data": 'montant_cotisation',
+							"name": 'montant_cotisation',
 							"className": 'nk-tb-col'
 						},
 						{

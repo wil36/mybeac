@@ -121,11 +121,15 @@
 															des prestations</a>
 													</li>
 													<li class="nav-item">
+														<a class="nav-link" id="tabItem" data-toggle="tab" href="#tabItem5">Liste
+															des emprunts</a>
+													</li>
+													<li class="nav-item">
 														<a class="nav-link" data-toggle="tab" href="#tabItem3">@lang('Liste des ayant droit')</a>
 													</li>
 													<li class="nav-item">
 														<a class="nav-link" data-toggle="tab" href="#tabItem4">@lang('Liste des ayant droit
-																												                                                            décédés')</a>
+																																																																																																																																																																								                                                            décédés')</a>
 													</li>
 												</ul>
 												<div class="tab-content">
@@ -139,10 +143,10 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant
-																																				                                                                                (FCFA)')</span>
+																																																																																																																																																																																																																								                                                                                (FCFA)')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Numéro de la
-																																				                                                                                séance')</span>
+																																																																																																																																																																																																																								                                                                                séance')</span>
 																		</th>
 																		<th class="nk-tb-col nk-tb-col-tools text-right">
 																			<span class="sub-text">Action</span>
@@ -169,16 +173,38 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant
-																																				                                                                                (FCFA)')</span>
+																																																																																																																																																																																																																								                                                                                (FCFA)')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Type de
-																																				                                                                                prestation')</span>
+																																																																																																																																																																																																																								                                                                                prestation')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Ayant
-																																				                                                                                droit')</span>
+																																																																																																																																																																																																																								                                                                                droit')</span>
 																		</th>
 																		<th class="nk-tb-col nk-tb-col-tools text-right">
 																			<span class="sub-text">Action</span>
+																		</th>
+																	</tr>
+																</thead>
+																<tbody></tbody>
+															</table>
+														</div>
+													</div>
+													<div class="tab-pane" id="tabItem5">
+														<div class="row m-md-2">
+
+															<h3 class="col-md-10 text-center">Liste des emprunts</h3>
+														</div>
+														<div class="table-responsive">
+															<table class="nk-tb-list nk-tb-ulist" id="empruntList" data-auto-responsive="true">
+																<thead>
+																	<tr class="nk-tb-item nk-tb-head">
+																		<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Type d\'emprunt')</span>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Etat du dossier d\'emprunt')</span></th>
+																		<th class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">@lang('Action')</span>
 																		</th>
 																	</tr>
 																</thead>
@@ -203,15 +229,15 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Nom')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Liens de
-																																				                                                                                parenté avec le membre')</span>
+																																																																																																																																																																																																																								                                                                                parenté avec le membre')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Cni')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Acte de
-																																				                                                                                naissance')</span>
+																																																																																																																																																																																																																								                                                                                naissance')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Certificat de
-																																				                                                                                vie')</span>
+																																																																																																																																																																																																																								                                                                                vie')</span>
 																		</th>
 																		<th class="nk-tb-col nk-tb-col-tools text-right">
 																			<span class="sub-text">Action</span>
@@ -226,7 +252,7 @@
 														<div class="row m-md-2">
 
 															<h3 class="col-md-10 text-center">@lang('Liste des ayant droit
-																														                                                                décédés')</h3>
+																																																																																																																																																																																				                                                                décédés')</h3>
 														</div>
 														<div class="table-responsive">
 															<table class="nk-tb-list nk-tb-ulist" id="ayantdroitListdecede" data-auto-responsive="true">
@@ -236,15 +262,15 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Nom')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Liens de
-																																				                                                                                parenté avec le membre')</span>
+																																																																																																																																																																																																																								                                                                                parenté avec le membre')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Cni')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Acte de
-																																				                                                                                naissance')</span>
+																																																																																																																																																																																																																								                                                                                naissance')</span>
 																		</th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Certificat de
-																																				                                                                                vie')</span>
+																																																																																																																																																																																																																								                                                                                vie')</span>
 																		</th>
 																		<th class="nk-tb-col nk-tb-col-tools text-right">
 																			<span class="sub-text">Action</span>
@@ -354,6 +380,102 @@
 				]
 			});
 		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$('#empruntList').DataTable({
+				processing: true,
+				serverSide: true,
+				autoWidth: false,
+				pageLength: 10,
+				paginate: true,
+				info: true,
+				language: {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+					"sEmptyTable": "Aucune donnée disponible dans le tableau",
+					"sInfo": "Affichage des éléments _START_ à _END_ sur _TOTAL_ éléments",
+					"sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+					"sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+					"sInfoPostFix": "",
+					"sInfoThousands": ",",
+					"sLengthMenu": "Afficher _MENU_ éléments",
+					"sLoadingRecords": "Chargement...",
+					"sProcessing": "Traitement...",
+					"sSearch": "Rechercher :",
+					"sZeroRecords": "Aucun élément correspondant trouvé",
+					"oPaginate": {
+						"sFirst": "Premier",
+						"sLast": "Dernier",
+						"sNext": "Suivant",
+						"sPrevious": "Précédent"
+					},
+					"oAria": {
+						"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+						"sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+					},
+					"select": {
+						"rows": {
+							"_": "%d lignes sélectionnées",
+							"0": "Aucune ligne sélectionnée",
+							"1": "1 ligne sélectionnée"
+						}
+					}
+				},
+				buttons: [
+					'copy', 'excel', 'pdf'
+				],
+				ajax: "{{ route('emprunt.getListOfEmpruntById', $membre->id) }}",
+				order: [
+					[0, "desc"]
+				],
+				columns: [{
+						"data": 'updated_at',
+						"name": 'updated_at',
+						"visible": false,
+						"className": 'nk-tb-col nk-tb-col-check'
+					},
+					// {
+					// 	"data": 'membre',
+					// 	"name": 'membre',
+					// 	"className": 'nk-tb-col'
+					// },
+					// {
+					// 	"data": 'matricule',
+					// 	"name": 'matricule',
+					// 	"className": 'nk-tb-col'
+					// },
+					{
+						"data": 'type',
+						"name": 'type',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'date',
+						"name": 'date',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'montant',
+						"name": 'montant',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'status',
+						"name": 'status',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'Actions',
+						"name": 'Actions',
+						"orderable": false,
+						"serachable": false,
+						"className": 'nk-tb-col nk-tb-col-tools'
+					},
+				]
+			});
+		});
+		$(".loader").addClass("d-none");
 	</script>
 
 	<script>

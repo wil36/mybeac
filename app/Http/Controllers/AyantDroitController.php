@@ -268,7 +268,6 @@ class AyantDroitController extends Controller
             // $file = $request->file->store('public/images');
             // $new_name = rand() . '.' . $file->getClientOriginalExtension();
             // $file->move(public_path('images'), $new_name);
-
             $ayantsdroits->save();
             DB::commit();
             return response()->json(["success" => "Enregistrement éffectuer !"]);
@@ -289,18 +288,28 @@ class AyantDroitController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id the ID of the resource to edit
+     * @return \Illuminate\Http\Response the response containing the edit form view
      */
     public function edit($id)
     {
         try {
+            // Find the resource to edit
             $ayantsdroits = AyantDroit::find($id);
-            $user = User::select('nom', 'matricule', 'prenom', 'email')->where('id', $ayantsdroits->users_id)->first();
-            return view('pages.addayantsdroits', ['father' => $user, 'id' => $ayantsdroits->users_id, 'ayantsdroits' => $ayantsdroits]);
+            // Get the user associated with the resource
+            $user = User::select('nom', 'matricule', 'prenom', 'email', 'type_parent')
+                ->where('id', $ayantsdroits->users_id)
+                ->first();
+            // Return the view with the user, resource ID, and resource data
+            return view('pages.addayantsdroits', [
+                'father' => $user,
+                'id' => $ayantsdroits->users_id,
+                'ayantsdroits' => $ayantsdroits
+            ]);
         } catch (Exception $e) {
+            // Return an error response if an exception is caught
             return response()->json(["error" => "Une erreur s'est produite."]);
         }
     }
@@ -351,7 +360,6 @@ class AyantDroitController extends Controller
             }
 
             $ayantsdroits->save();
-            DB::commit();
 
             if ($request->hasFile('cni') && $request->file('cni')->isValid()) {
                 if (Storage::exists('public/images/ayantdroit/cni/' . $expathcni)) {
@@ -368,6 +376,8 @@ class AyantDroitController extends Controller
                     Storage::delete('public/images/ayantdroit/certificat_vie/' . $expathcertificat_vie);
                 }
             }
+
+            DB::commit();
 
             return response()->json(["success" => "Enregistrement éffectuer !"]);
         } catch (Exception $e) {

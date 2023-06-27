@@ -190,6 +190,7 @@
 				},
 				success: function(data) {
 					if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+						console.log("hello!");
 						//success
 						Swal.fire(data.success,
 							'Votre requête s\'est terminer avec succèss', 'success', );

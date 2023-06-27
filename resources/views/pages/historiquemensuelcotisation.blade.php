@@ -45,8 +45,8 @@
 									<span class="sr-only">Loading...</span>
 								</div>
 							</div>
-							<a class="btn btn-primary" href="{{ route('cotisation.impressionListDeHistoriqueCotisationsMenseulle') }}"><em
-									class="icon ni ni-printer"></em></a>
+							{{-- <a class="btn btn-primary" href="{{ route('cotisation.impressionListDeHistoriqueCotisationsMenseulle') }}"><em
+									class="icon ni ni-printer"></em></a> --}}
 							<div class="card">
 								<div class="nk-block nk-block-lg">
 									<div class="card card-preview">

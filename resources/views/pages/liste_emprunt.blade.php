@@ -54,7 +54,7 @@
 									<div class="card card-preview">
 										<div class="card-inner">
 											<div class="table-responsive">
-												<table class="nk-tb-list nk-tb-ulist" id="typeprestationList" data-auto-responsive="true">
+												<table class="nk-tb-list nk-tb-ulist" id="empruntList" data-auto-responsive="true">
 													<thead>
 														<tr class="nk-tb-item nk-tb-head">
 															<th class="nk-tb-col" hidden><span class="sub-text"></span></th>
@@ -144,7 +144,7 @@
 
 	<script>
 		$(document).ready(function() {
-			$('#typeprestationList').DataTable({
+			$('#empruntList').DataTable({
 				processing: true,
 				serverSide: true,
 				autoWidth: false,

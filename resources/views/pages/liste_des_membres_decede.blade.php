@@ -208,7 +208,7 @@
 						{
 							"data": 'Actions',
 							"name": 'Actions',
-							"visible": false,
+							"visible": true,
 							"orderable": false,
 							"serachable": false,
 							"className": 'nk-tb-col nk-tb-col-tools'
@@ -291,7 +291,7 @@
 						{
 							"data": 'Actions',
 							"name": 'Actions',
-							"visible": false,
+							"visible": true,
 							"orderable": false,
 							"serachable": false,
 							"className": 'nk-tb-col nk-tb-col-tools'

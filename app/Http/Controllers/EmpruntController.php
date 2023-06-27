@@ -76,17 +76,17 @@ class EmpruntController extends Controller
                 return response()
                     ->json(['errors' => $validator->errors()->all()]);
             }
-            if ($request->type_emprunt == 'BLI') {
-                if ($request->montant < 2000000 || $request->montant > 10000000) {
-                    return response()
-                        ->json(['error' => 'Le montant de prêt du Bridge Loan Immo est situé 2 000 000 et 10 000 000 de FCFA.']);
-                }
-            } else if ($request->type_emprunt == 'BBL') {
-                if ($request->montant < 500000 || $request->montant > 3000000) {
-                    return response()
-                        ->json(['error' => 'Le montant de prêt du Bridge Loan Immo est situé 500 000 et 3 000 000 de FCFA.']);
-                }
-            }
+            // if ($request->type_emprunt == 'BLI') {
+            //     if ($request->montant < 2000000 || $request->montant > 10000000) {
+            //         return response()
+            //             ->json(['error' => 'Le montant de prêt du Bridge Loan Immo est situé 2 000 000 et 10 000 000 de FCFA.']);
+            //     }
+            // } else if ($request->type_emprunt == 'BBL') {
+            //     if ($request->montant < 500000 || $request->montant > 3000000) {
+            //         return response()
+            //             ->json(['error' => 'Le montant de prêt du Bridge Loan Immo est situé 500 000 et 3 000 000 de FCFA.']);
+            //     }
+            // }
             DB::beginTransaction();
             $emprunt  = new Emprunt();
             $emprunt['type'] = $request['type_emprunt'];
@@ -227,6 +227,101 @@ class EmpruntController extends Controller
             </ul>' : '');
                 })->setRowClass("nk-tb-item")
                 ->rawColumns(['Actions', 'membre', 'status'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(["error" => "Une erreur s'est produite."]);
+        }
+    }
+
+    public function getListOfEmpruntById(Request $request)
+    {
+        try {
+
+            $data = Emprunt::with('membre')->where('users_id', '=', $request->id);
+            return \Yajra\DataTables\DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn("id", function ($data) {
+                    return $data->id;
+                })
+                ->addColumn("updated_at", function ($data) {
+                    return $data->created_at;
+                })
+                ->addColumn("date", function ($data) {
+                    return
+                        "<div class='user-card'>
+                <div class='user-avatar bg-dim-primary d-none d-sm-flex'>
+                    <span>EMP</span>
+                </div>
+                <div class='user-info'>
+                    <span class='tb-lead'>" . Carbon::parse($data->date)->format('d M Y') . "</span>
+                </div>
+            </div>";
+                })
+
+                ->editColumn("type", function ($data) {
+                    return ($data->type == 'BLI' ? 'Bridge Loan Immo' : ($data->type == 'BBL' ? 'Back to Back Loan' : ($data->type == 'ASS' ? 'Avance Sur Salaire' : ($data->type == 'BL' ? 'Bridge Loan' : ($data->type == 'ASG' ? 'Avance Sur Gratification' : '')))));
+                })
+                ->addColumn("montant", function ($data) {
+                    return number_format($data->montant, 0, ',', ' ');
+                })
+                ->addColumn("status", function ($data) {
+                    return $data->etat == 'En attente de LS signé' ? "<span class='badge badge-outline-warning'>En attente de Lettre de souscription signé</span>" : ($data->etat == 'Dossier en etude' ?  "<span class='badge badge-outline-info'>Dossier en cour d'étude</span>" : ($data->etat == 'Dossier accepter' ?  "<span class='badge badge-outline-success'>Dossier accepter</span>" : "<span class='badge badge-outline-danger'>Dossier refuser</span>"));
+                })
+                ->addColumn('Actions', function ($data) {
+                    return $data->etat == 'En attente de LS signé' ? '<ul class="nk-tb-actions gx-1">
+               
+                  <li class="nk-tb-action-hidden">
+                    <a href="' . route('emprunt.showFormUploadLettreDeMotivation', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Continuer le dossier">
+                       <em class="icon ni ni-forward-ios"></em>
+                    </a>
+                </li>
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="link-list-opt no-bdr">
+                                
+                                <li><a href="' . route('emprunt.showFormUploadLettreDeMotivation', $data->id) . '"><em class="icon ni ni-forward-ios"></em><span>Continuer le dossier</span></a></li>
+                                
+                                 
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>' : ($data->etat == 'Dossier accepter' ? '<ul class="nk-tb-actions gx-1">
+               
+                  <li class="nk-tb-action-hidden">
+                    <a href="' . route('emprunt.download-lettre-adjudication', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Télécharger la lettre d\'adjudication">
+                       <em class="icon ni ni-download"></em>
+                    </a>
+                </li>
+                 <li class="nk-tb-action-hidden">
+                    <a href="' . route('emprunt.download-lettre-engagement', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Télécharger la lettre d\'engagement">
+                       <em class="icon ni ni-download"></em>
+                    </a>
+                </li>
+                 <li class="nk-tb-action-hidden">
+                    <a href="' . route('emprunt.download-ordre_paiement', $data->id) . '" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Télécharger l\'ordre de paiement">
+                       <em class="icon ni ni-download"></em>
+                    </a>
+                </li>
+                <li>
+                    <div class="drodown">
+                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="link-list-opt no-bdr">
+                                
+                                <li><a href="' . route('emprunt.download-lettre-adjudication', $data->id) . '"><em class="icon ni ni-download"></em><span>Télécharger la lettre d\'adjudication</span></a></li>
+                                <li><a href="' . route('emprunt.download-lettre-engagement', $data->id) . '"><em class="icon ni ni-download"></em><span>Télécharger la lettre d\'engagement</span></a></li>
+                                <li><a href="' . route('emprunt.download-ordre_paiement', $data->id) . '"><em class="icon ni ni-download"></em><span>Télécharger l\'ordre de paiement</span></a></li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>' : '');
+                })->setRowClass("nk-tb-item")
+                ->rawColumns(['Actions', 'date', 'status'])
                 ->make(true);
         } catch (Exception $e) {
             return response()->json(["error" => "Une erreur s'est produite."]);
