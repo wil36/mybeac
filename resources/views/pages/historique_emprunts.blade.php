@@ -69,12 +69,14 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant commission (FCFA)')</span></th>
 																	</tr>
 																</thead>
 																<tbody></tbody>
 															</table>
 															<br><br>
 															<h5>Total : {{ number_format(abs($BLtotal), 0, ',', ' ') }} FCFA</h5>
+															<h5>Montant Total des commissions : {{ number_format(abs($BLtotalCommission), 0, ',', ' ') }} FCFA</h5>
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem2">
@@ -90,11 +92,13 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant commission (FCFA)')</span></th>
 																	</tr>
 																</thead>
 																<tbody></tbody>
 															</table><br><br>
 															<h5>Total : {{ number_format(abs($BLItotal), 0, ',', ' ') }} FCFA</h5>
+															<h5>Montant Total des commissions : {{ number_format(abs($BLItotalCommission), 0, ',', ' ') }} FCFA</h5>
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem3">
@@ -110,11 +114,13 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant commission (FCFA)')</span></th>
 																	</tr>
 																</thead>
 																<tbody></tbody>
 															</table><br><br>
 															<h5>Total : {{ number_format(abs($BBLtotal), 0, ',', ' ') }} FCFA</h5>
+															<h5>Montant Total des commissions : {{ number_format(abs($BBLtotalCommission), 0, ',', ' ') }} FCFA</h5>
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem4">
@@ -130,11 +136,13 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant commission (FCFA)')</span></th>
 																	</tr>
 																</thead>
 																<tbody></tbody>
 															</table><br><br>
 															<h5>Total : {{ number_format(abs($ASStotal), 0, ',', ' ') }} FCFA</h5>
+															<h5>Montant Total des commissions : {{ number_format(abs($ASStotalCommission), 0, ',', ' ') }} FCFA</h5>
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem5">
@@ -150,11 +158,13 @@
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+																		<th class="nk-tb-col"><span class="sub-text">@lang('Montant commission (FCFA)')</span></th>
 																	</tr>
 																</thead>
 																<tbody></tbody>
 															</table><br><br>
 															<h5>Total : {{ number_format(abs($ASGtotal), 0, ',', ' ') }} FCFA</h5>
+															<h5>Montant Total des commissions : {{ number_format(abs($ASGtotalCommission), 0, ',', ' ') }} FCFA</h5>
 														</div>
 													</div>
 												</div>
@@ -250,6 +260,16 @@
 						"name": 'montant',
 						"className": 'nk-tb-col'
 					},
+					{
+						"data": 'montant_commission',
+						"name": 'montant_commission',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'status',
+						"name": 'status',
+						"className": 'nk-tb-col'
+					},
 				]
 			});
 		});
@@ -324,6 +344,16 @@
 					"name": 'montant',
 					"className": 'nk-tb-col'
 				},
+				{
+						"data": 'montant_commission',
+						"name": 'montant_commission',
+						"className": 'nk-tb-col'
+				},
+				{
+						"data": 'status',
+						"name": 'status',
+						"className": 'nk-tb-col'
+					},
 			]
 		});
 		$('#historiqueEmpruntBBL').DataTable({
@@ -397,6 +427,16 @@
 					"name": 'montant',
 					"className": 'nk-tb-col'
 				},
+				{
+						"data": 'montant_commission',
+						"name": 'montant_commission',
+						"className": 'nk-tb-col'
+				},
+				{
+						"data": 'status',
+						"name": 'status',
+						"className": 'nk-tb-col'
+					},
 			]
 		});
 		$('#historiqueEmpruntASS').DataTable({
@@ -470,6 +510,16 @@
 					"name": 'montant',
 					"className": 'nk-tb-col'
 				},
+				{
+						"data": 'montant_commission',
+						"name": 'montant_commission',
+						"className": 'nk-tb-col'
+				},
+				{
+						"data": 'status',
+						"name": 'status',
+						"className": 'nk-tb-col'
+					},
 			]
 		});
 		$('#historiqueEmpruntASG').DataTable({
@@ -543,6 +593,16 @@
 					"name": 'montant',
 					"className": 'nk-tb-col'
 				},
+				{
+						"data": 'montant_commission',
+						"name": 'montant_commission',
+						"className": 'nk-tb-col'
+				},
+				{
+						"data": 'status',
+						"name": 'status',
+						"className": 'nk-tb-col'
+					},
 			]
 		});
 		$(".loader").addClass("d-none");

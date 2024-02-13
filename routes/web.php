@@ -83,6 +83,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('/liste-des-emprunts-rembourser-par-les-membres-ajax', [EmpruntController::class, 'getListOfEmpruntWhoIsReturnByTheMemberAjax'])->name('emprunt.getListOfEmpruntWhoIsReturnByTheMemberAjax');
     Route::post('/acepter-le-dossier', [EmpruntController::class, 'accepterLeDossier'])->name('emprunt.accepterLeDossier');
     Route::post('/refuser-le-dossier', [EmpruntController::class, 'refuserLeDossier'])->name('emprunt.refuserLeDossier');
+    Route::post('/rembourser-le-dossier', [EmpruntController::class, 'rembourserLemprunt'])->name('emprunt.rembourserLeDossier');
     Route::get('/ajouter-emprunt-manuel', [EmpruntController::class, 'getViewEnregistrementManuelD1Emprunt'])->name('emprunt.getViewEnregistrementManuelD1Emprunt');
     Route::post('/save-emprunt-manuel', [EmpruntController::class, 'saveEmpruntManuel'])->name('emprunt.saveEmpruntManuel');
     Route::get('/liste-des-emprunts-expirés', [EmpruntController::class, 'getViewForListOfEmpruntWhoIsExpire'])->name('emprunt.getViewForListOfEmpruntWhoIsExpire');
@@ -93,6 +94,13 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('/historique-emprunt-BBL-ajax', [EmpruntController::class, 'getHistoriqueBBLEmprunt'])->name('emprunt.getHistoriqueBBLEmpruntAjax');
     Route::get('/historique-emprunt-ASS-ajax', [EmpruntController::class, 'getHistoriqueASSEmprunt'])->name('emprunt.getHistoriqueASSEmpruntAjax');
     Route::get('/historique-emprunt-ASG-ajax', [EmpruntController::class, 'getHistoriqueASGEmprunt'])->name('emprunt.getHistoriqueASGEmpruntAjax');
+
+    Route::get('/historique-emprunt-BL-all-ajax', [EmpruntController::class, 'getHistoriqueBLAllEmprunt'])->name('emprunt.getHistoriqueBLAllEmpruntAjax');
+    Route::get('/historique-emprunt-BLI-all-ajax', [EmpruntController::class, 'getHistoriqueBLIAllEmprunt'])->name('emprunt.getHistoriqueBLIAllEmpruntAjax');
+    Route::get('/historique-emprunt-BBL-all-ajax', [EmpruntController::class, 'getHistoriqueBBLAllEmprunt'])->name('emprunt.getHistoriqueBBLAllEmpruntAjax');
+    Route::get('/historique-emprunt-ASS-all-ajax', [EmpruntController::class, 'getHistoriqueASSAllEmprunt'])->name('emprunt.getHistoriqueASSAllEmpruntAjax');
+    Route::get('/historique-emprunt-ASG-all-ajax', [EmpruntController::class, 'getHistoriqueASGAllEmprunt'])->name('emprunt.getHistoriqueASGAllEmpruntAjax');
+
     Route::get('emprunts/impression-liste-des-emprunts-en-cour-etude', [EmpruntController::class, 'impressionListDesEmpruntsEnCourEtude'])->name('emprunt.impressionListDesEmpruntsEnCourEtude');
     Route::get('emprunts/impression-liste-des-emprunts-valider_par_la_mutuelle', [EmpruntController::class, 'impressionListDesEmpruntsValiderParLaMutuelle'])->name('emprunt.impressionListDesEmpruntsValiderParLaMutuelle');
     Route::get('emprunts/impression-liste-des-emprunts-expires', [EmpruntController::class, 'impressionListDesEmpruntsExpires'])->name('emprunt.impressionListDesEmpruntsExpires');

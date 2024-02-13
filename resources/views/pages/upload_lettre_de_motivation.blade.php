@@ -45,8 +45,8 @@
 														<input type="text" hidden name="id" id="id" value="{{ $id }}">
 														<div class="col-md-12">
 															<b>
-																<h5>Après la validation de ce formulaire, vous ne pouriez plus modifier cette demande de souscription.
-																	<br><br> Vous Pouvez consulté le tableau de comission donnant les modalités de remboursement. <a
+																<h5>Après la validation de ce formulaire, vous ne pourriez plus modifier cette demande de souscription.
+																	<br><br> Vous pouvez consulté le tableau de commission donnant les modalités de remboursement. <a
 																		href="{{ asset('document/tableau_commission.pdf') }}">cliquez ici</a><br><br><br><br>
 																</h5>
 															</b>
@@ -68,7 +68,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-md-6">
+														{{-- <div class="col-md-6">
 															<div class="form-group">
 																<label style="font-weight: bold;" for="adi">Avis d'imposition</label>
 																<div class="form-control-wrap">
@@ -132,7 +132,7 @@
 																	</div>
 																</div>
 															</div>
-														</div>
+														</div> --}}
 														<div class="col-md-6">
 															<div class="form-group">
 																<label style="font-weight: bold;" for="autres">Autres</label>
@@ -178,20 +178,20 @@
 			e.preventDefault();
 			let id = $("#id").val();
 			let lss = $("#lss")[0].files;
-			let adi = $("#adi")[0].files;
-			let bds = $("#bds")[0].files;
-			let ddt = $("#ddt")[0].files;
-			let pdv = $("#pdv")[0].files;
-			let cdt = $("#cdt")[0].files;
+			// let adi = $("#adi")[0].files;
+			// let bds = $("#bds")[0].files;
+			// let ddt = $("#ddt")[0].files;
+			// let pdv = $("#pdv")[0].files;
+			// let cdt = $("#cdt")[0].files;
 			let autres = $("#autres")[0].files;
 			var formData = new FormData();
 			formData.append('id', id);
 			formData.append('lss', lss[0]);
-			formData.append('adi', adi[0]);
-			formData.append('bds', bds[0]);
-			formData.append('ddt', ddt[0]);
-			formData.append('pdv', pdv[0]);
-			formData.append('cdt', cdt[0]);
+			// formData.append('adi', adi[0]);
+			// formData.append('bds', bds[0]);
+			// formData.append('ddt', ddt[0]);
+			// formData.append('pdv', pdv[0]);
+			// formData.append('cdt', cdt[0]);
 			formData.append('autres', autres[0]);
 			$.ajax({
 				headers: {

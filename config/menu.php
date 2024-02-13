@@ -156,7 +156,7 @@ return [
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Historique des emprunts',
+                'name'  => 'Etat de mes emprunts',
                 'role'  => 'admin',
                 'route' => 'emprunt.historiqueEmprunts',
                 'altRoute' => '',
@@ -183,6 +183,12 @@ return [
                 'name'  => 'Liste des emprunts expirés',
                 'role'  => 'admin',
                 'route' => 'emprunt.getViewForListOfEmpruntWhoIsExpire',
+                'altRoute' => '',
+            ],
+            [
+                'name'  => 'Liste des emprunts remboursés',
+                'role'  => 'admin',
+                'route' => 'emprunt.showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember',
                 'altRoute' => '',
             ],
         ],

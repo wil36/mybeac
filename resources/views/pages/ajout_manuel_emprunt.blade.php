@@ -105,7 +105,7 @@
 														</div>
 														<div class="col-md-12">
 															<div class="form-group">
-																<x-input name='objet' :value="isset($don) && $don->type == 'interne' ? abs($don->montant) : ''" input='text' :required="true" title="Objet l'emprunt *">
+																<x-input name='objet' :value="isset($don) && $don->type == 'interne' ? abs($don->montant) : ''" input='text' :required="true" title="Objet l'emprunt">
 																</x-input>
 
 															</div>

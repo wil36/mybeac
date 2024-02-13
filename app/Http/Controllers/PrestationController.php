@@ -442,7 +442,7 @@ class PrestationController extends Controller
                 'typePrestation' => ['required', 'string'],
                 'montant' => ['required', 'numeric'],
                 'date' => ['required', 'date', 'date_format:Y-m-d'],
-                'listAyantDroit' => [],
+                'listAyantDroit' => ['nullable', 'interger'],
             ]);
             $validator->setAttributeNames($attributeNames);
             if ($validator->fails()) {
@@ -544,7 +544,7 @@ class PrestationController extends Controller
                 'typePrestation' => ['required', 'string'],
                 'montant' => ['required', 'numeric'],
                 'date' => ['required', 'date', 'date_format:Y-m-d'],
-                'listAyantDroit' => ['required', 'integer'],
+                'listAyantDroit' => ['nullable', 'integer'],
             ]);
             $validator->setAttributeNames($attributeNames);
             if ($validator->fails()) {

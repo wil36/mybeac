@@ -46,14 +46,14 @@ return [
     ],
     'emprunt' => [
         'appelASouscription' => 'Formulaire de souscription à un emprunt',
-        'viewForListOfEmpruntOfUUserWhoIsConnect' => 'Historique de mes emprunts',
+        'viewForListOfEmpruntOfUUserWhoIsConnect' => 'Etat de mes emprunts',
         'viewListEmpruntWhoWatingTheValidationByAdmin' => 'Liste des emprunts en cours d\'étude',
         'showFormUploadLettreDeMotivation' => 'Enregistrer la lettre de souscription signée',
-        'showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual' => 'Liste des emprunts valider par la mutuelle',
-        'showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember' => 'Liste des emprunts rembouser par les membres',
+        'showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual' => 'Liste des emprunts validés par la mutuelle',
+        'showFormWhoShowListOfEmpruntWhoIsIsReturnByTheMember' => 'Liste des emprunts remboursés par les membres',
         'getViewEnregistrementManuelD1Emprunt' => 'Formulaire d\'ajout manuel d\'un emprunt',
         'getViewForListOfEmpruntWhoIsExpire' => 'Liste des emprunts expirés',
-        'historiqueEmprunts' => 'Hitorique des emprunts'
+        'historiqueEmprunts' => 'Liste des emprunts remboursés classer par types'
     ],
     'messagerie' => [
         'sendMessageToMutual' => 'Envoyer un message à la mutuelle',

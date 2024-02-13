@@ -61,6 +61,7 @@
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Commission (FCFA)')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Etat du dossier d\'emprunt')</span></th>
 														</tr>
 													</thead>
@@ -220,6 +221,11 @@
 					{
 						"data": 'montant',
 						"name": 'montant',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'commission',
+						"name": 'commission',
 						"className": 'nk-tb-col'
 					},
 					{

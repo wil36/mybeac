@@ -20,6 +20,7 @@ class Agent
         if ($user && ($user->role === 'admin' || $user->role === 'agent') && $user->deces === 0 && $user->retraite === 0 && $user->exclut === 0) {
             return $next($request);
         }
-        return redirect()->route('dashboard');
+        // return redirect()->route('dashboard');
+        abort(403);
     }
 }

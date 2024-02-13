@@ -70,6 +70,7 @@
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Date de fin')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Commission (FCFA)')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Etat du dossier d\'emprunt')</span></th>
 															<th class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">@lang('Action')</span></th>
 														</tr>
@@ -149,12 +150,12 @@
 			});
 		});
 
-		$(document).on('click', '.valide-data-emprunt', function(e) {
+		$(document).on('click', '.emprunt-data', function(e) {
 			e.preventDefault();
 			var id = $(this).attr('data_id');
 			Swal.fire({
-				title: 'Voulez-vous vraiment accepter ?',
-				text: "Vous êtes en train de vouloir accepter cet emprunt ! Assurez-vous que c'est bien la bonne !",
+				title: 'Voulez-vous vraiment rembourser ?',
+				text: "Vous êtes en train de vouloir rembourser cet emprunt ! Assurez-vous que c'est bien le bon !",
 				icon: 'warning',
 				showCancelButton: true,
 				confirmButtonText: 'Oui',
@@ -165,7 +166,7 @@
 						headers: {
 							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						},
-						url: "{{ route('emprunt.accepterLeDossier') }}",
+						url: "{{ route('emprunt.rembourserLeDossier') }}",
 						type: "POST",
 						dataType: 'json',
 						data: {
@@ -174,12 +175,13 @@
 						success: function(data) {
 							if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
 								Swal.fire(
-									'Dossier accepter!',
+									'Emprunt rembourser !',
 									data.success,
 									'success'
 								);
 								window.setTimeout('location.reload()', 1500);
 							} else {
+								console.log(data);
 								Swal.fire(
 									'Erreur!',
 									data.error,
@@ -284,6 +286,11 @@
 					{
 						"data": 'montant',
 						"name": 'montant',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'commission',
+						"name": 'commission',
 						"className": 'nk-tb-col'
 					},
 					{

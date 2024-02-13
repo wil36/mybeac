@@ -147,24 +147,19 @@
 				}
 			});
 		});
+		
 
 		$(document).on('click', '.valide-data-emprunt', function(e) {
 			e.preventDefault();
 			var id = $(this).attr('data_id');
 			var montant = 0;
 			Swal.fire({
-				title: 'Montant de la commission',
+				icon: 'warning',
+				title: 'Voulez-vous vraiment accepter cet emprunt ?',
+				text: "Vous êtes en train de vouloir accepter cet emprunt ! Assurez-vous que c'est bien le bon !",
 				showCancelButton: true,
-				confirmButtonText: 'Valider',
+				confirmButtonText: 'Oui',
 				cancelButtonText: 'Annuler',
-				input: 'number',
-				preConfirm: function preConfirm(input) {
-					if (input == "") {
-						Swal.showValidationMessage("Remplir le champ");
-					} else {
-						montant = input;
-					}
-				},
 			}).then((result) => {
 				if (result.value) {
 					$.ajax({
@@ -205,6 +200,109 @@
 
 						}
 					});
+				}
+			});
+		});
+
+		$('.valide-data-emprunt-montant').on("click", function (e) {
+    Swal.fire({
+      title: 'Montant de la commission',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Look up',
+      showLoaderOnConfirm: true,
+      preConfirm: function preConfirm(login) {
+        return fetch("//api.github.com/users/".concat(login)).then(function (response) {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+
+          return response.json();
+        })["catch"](function (error) {
+          Swal.showValidationMessage("Request failed: ".concat(error));
+        });
+      },
+      allowOutsideClick: function allowOutsideClick() {
+        return !Swal.isLoading();
+      }
+    }).then(function (result) {
+      if (result.value) {
+        Swal.fire({
+          title: "".concat(result.value.login, "'s avatar"),
+          imageUrl: result.value.avatar_url,
+          imageWidth: '120px'
+        });
+      }
+    });
+    e.preventDefault();
+  });
+
+		$(document).on('click', '.valide-data-emprunt-montant', function(e) {
+			e.preventDefault();
+			var id = $(this).attr('data_id');
+			var montant = 0;
+			Swal.fire({
+				title: 'Montant de la commission',
+      input: 'number',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Look up',
+      showLoaderOnConfirm: true,
+      preConfirm: function preConfirm(montant) {
+        if (montant) {
+			$.ajax({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						url: "{{ route('emprunt.accepterLeDossier') }}",
+						type: "POST",
+						dataType: 'json',
+						data: {
+							id: id,
+							montant: montant,
+						},
+						success: function(data) {
+							if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+								Swal.fire(
+									'Dossier accepter!',
+									data.success,
+									'success'
+								);
+								window.setTimeout('location.reload()', 1500);
+							} else {
+								Swal.fire(
+									'Erreur!',
+									data.error,
+									'error'
+								)
+							}
+							$("html, body").animate({
+								scrollTop: 0
+							}, "slow");
+						},
+						error: function(data) {
+							console.log(data);
+							Swal.fire('Une erreur s\'est produite.',
+								'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+								'error');
+
+						}
+					});
+			return false;
+		}
+          Swal.showValidationMessage("Entrez le montant de la commission");
+        
+      },
+				confirmButtonText: 'Valider',
+				cancelButtonText: 'Annuler',
+			}).then((result) => {
+				if (result.value) {
+					
 				}
 			});
 		});
