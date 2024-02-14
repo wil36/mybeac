@@ -63,6 +63,7 @@
 															<th class="nk-tb-col"><span class="sub-text">@lang('Montant (FCFA)')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Commission (FCFA)')</span></th>
 															<th class="nk-tb-col"><span class="sub-text">@lang('Etat du dossier d\'emprunt')</span></th>
+															<th class="nk-tb-col"><span class="sub-text">@lang('Action')</span></th>
 														</tr>
 													</thead>
 													<tbody></tbody>
@@ -129,6 +130,60 @@
 							}, "slow");
 						},
 						error: function(data) {
+							Swal.fire('Une erreur s\'est produite.',
+								'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
+								'error');
+
+						}
+					});
+				}
+			});
+		});
+
+		$(document).on('click', '.emprunt-data', function(e) {
+			e.preventDefault();
+			var id = $(this).attr('data_id');
+			Swal.fire({
+				title: 'Voulez-vous vraiment rembourser ?',
+				text: "Vous êtes en train de vouloir rembourser cet emprunt ! Assurez-vous que c'est bien le bon !",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Oui',
+				cancelButtonText: 'Annuler',
+			}).then((result) => {
+				if (result.value) {
+					$.ajax({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						url: "{{ route('emprunt.rembourserLeDossier') }}",
+						type: "POST",
+						dataType: 'json',
+						data: {
+							id: id,
+						},
+						success: function(data) {
+							if ($.isEmptyObject(data.errors) && $.isEmptyObject(data.error)) {
+								Swal.fire(
+									'Emprunt rembourser !',
+									data.success,
+									'success'
+								);
+								window.setTimeout('location.reload()', 1500);
+							} else {
+								console.log(data);
+								Swal.fire(
+									'Erreur!',
+									data.error,
+									'error'
+								)
+							}
+							$("html, body").animate({
+								scrollTop: 0
+							}, "slow");
+						},
+						error: function(data) {
+							console.log(data);
 							Swal.fire('Une erreur s\'est produite.',
 								'Veuilez contacté l\'administration et leur expliqué l\'opération qui a provoqué cette erreur.',
 								'error');
@@ -231,6 +286,11 @@
 					{
 						"data": 'status',
 						"name": 'status',
+						"className": 'nk-tb-col'
+					},
+					{
+						"data": 'Actions',
+						"name": 'Actions',
 						"className": 'nk-tb-col'
 					},
 				]

@@ -46,7 +46,7 @@ return [
     ],
     'emprunt' => [
         'appelASouscription' => 'Formulaire de souscription à un emprunt',
-        'viewForListOfEmpruntOfUUserWhoIsConnect' => 'Etat de mes emprunts',
+        'viewForListOfEmpruntOfUUserWhoIsConnect' => 'Etat des emprunts',
         'viewListEmpruntWhoWatingTheValidationByAdmin' => 'Liste des emprunts en cours d\'étude',
         'showFormUploadLettreDeMotivation' => 'Enregistrer la lettre de souscription signée',
         'showFormWhoShowListOfEmpruntWhoIsValidateByTheMutual' => 'Liste des emprunts validés par la mutuelle',

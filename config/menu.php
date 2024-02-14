@@ -156,8 +156,8 @@ return [
                 'altRoute' => '',
             ],
             [
-                'name'  => 'Etat de mes emprunts',
-                'role'  => 'admin',
+                'name'  => 'Etat des emprunts',
+                'role'  => 'agents',
                 'route' => 'emprunt.historiqueEmprunts',
                 'altRoute' => '',
             ],

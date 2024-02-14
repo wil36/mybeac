@@ -101,6 +101,12 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('/historique-emprunt-ASS-all-ajax', [EmpruntController::class, 'getHistoriqueASSAllEmprunt'])->name('emprunt.getHistoriqueASSAllEmpruntAjax');
     Route::get('/historique-emprunt-ASG-all-ajax', [EmpruntController::class, 'getHistoriqueASGAllEmprunt'])->name('emprunt.getHistoriqueASGAllEmpruntAjax');
 
+    Route::get('/historique-emprunt-valider-BL-all-ajax', [EmpruntController::class, 'getHistoriqueBLAllEmpruntValider'])->name('emprunt.getHistoriqueBLAllEmpruntValiderAjax');
+    Route::get('/historique-emprunt-valider-BLI-all-ajax', [EmpruntController::class, 'getHistoriqueBLIAllEmpruntValider'])->name('emprunt.getHistoriqueBLIAllEmpruntValiderAjax');
+    Route::get('/historique-emprunt-valider-BBL-all-ajax', [EmpruntController::class, 'getHistoriqueBBLAllEmpruntValider'])->name('emprunt.getHistoriqueBBLAllEmpruntValiderAjax');
+    Route::get('/historique-emprunt-valider-ASS-all-ajax', [EmpruntController::class, 'getHistoriqueASSAllEmpruntValider'])->name('emprunt.getHistoriqueASSAllEmpruntValiderAjax');
+    Route::get('/historique-emprunt-valider-ASG-all-ajax', [EmpruntController::class, 'getHistoriqueASGAllEmpruntValider'])->name('emprunt.getHistoriqueASGAllEmpruntValiderAjax');
+
     Route::get('emprunts/impression-liste-des-emprunts-en-cour-etude', [EmpruntController::class, 'impressionListDesEmpruntsEnCourEtude'])->name('emprunt.impressionListDesEmpruntsEnCourEtude');
     Route::get('emprunts/impression-liste-des-emprunts-valider_par_la_mutuelle', [EmpruntController::class, 'impressionListDesEmpruntsValiderParLaMutuelle'])->name('emprunt.impressionListDesEmpruntsValiderParLaMutuelle');
     Route::get('emprunts/impression-liste-des-emprunts-expires', [EmpruntController::class, 'impressionListDesEmpruntsExpires'])->name('emprunt.impressionListDesEmpruntsExpires');
@@ -109,6 +115,19 @@ Route::middleware(['auth:sanctum', 'verified', 'admin'])->prefix('administration
     Route::get('emprunts/impression-liste-des-emprunts-bbl', [EmpruntController::class, 'impressionListDesEmpruntsBBL'])->name('emprunt.impressionListDesEmpruntsBBL');
     Route::get('emprunts/impression-liste-des-emprunts-ass', [EmpruntController::class, 'impressionListDesEmpruntsASS'])->name('emprunt.impressionListDesEmpruntsASS');
     Route::get('emprunts/impression-liste-des-emprunts-asg', [EmpruntController::class, 'impressionListDesEmpruntsASG'])->name('emprunt.impressionListDesEmpruntsASG');
+
+    Route::get('emprunts/impression-liste-des-emprunts-rembourser-bl', [EmpruntController::class, 'impressionListDesEmpruntsRembourserBL'])->name('emprunt.impressionListDesEmpruntsRembourserBL');
+    Route::get('emprunts/impression-liste-des-emprunts-rembourser-bli', [EmpruntController::class, 'impressionListDesEmpruntsRembourserBLI'])->name('emprunt.impressionListDesEmpruntsRembourserBLI');
+    Route::get('emprunts/impression-liste-des-emprunts-rembourser-bbl', [EmpruntController::class, 'impressionListDesEmpruntsRembourserBBL'])->name('emprunt.impressionListDesEmpruntsRembourserBBL');
+    Route::get('emprunts/impression-liste-des-emprunts-rembourser-ass', [EmpruntController::class, 'impressionListDesEmpruntsRembourserASS'])->name('emprunt.impressionListDesEmpruntsRembourserASS');
+    Route::get('emprunts/impression-liste-des-emprunts-rembourser-asg', [EmpruntController::class, 'impressionListDesEmpruntsRembourserASG'])->name('emprunt.impressionListDesEmpruntsRembourserASG');
+
+    Route::get('emprunts/impression-liste-etat-des-emprunts-bl', [EmpruntController::class, 'impressionListEtatDesEmpruntsBL'])->name('emprunt.impressionListEtatDesEmpruntsBL');
+    Route::get('emprunts/impression-liste-etat-des-emprunts-bli', [EmpruntController::class, 'impressionListEtatDesEmpruntsBLI'])->name('emprunt.impressionListEtatDesEmpruntsBLI');
+    Route::get('emprunts/impression-liste-etat-des-emprunts-bbl', [EmpruntController::class, 'impressionListEtatDesEmpruntsBBL'])->name('emprunt.impressionListEtatDesEmpruntsBBL');
+    Route::get('emprunts/impression-liste-etat-des-emprunts-ass', [EmpruntController::class, 'impressionListEtatDesEmpruntsASS'])->name('emprunt.impressionListEtatDesEmpruntsASS');
+    Route::get('emprunts/impression-liste-etat-des-emprunts-asg', [EmpruntController::class, 'impressionListEtatDesEmpruntsASG'])->name('emprunt.impressionListEtatDesEmpruntsASG');
+
     Route::get('emprunts/telechargement-multi-file/{id}', [EmpruntController::class, 'donwloadMultipleFileEmprunt'])->name('emprunt.donwloadMultipleFileEmprunt');
 
 

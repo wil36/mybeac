@@ -57,7 +57,7 @@
 												</ul>
 												<div class="tab-content">
 													<div class="tab-pane active" id="tabItem1">
-														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsBL') }}"><em
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsRembourserBL') }}"><em
 																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Bridge Loan</h3>
 														<div class="table-responsive">
@@ -82,7 +82,7 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem2">
-														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsBLI') }}"><em
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsRembourserBLI') }}"><em
 																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Bridge Loan Immo</h3>
 														<div class="table-responsive">
@@ -106,7 +106,7 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem3">
-														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsBBL') }}"><em
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsRembourserBBL') }}"><em
 																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Back to Back Loan</h3>
 														<div class="table-responsive">
@@ -130,7 +130,7 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem4">
-														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsASS') }}"><em
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsRembourserASS') }}"><em
 																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Avance sur Salaire</h3>
 														<div class="table-responsive">
@@ -154,7 +154,7 @@
 														</div>
 													</div>
 													<div class="tab-pane" id="tabItem5">
-														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsASG') }}"><em
+														<a class="btn btn-primary" href="{{ route('emprunt.impressionListDesEmpruntsRembourserASG') }}"><em
 																class="icon ni ni-printer"></em></a>
 														<h3 class="text-center">Recapitulatif Avance sur Gratification</h3>
 														<div class="table-responsive">
